@@ -1,16 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>JejakDaya - Platform Circular Economy</title>
 </head>
+
 <body>
-    <h1>Home</h1>
-    <h1>Halo {{ user.username }}</h1>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+
+    <nav>
+        <strong>JejakDaya</strong>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#tentang">Tentang Kami</a></li>
+            <li><a href="#proyek">Daftar Kebutuhan</a></li>
+            <li><a href="#dampak">Dampak</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Daftar</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <section id="home">
+        <h1>JejakDaya: Menghubungkan Kebutuhan Petani dan Kontribusi Masyarakat</h1>
+        <p>Platform berbasis Circular Economy yang transparan dan terukur.</p>
+    </section>
+
+    <hr>
+
+    <section id="tentang">
+        <h2>Tentang JejakDaya</h2>
+        <p>Banyak petani kecil menghadapi kendala akses modal dan bibit. JejakDaya hadir sebagai solusi untuk mengelola
+            sumber daya secara berkelanjutan.</p>
+
+        <h3>Cara Kerja Kami:</h3>
+        <ol>
+            <li><strong>Pengajuan:</strong> Mitra (Petani) mengajukan kebutuhan spesifik.</li>
+            <li><strong>Kontribusi:</strong> Masyarakat menyalurkan bantuan (dana/barang).</li>
+            <li><strong>Pelacakan:</strong> Kontribusi dicatat dalam <em>Impact Receipt</em>.</li>
+            <li><strong>Dampak:</strong> Perkembangan proyek dilaporkan secara terbuka.</li>
+        </ol>
+    </section>
+
+    <hr>
+
+    <section id="proyek">
+        <div>
+            <h3>Pengadaan 20 Karung Kompos</h3>
+            <p>Lokasi: Sleman, Yogyakarta</p>
+            <p>Status: Terkumpul 5 Karung dari target 20 Karung</p>
+            <progress value="25" max="100"></progress> 25%
+            <br>
+            <a href="detail-proyek.html"><button>Lihat Detail & Kontribusi</button></a>
+        </div>
+    </section>
+
+    <hr>
+
+    <section id="dampak">
+        <h2>Dampak Real-Time</h2>
+        <ul>
+            <li>Total Proyek Aktif: tak terhingga</li>
+            <li>Total Kebutuhan Terpenuhi: 85%</li>
+            <li>Jumlah Mitra Terbantu:  Kelompok Tani</li>
+            <li>Total Kontributor: Orang</li>
+        </ul>
+    </section>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2026 JejakDaya - Menuju Pertanian Berkelanjutan</p>
+        <ul>
+            <li>Email: ubaucdillah@gmail.com</li>
+            <li>WhatsApp: 0859-1661-40169</li>
+        </ul>
+    </footer>
+
 </body>
+
 </html>

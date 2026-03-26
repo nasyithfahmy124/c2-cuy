@@ -5,6 +5,11 @@ from django.contrib import messages
 from .forms import Register
 
 # Create your views here.
+def home_awal(request):
+    
+    return render(request,'home.html')
+
+
 def page_login(request):
     if request.method == "POST":
         usn = request.POST.get('username')
@@ -44,4 +49,4 @@ def logout_page(request):
 @login_required
 def home_page(request):
     
-    return render(request,'home.html')
+    return render(request,'login/home_page.html')
