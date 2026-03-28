@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import Register
+from .forms import Register,GantiPwForm
 
 # Create your views here.
 def home_awal(request):
@@ -50,3 +50,18 @@ def logout_page(request):
 def home_page(request):
     
     return render(request,'login/home_page.html')
+
+@login_required
+def gantipw(request):
+    form = GantiPwForm(request.user,request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request,'Ubah password berhasil!')
+        return redirect('home')
+    else:
+        form = GantiPwForm(request.user)
+    return render(request,'login/gantipw.html',{
+        'form' : form
+    })
+
+    
