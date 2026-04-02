@@ -1,24 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Daftar Akun JejakDaya</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        jejak: {
+                            primary: '#1F4D3A',   /* Dark Green */
+                            secondary: '#6B8F71', /* Sage Green */
+                            accent: '#C76B4E',    /* Rust */
+                            bg: '#F7F3EA',        /* Cream */
+                            text: '#1F2933',      /* Dark Charcoal */
+                        },
+                    },
+                },
+            },
+        }
+    </script>
 </head>
 
-<body>
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
-    <h1>form register</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-</body>
+<body class="bg-jejak-bg font-sans text-jejak-text min-h-screen flex items-center justify-center p-4">
+    {% load static %}
 
+    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-xl grid md:grid-cols-5 overflow-hidden max-h-[95vh]">
+        
+        <div class="hidden md:flex flex-col justify-between bg-jejak-primary text-white p-8 lg:p-10 md:col-span-2">
+            <div>
+                <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tighter mb-4 leading-tight">Buat Jejak Kebaikan.</h1>
+                <p class="text-jejak-secondary text-base lg:text-lg font-medium">Kelola donasi dan sponsorship Anda dengan transparan dan efisien dalam satu wadah.</p>
+            </div>
+            
+            <div class="flex items-end space-x-2">
+                <div class="w-12 h-12 rounded-full bg-jejak-secondary shadow-lg"></div>
+                <div class="w-1 h-12 rounded-full bg-white/40"></div>
+                <div class="w-16 h-16 rounded-full bg-jejak-accent shadow-lg"></div>
+            </div>
+        </div>
+
+        <div class="p-6 md:p-10 lg:p-12 flex flex-col justify-center md:col-span-3 overflow-y-auto custom-scrollbar">
+            
+            <div class="text-center md:text-left mb-8">
+                <h2 class="text-3xl font-extrabold tracking-tight text-jejak-text">Buat Akun JejakDaya</h2>
+                <p class="text-jejak-text/60 text-sm mt-2">Satu langkah kecil menuju dampak yang besar.</p>
+            </div>
+
+            <form action="" method="post" class="space-y-4">
+                {% csrf_token %}
+
+                <div class="relative">
+                    <i class="ph ph-envelope-simple text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
+                    <input type="email" name="email" id="id_email" required placeholder="Alamat email aktif" 
+                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                </div>
+
+                <div class="relative">
+                    <i class="ph ph-user text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
+                    <input type="text" name="username" id="id_username" required placeholder="Pilih Username" 
+                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="relative">
+                        <i class="ph ph-lock text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
+                        <input type="password" name="password1" id="id_password1" required placeholder="Kata sandi" 
+                               class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                    </div>
+
+                    <div class="relative">
+                        <i class="ph ph-check-circle text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
+                        <input type="password" name="password2" id="id_password2" required placeholder="Ulangi sandi" 
+                               class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                    </div>
+                </div>
+
+                <div class="flex items-start text-xs mt-6 space-x-2">
+                    <input type="checkbox" id="terms" required class="w-4 h-4 accent-jejak-primary border-jejak-secondary rounded mt-0.5 flex-shrink-0">
+                    <label for="terms" class="text-jejak-text/70 font-medium leading-tight">Saya setuju dengan <a href="#" class="text-jejak-accent font-semibold">Ketentuan Layanan</a> & <a href="#" class="text-jejak-accent font-semibold">Kebijakan Privasi</a>.</label>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-jejak-primary text-white text-base font-bold py-3 rounded-xl shadow-lg hover:bg-jejak-primary/90 transition-all active:scale-[0.98]">
+                        Daftar Akun
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-between border-t border-jejak-secondary/20 pt-6">
+                <p class="text-jejak-text/60 font-medium text-sm mb-4 sm:mb-0">Daftar cepat dengan:</p>
+                <div class="flex space-x-3">
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
+                        <i class="ph ph-facebook-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
+                        <i class="ph ph-google-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
+                        <i class="ph ph-apple-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center text-jejak-text/70 font-medium text-sm">
+                Sudah punya akun? <a href="{% url 'login' %}" class="text-jejak-accent font-bold hover:text-jejak-accent/80 transition-colors underline decoration-jejak-accent decoration-2 underline-offset-4">Masuk sekarang</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
 </html>

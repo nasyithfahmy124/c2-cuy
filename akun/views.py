@@ -9,6 +9,10 @@ def home_awal(request):
     
     return render(request,'home.html')
 
+def landing_page(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request,'landing.html')
 
 def page_login(request):
     if request.method == "POST":
