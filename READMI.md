@@ -43,6 +43,8 @@ DB_HOST → biasanya localhost
 DB_PORT → default MySQL 3306
 SECRET_KEY → kunci rahasia Django (harus diisi sendiri)
 DEBUG → gunakan True untuk development
+
+
 Cara membuat SECRET_KEY:
 
 Jalankan perintah berikut di terminal:
@@ -50,6 +52,11 @@ Jalankan perintah berikut di terminal:
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
 
 Lalu copy hasilnya ke bagian SECRET_KEY di file .env.
+
+
+DAN INSTAL DOTENV
+pip install python-dotenv
+
 
 6. migrasi Migrasi database
 python manage.py migrate

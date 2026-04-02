@@ -1,4 +1,22 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Daftar</button>
+    </form>
+    <a href="{% url 'login' %}">Login</a>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -63,26 +81,26 @@
                 <div class="relative">
                     <i class="ph ph-envelope-simple text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
                     <input type="email" name="email" id="id_email" required placeholder="Alamat email aktif" 
-                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                        class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
                 </div>
 
                 <div class="relative">
                     <i class="ph ph-user text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
                     <input type="text" name="username" id="id_username" required placeholder="Pilih Username" 
-                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                        class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="relative">
                         <i class="ph ph-lock text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
                         <input type="password" name="password1" id="id_password1" required placeholder="Kata sandi" 
-                               class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                            class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
                     </div>
 
                     <div class="relative">
                         <i class="ph ph-check-circle text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
                         <input type="password" name="password2" id="id_password2" required placeholder="Ulangi sandi" 
-                               class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
+                            class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
                     </div>
                 </div>
 
@@ -121,4 +139,4 @@
     </div>
 
 </body>
-</html>
+</html> -->

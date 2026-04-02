@@ -2,12 +2,11 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import Register,GantiPwForm
-
+from .forms import *
 # Create your views here.
 def home_awal(request):
     
-    return render(request,'home.html')
+    return render(request,'landing.html')
 
 def landing_page(request):
     if request.user.is_authenticated:
@@ -15,32 +14,41 @@ def landing_page(request):
     return render(request,'landing.html')
 
 def page_login(request):
-    if request.method == "POST":
-        usn = request.POST.get('username')
-        pw = request.POST.get('password')
-        user = authenticate(request,username = usn,password = pw)
-        if user is not None:
-            login(request,user)
-            messages.success(request,'Login berhasil')
-            return redirect('home')
-        else:
-            messages.error(request,'Login gagal!')
-            return redirect('login')
-    return render(request,'login/login.html')
+    form = LoginForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+
+                if user.role == 'petani':
+                    return redirect('home_p')
+                elif user.role == 'donatur':
+                    return redirect('home_d')
+            else:
+                messages.error(request, 'Username atau password salah')
+
+    return render(request, 'login/login.html', {
+        'form': form
+    })
 
 def page_register(request):
     if request.method == "POST":
-        form_register = Register(request.POST)
+        form_register = RegisterForm(request.POST)
         if form_register.is_valid():
             form_register.save()
-            messages.success(request,'Akun berhasil dibuat')
+            messages.success(request, 'Akun berhasil dibuat')
             return redirect('home')
     else:
-        form_register = Register()
-        
-    
-    return render(request,'login/register.html',{
-        'form' : form_register
+        form_register = RegisterForm()
+
+    return render(request, 'login/register.html', {
+        'form': form_register
     })
     
 def logout_page(request):
