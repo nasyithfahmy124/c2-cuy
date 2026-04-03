@@ -10,6 +10,26 @@
 <body>
     <a href="{% url 'logout' %}"></a>
     <h1>Haloo {{ user.username }} donatur sugih bijak </h1>
+    <h2>Daftar Proyek Petani</h2>
+    
+    {% for project in projects %}
+    <div style="border:1px solid black; margin:10px; padding:10px;">
+        <h3>{{ project.nama }}</h3>
+        <p>Target: {{ project.target_dana }}</p>
+        <p>Terkumpul: {{ project.dana_terkumpul }}</p>
+        <p>Kebutuhan: {{ project.kebutuhan }}</p>
+    
+        {% if project.status == 'selesai' %}
+        <p>Donasi sudah terpenuhi</p>
+        {% else %}
+        <a href="{% url 'danai_project' project.id %}">
+            Danai
+        </a>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>Belum ada proyek</p>
+    {% endfor %}
 </body>
 
 </html>
