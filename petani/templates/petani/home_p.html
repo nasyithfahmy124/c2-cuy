@@ -6,7 +6,11 @@
     <title>Document</title>
 </head>
 <body>
+    {% load humanize %}
+
     <h1>Haloo {{ user.username }} petani bijak </h1>
+
+    <h3>Dana terkumpul : Rp {{ dana|intcomma }},00 </h3>
     <!-- ini tanggal dan waktu -->
     <h4>{{ waktu }}</h4> 
     <a href="{% url 'projek' %}">buat projek</a>

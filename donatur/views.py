@@ -7,8 +7,7 @@ from petani.models import Project
 # Create your views here.
 @login_required
 def home_page(request):
-    projects = Project.objects.all()  
-
+    projects = Project.objects.all().order_by('-id')
     return render(request, 'donatur/home_d.html', {
         'projects': projects
     })

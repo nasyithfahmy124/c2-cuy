@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from django.utils import timezone   
 STATUS_CHOICES = [
     ('pending', 'Menunggu'),
     ('aktif', 'Sedang Didanai'),
@@ -24,9 +24,12 @@ class Project(models.Model):
     target_dana = models.IntegerField(null=True)
     kebutuhan = models.TextField(null=True)
     estimasi_hasil = models.IntegerField(null=True)
-
+    dana_terkumpul = models.IntegerField(default=0)
     # waktu
     tanggal_mulai = models.DateField(null=True)
     estimasi_panen = models.DateField(null=True)
     # status
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+    
+    
