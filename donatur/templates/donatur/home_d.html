@@ -13,12 +13,15 @@
     <h2>Daftar Proyek Petani</h2>
     
     {% for project in projects %}
+    {% if project.status == 'aktif' %}
+    <span style="color:green;">Sudah Diverifikasi</span>
+    {% endif %}
     <div style="border:1px solid black; margin:10px; padding:10px;">
         <h3>{{ project.nama }}</h3>
         <p>Target: {{ project.target_dana }}</p>
         <p>Terkumpul: {{ project.dana_terkumpul }}</p>
         <p>Kebutuhan: {{ project.kebutuhan }}</p>
-    
+        
         {% if project.status == 'selesai' %}
         <p>Donasi sudah terpenuhi</p>
         {% else %}
@@ -26,10 +29,14 @@
             Danai
         </a>
         {% endif %}
+        <a href="{% url 'lihat_laporan' project.id %}">
+            Lihat Laporan
+        </a>
     </div>
     {% empty %}
     <p>Belum ada proyek</p>
     {% endfor %}
+    <a href="{% url 'home_d' %}">back</a>
 </body>
 
 </html>

@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'akun',
     'petani',
     'donatur',
+    'dashboard'
+    
 ]
 
 MIDDLEWARE = [

@@ -7,7 +7,7 @@ from petani.models import Project
 # Create your views here.
 @login_required
 def home_page(request):
-    projects = Project.objects.all().order_by('-id')
+    projects = Project.objects.filter(status='aktif')
     return render(request, 'donatur/home_d.html', {
         'projects': projects
     })
@@ -17,11 +17,15 @@ def home_page(request):
 def danai_project(request, id):
     project = get_object_or_404(Project, id=id)
 
+    if project.status != 'aktif':
+        return redirect('home_d')  # atau tampilkan error
+
     if request.method == 'POST':
         form = FormDonasi(request.POST)
         if form.is_valid():
             jumlah = form.cleaned_data['jumlah']
             sisa = project.target_dana - project.dana_terkumpul
+
             if jumlah > sisa:
                 form.add_error('jumlah', f'Maksimal donasi: {sisa}')
             else:
@@ -29,7 +33,9 @@ def danai_project(request, id):
                 funding.donatur = request.user
                 funding.project = project
                 funding.save()
+
                 project.dana_terkumpul += jumlah
+
                 if project.dana_terkumpul >= project.target_dana:
                     project.status = 'selesai'
                 else:
@@ -44,4 +50,14 @@ def danai_project(request, id):
     return render(request, 'donatur/donasi.html', {
         'form': form,
         'project': project
+    })
+
+@login_required
+def lihat_laporan(request, id):
+    project = get_object_or_404(Project, id=id)
+    laporan = project.laporan.all().order_by('-tanggal')
+
+    return render(request, 'donatur/laporan_fp.html', {
+        'project': project,
+        'laporan': laporan
     })

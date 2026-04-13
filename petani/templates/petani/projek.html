@@ -6,6 +6,11 @@
     <title>Document</title>
 </head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
     <h1>form minta sumbangan</h1>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -14,5 +19,6 @@
     </form>
 
     <a href="{% url 'home_p' %}">Home</a>
+    
 </body>
 </html>

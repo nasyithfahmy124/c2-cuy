@@ -43,7 +43,7 @@ def page_register(request):
         if form_register.is_valid():
             form_register.save()
             messages.success(request, 'Akun berhasil dibuat')
-            return redirect('home')
+            return redirect('home_p')
     else:
         form_register = RegisterForm()
 

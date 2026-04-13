@@ -1,18 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>P2P Agro-Funding - Dasbor Petani</title>
 </head>
+
 <body>
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% load humanize %}
 
-    <h1>Haloo {{ user.username }} petani bijak </h1>
+    <header>
+        <nav>
+            <h1>🌾 Halo, Pak/Bu {{ user.username }}</h1>
+            <p>Selamat datang kembali, Petani Bijak.</p>
+        </nav>
+    </header>
 
-    <h3>Dana terkumpul : Rp {{ dana|intcomma }},00 </h3>
-    <!-- ini tanggal dan waktu -->
-    <h4>{{ waktu }}</h4> 
-    <a href="{% url 'projek' %}">buat projek</a>
+    
+
+    <main>
+        <section>
+            <h2>Dana Terkumpul Saat Ini:</h2>
+            <div>
+                <strong>Rp {{ dana|intcomma }},00</strong>
+            </div>
+            <p>
+                Update terakhir: <span>{{ waktu }}</span>
+            </p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Apa itu Platform Inklusi Pertanian?</h3>
+            <p>
+                Ini adalah tempat Pak/Bu Tani mendapatkan <strong>modal usaha</strong> (bibit, pupuk, alat)
+                langsung dari masyarakat yang ingin membantu. Di sini, kita bukan hanya bertani,
+                tapi menjadi <strong>mitra bisnis</strong> yang profesional dan jujur.
+            </p>
+        </section>
+
+        <section>
+            <div>
+                <a href="{% url 'projek' %}">
+                    <h3>BUAT PROJEK BARU</h3>
+                    <p>Ajukan modal untuk bibit atau alat tani</p>
+                </a>
+            </div>
+
+            <div>
+                <a href="{% url 'allp' %}">
+                    <h3>LIHAT PROJEK SAYA</h3>
+                    <p>Pantau laporan dan perkembangan lahan</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <hr>
+    
+    <footer>
+        <p>Meningkatkan Taraf Hidup Petani Indonesia melalui Teknologi</p>
+    </footer>
+
 </body>
+
 </html>

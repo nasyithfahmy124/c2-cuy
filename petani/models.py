@@ -26,10 +26,20 @@ class Project(models.Model):
     estimasi_hasil = models.IntegerField(null=True)
     dana_terkumpul = models.IntegerField(default=0)
     # waktu
-    tanggal_mulai = models.DateField(null=True)
-    estimasi_panen = models.DateField(null=True)
+    # tanggal_mulai = models.DateField(null=True)
+    # estimasi_panen = models.DateField(null=True)
+    berapa_bulan = models.CharField(max_length=200) 
     # status
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
 
     
-    
+class Laporan(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')
+    judul = models.CharField(max_length=100)
+    deskripsi = models.TextField()
+    jumlah_pengeluaran = models.DecimalField(max_digits=12, decimal_places=2)
+    bukti = models.ImageField(upload_to='bukti_laporan/', null=True, blank=True)
+    tanggal = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.judul
