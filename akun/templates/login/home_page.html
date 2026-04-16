@@ -1,26 +1,116 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
-    <nav>
-        <li><a href="{% url 'gantipw' %}">Ganti Pw</a></li>
-        <li>
-            <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-        </li>
-    </nav>
-    <h1>Hallo {{ user.username }}</h1>
+    <title>Dasbor - JejakDaya</title>
     
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+<body class="bg-jejak-bg font-sans text-jejak-text min-h-screen flex flex-col">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-jejak-primary/10 flex items-center justify-center">
+                        <i class="ph-fill ph-leaf text-jejak-primary text-xl"></i>
+                    </div>
+                    <span class="font-bold text-xl text-jejak-primary tracking-tight hidden sm:block">JejakDaya</span>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-4">
+                    
+                    <div class="hidden md:flex items-center gap-2 mr-4">
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300">
+                            <i class="ph-fill ph-user text-gray-500"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold leading-tight">{{ user.username }}</span>
+                            <span class="text-xs text-gray-500 capitalize">{{ user.role|default:"Anggota" }}</span>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'gantipw' %}" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-jejak-primary hover:bg-jejak-primary/5 rounded-lg transition-all" title="Pengaturan Akun">
+                        <i class="ph ph-key text-lg"></i>
+                        <span class="hidden sm:inline">Ganti Sandi</span>
+                    </a>
+                    
+                    <div class="w-px h-6 bg-gray-200 mx-1"></div>
+
+                    <form method="post" action="{% url 'logout' %}" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all">
+                            <i class="ph ph-sign-out text-lg"></i>
+                            <span class="hidden sm:inline">Keluar</span>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {% if messages %}
+        <div class="mb-6 space-y-3">
+            {% for message in messages %}
+            <div class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-fade-in-up {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% else %}bg-green-50 text-jejak-primary border border-jejak-secondary/30{% endif %}">
+                <i class="ph-fill {% if message.tags == 'error' %}ph-warning-circle{% else %}ph-check-circle{% endif %} text-lg"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="bg-jejak-primary rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden shadow-xl shadow-jejak-primary/20 animate-fade-in-up">
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 right-20 w-32 h-32 bg-jejak-accent/20 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <p class="text-white/80 text-sm font-medium mb-1 tracking-wide uppercase">Ringkasan Dasbor</p>
+                <h1 class="text-3xl sm:text-4xl font-bold mb-3">Halo, {{ user.username }}! 👋</h1>
+                <p class="text-white/90 max-w-xl text-sm sm:text-base leading-relaxed">
+                    Selamat datang di ekosistem JejakDaya. Kelola aktivitasmu, pantau perkembangan, dan mari wujudkan dampak positif pada sektor agribisnis hari ini.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-jejak-primary/10 flex items-center justify-center mb-4">
+                    <i class="ph ph-plant text-2xl text-jejak-primary"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">Aktivitas Lahan</h3>
+                <p class="text-sm text-gray-500">Belum ada data aktivitas. Mulai buat catatan proyek barumu.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-jejak-secondary/10 flex items-center justify-center mb-4">
+                    <i class="ph ph-chart-line-up text-2xl text-jejak-secondary"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">Portofolio</h3>
+                <p class="text-sm text-gray-500">Pantau perkembangan investasi dan *benefit-sharing* di sini.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-jejak-accent/10 flex items-center justify-center mb-4">
+                    <i class="ph ph-users text-2xl text-jejak-accent"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">Komunitas</h3>
+                <p class="text-sm text-gray-500">Terhubung dengan jaringan petani milenial dan investor lainnya.</p>
+            </div>
+
+        </div>
+
+    </main>
+
 </body>
 </html>

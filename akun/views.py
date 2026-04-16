@@ -1,21 +1,47 @@
-from django.shortcuts import render,redirect
-from django.contrib.auth import login,logout,authenticate
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import *
-# Create your views here.
-def home_awal(request):
-    
-    return render(request,'landing.html')
+
+# ==========================================
+# 1. HALAMAN UTAMA & REDIRECTOR
+# ==========================================
 
 def landing_page(request):
+    # Halaman default (halaman awal)
+    return render(request, 'landing.html')
+
+def mulai_redirect(request):
+    # Logika ketika tombol "Mulai" di-klik
     if request.user.is_authenticated:
-        return redirect('home')
-    return render(request,'landing.html')
+        # Jika sudah login, arahkan ke dashboard
+        return redirect('dashboard')
+    else:
+        # Jika belum login, arahkan ke halaman home biasa
+        return redirect('public_home')
+
+def public_home(request):
+    # Merender halaman templates/home.html (Untuk tamu/belum login)
+    return render(request, 'home.html')
+
+@login_required
+def home_page(request):
+    # Merender halaman dasbor (Untuk user yang sudah login)
+    # Sesuaikan path template-nya sesuai struktur foldermu
+    return render(request, 'login/home_page.html')
+
+
+# ==========================================
+# 2. AUTENTIKASI (LOGIN, REGISTER, LOGOUT)
+# ==========================================
 
 def page_login(request):
-    form = LoginForm(request.POST or None)
+    # Cegah user yang sudah login buka halaman login lagi
+    if request.user.is_authenticated:
+        return redirect('dashboard')
 
+    form = LoginForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -25,11 +51,8 @@ def page_login(request):
 
             if user is not None:
                 login(request, user)
-
-                if user.role == 'petani':
-                    return redirect('home_p')
-                elif user.role == 'donatur':
-                    return redirect('home_d')
+                # Sesuai request, semua user yang login diarahkan ke dashboard
+                return redirect('dashboard')
             else:
                 messages.error(request, 'Username atau password salah')
 
@@ -38,12 +61,17 @@ def page_login(request):
     })
 
 def page_register(request):
+    # Cegah user yang sudah login buka halaman register
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
     if request.method == "POST":
         form_register = RegisterForm(request.POST)
         if form_register.is_valid():
             form_register.save()
-            messages.success(request, 'Akun berhasil dibuat')
-            return redirect('home_p')
+            messages.success(request, 'Akun berhasil dibuat. Silakan masuk.')
+            # Setelah register, arahkan ke login
+            return redirect('login')
     else:
         form_register = RegisterForm()
 
@@ -53,27 +81,24 @@ def page_register(request):
     
 def logout_page(request):
     logout(request) 
-    messages.success(request,'bisa logout cuyy')
-    return redirect('login')
+    # Setelah logout, kembalikan ke landing page
+    return redirect('landing')
 
-    
-    
-@login_required
-def home_page(request):
-    
-    return render(request,'login/home_page.html')
+
+# ==========================================
+# 3. PENGATURAN AKUN
+# ==========================================
 
 @login_required
 def gantipw(request):
-    form = GantiPwForm(request.user,request.POST or None)
+    form = GantiPwForm(request.user, request.POST or None)
     if form.is_valid():
         form.save()
-        messages.success(request,'Ubah password berhasil!')
-        return redirect('home')
+        messages.success(request, 'Ubah password berhasil!')
+        return redirect('dashboard')
     else:
         form = GantiPwForm(request.user)
-    return render(request,'login/gantipw.html',{
-        'form' : form
+        
+    return render(request, 'login/gantipw.html', {
+        'form': form
     })
-
-    

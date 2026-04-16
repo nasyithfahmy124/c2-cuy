@@ -1,0 +1,25 @@
+{
+  "name": "projek-lomba",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch",
+    "build": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nasyithfahmy124/projek-lomba.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nasyithfahmy124/projek-lomba/issues"
+  },
+  "homepage": "https://github.com/nasyithfahmy124/projek-lomba#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

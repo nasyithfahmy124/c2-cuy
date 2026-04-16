@@ -1,21 +1,5 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    <a href="{% url 'register' %}">Register</a>
-</body>
-</html>
-<!-- <!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -23,116 +7,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - JejakDaya</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        jejak: {
-                            primary: '#1F4D3A',   /* Dark Green */
-                            secondary: '#6B8F71', /* Sage Green */
-                            accent: '#C76B4E',    /* Rust */
-                            bg: '#F7F3EA',        /* Cream */
-                            text: '#1F2933',      /* Dark Charcoal */
-                        },
-                    },
-                },
-            },
+    <style>
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(20px);
         }
-    </script>
+    </style>
 </head>
 
-<body class="bg-jejak-bg font-sans text-jejak-text min-h-screen flex items-center justify-center p-4">
-    {% load static %}
+<body class="min-h-screen flex flex-col lg:flex-row bg-jejak-bg font-sans text-jejak-text">
 
-    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-xl grid md:grid-cols-5 overflow-hidden max-h-[95vh]">
-        
-        <div class="hidden md:flex flex-col justify-between bg-jejak-primary text-white p-8 lg:p-10 md:col-span-2">
-            <div>
-                <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tighter mb-4 leading-tight">Melangkah Bersama.</h1>
-                <p class="text-jejak-secondary text-base lg:text-lg font-medium">Lanjut perjalanan JejakDaya Anda. Kelola donasi dan sponsorship Anda di satu tempat.</p>
+    <div class="flex relative bg-jejak-primary overflow-hidden w-full lg:w-1/2 min-h-[35vh] lg:min-h-screen">
+        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="JejakDaya Background"
+            class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-t from-jejak-primary via-jejak-primary/80 to-transparent"></div>
+
+        <div class="relative z-10 p-6 lg:p-12 flex flex-col justify-center lg:justify-between h-full w-full">
+            <div class="flex items-center gap-3 text-white mb-auto lg:mb-0">
+                <div
+                    class="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm">
+                    <i class="ph-fill ph-leaf text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">JejakDaya</span>
             </div>
-            
-            <div class="flex items-end space-x-2">
-                <div class="w-12 h-12 rounded-full bg-jejak-secondary/60"></div>
-                <div class="w-16 h-16 rounded-full bg-jejak-accent shadow-lg"></div>
-                <div class="w-12 h-1 rounded-full bg-white/40"></div>
+
+            <div class="text-white mt-8 lg:mt-auto lg:mb-10">
+                <h1 class="text-3xl lg:text-5xl font-bold leading-tight mb-2 lg:mb-4">Melangkah Bersama,<br>Membangun
+                    Agribisnis.</h1>
+                <p class="hidden sm:block text-white/80 text-sm lg:text-lg max-w-md">Kendalikan semua portofolio donasi
+                    dan pantau perkembangan petani milenial dalam satu wadah.</p>
             </div>
         </div>
+    </div>
 
-        <div class="p-6 md:p-10 lg:p-12 flex flex-col justify-center md:col-span-3 overflow-y-auto">
-            
-            <div class="text-center md:text-left mb-8">
-                <h2 class="text-3xl font-extrabold tracking-tight text-jejak-text">Selamat Datang Kembali</h2>
-                <p class="text-jejak-text/60 text-sm mt-2">Masuk ke akun Anda untuk melanjutkan perjalanan.</p>
+    <div
+        class="w-full lg:w-1/2 flex flex-grow items-center justify-center p-6 sm:p-12 lg:p-24 bg-jejak-bg relative z-20 -mt-8 lg:mt-0 rounded-t-[2rem] lg:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.3)] lg:shadow-none">
+        <div class="w-full max-w-md space-y-8 lg:space-y-10" data-animate>
+
+            <div class="text-center lg:text-left mt-2 lg:mt-0">
+                <h2 class="text-3xl font-bold text-jejak-primary mb-2">Selamat Datang</h2>
+                <p class="text-gray-500">Silakan masukkan detail akun Anda.</p>
             </div>
 
             {% if messages %}
-            <div class="mb-6 p-3 bg-red-50 text-red-700 rounded-xl border border-red-200">
+            <div class="mb-6">
                 {% for message in messages %}
-                <p class="{{ message.tags }} font-medium text-sm flex items-center"><i class="ph-bold ph-warning-circle text-lg mr-2"></i> {{ message }}</p>
+                <div
+                    class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% else %}bg-green-50 text-jejak-primary border border-jejak-secondary/30{% endif %}">
+                    <i
+                        class="ph-fill {% if message.tags == 'error' %}ph-warning-circle{% else %}ph-check-circle{% endif %} text-lg"></i>
+                    {{ message }}
+                </div>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <form method="post" class="space-y-5">
+            <form method="post" action="{% url 'login' %}" class="space-y-6">
                 {% csrf_token %}
 
-                <div class="relative">
-                    <i class="ph ph-user text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
-                    <input type="text" name="username" id="username" required placeholder="Username atau Email" 
-                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
-                </div>
-
-                <div class="relative">
-                    <i class="ph ph-lock text-jejak-secondary text-xl absolute left-0 bottom-2.5"></i>
-                    <input type="password" name="password" id="password" required placeholder="Kata sandi Anda" 
-                           class="w-full pl-8 pr-4 py-2 border-b border-jejak-secondary/50 focus:border-jejak-primary outline-none text-base text-jejak-text placeholder:text-jejak-text/40 transition-colors">
-                </div>
-
-                <div class="flex items-center justify-between text-sm mt-6">
-                    <div class="flex items-center space-x-2">
-                        <input type="checkbox" id="remember" class="w-4 h-4 accent-jejak-primary border-jejak-secondary rounded">
-                        <label for="remember" class="text-jejak-text/70 font-medium">Ingat saya</label>
+                <div class="space-y-2">
+                    <label for="username" class="text-sm font-semibold text-gray-700">Username</label>
+                    <div class="relative">
+                        <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" name="username" id="username" required placeholder="Masukkan username"
+                            class="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
                     </div>
-                    <a href="#" class="text-jejak-accent font-semibold hover:text-jejak-accent/80 transition-colors">Lupa sandi?</a>
                 </div>
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-jejak-primary text-white text-base font-bold py-3 rounded-xl shadow-lg hover:bg-jejak-primary/90 transition-all active:scale-[0.98]">
-                        Masuk
-                    </button>
+                <div class="space-y-2">
+                    <label for="password" class="text-sm font-semibold text-gray-700">Password</label>
+                    <div class="relative">
+                        <i class="ph ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="password" name="password" id="password" required placeholder="Masukkan password"
+                            class="w-full pl-11 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
+                        <button type="button" onclick="togglePassword('password', this)"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-jejak-primary">
+                            <i class="ph ph-eye text-xl"></i>
+                        </button>
+                    </div>
                 </div>
+
+                <div class="flex items-center justify-between gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox"
+                            class="w-4 h-4 rounded border-gray-300 text-jejak-primary focus:ring-jejak-primary">
+                        <span class="text-sm text-gray-600">Ingat saya</span>
+                    </label>
+                    <a href="{% url 'gantipw' %}"
+                        class="text-sm font-semibold text-jejak-accent hover:text-jejak-accent/80 transition-colors">Lupa
+                        Password?</a>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-4 bg-jejak-primary hover:bg-jejak-primary/90 text-white rounded-xl font-semibold shadow-lg shadow-jejak-primary/30 transition-all active:scale-[0.98]">
+                    Masuk ke Dasbor
+                </button>
             </form>
 
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-between border-t border-jejak-secondary/20 pt-6">
-                <p class="text-jejak-text/60 font-medium text-sm mb-4 sm:mb-0">Atau masuk dengan:</p>
-                <div class="flex space-x-3">
-                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
-                        <i class="ph ph-facebook-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
-                        <i class="ph ph-google-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 flex items-center justify-center rounded-xl border border-jejak-secondary group hover:bg-jejak-bg transition-all">
-                        <i class="ph ph-apple-logo text-jejak-secondary text-xl group-hover:text-jejak-primary"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="mt-6 text-center text-jejak-text/70 font-medium text-sm">
-                Belum punya akun? <a href="{% url 'register' %}" class="text-jejak-accent font-bold hover:text-jejak-accent/80 transition-colors underline decoration-jejak-accent decoration-2 underline-offset-4">Daftar sekarang</a>
-            </div>
+            <p class="mt-8 text-center text-sm text-gray-600 pb-6 lg:pb-0">
+                Belum punya akun?
+                <a href="{% url 'register' %}"
+                    class="font-semibold text-jejak-primary hover:underline underline-offset-4">Daftar sekarang</a>
+            </p>
 
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElement = document.querySelector('[data-animate]');
+            if (animateElement) animateElement.classList.add('animate-fade-in-up');
+        });
+
+        function togglePassword(inputId, iconButton) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = iconButton.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('ph-eye', 'ph-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('ph-eye-slash', 'ph-eye');
+            }
+        }
+    </script>
 </body>
-</html> -->
+
+</html>
