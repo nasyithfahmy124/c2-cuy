@@ -13,14 +13,19 @@ def landing_page(request):
     return render(request, 'landing.html')
 
 def mulai_redirect(request):
-    # Logika ketika tombol "Mulai" di-klik
     if request.user.is_authenticated:
-        # Jika sudah login, arahkan ke dashboard
-        return redirect('dashboard')
-    else:
-        # Jika belum login, arahkan ke halaman home biasa
-        return redirect('public_home')
+        user = request.user
 
+        if user.role == 'petani':
+            return redirect('home_p')
+        elif user.role == 'donatur':
+            return redirect('home_d')
+        else:
+            return redirect('public_home')  # fallback
+
+    else:
+        return redirect('public_home')
+    
 def public_home(request):
     # Merender halaman templates/home.html (Untuk tamu/belum login)
     return render(request, 'home.html')
@@ -37,11 +42,8 @@ def home_page(request):
 # ==========================================
 
 def page_login(request):
-    # Cegah user yang sudah login buka halaman login lagi
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-
     form = LoginForm(request.POST or None)
+
     if request.method == 'POST':
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -51,14 +53,20 @@ def page_login(request):
 
             if user is not None:
                 login(request, user)
-                # Sesuai request, semua user yang login diarahkan ke dashboard
-                return redirect('dashboard')
+
+                if user.role == 'petani':
+                    return redirect('home_p')
+                elif user.role == 'donatur':
+                    return redirect('home_d')
             else:
                 messages.error(request, 'Username atau password salah')
 
     return render(request, 'login/login.html', {
         'form': form
     })
+
+    
+
 
 def page_register(request):
     # Cegah user yang sudah login buka halaman register
@@ -70,7 +78,6 @@ def page_register(request):
         if form_register.is_valid():
             form_register.save()
             messages.success(request, 'Akun berhasil dibuat. Silakan masuk.')
-            # Setelah register, arahkan ke login
             return redirect('login')
     else:
         form_register = RegisterForm()

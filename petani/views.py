@@ -48,6 +48,7 @@ def laporan(request, project_id):
             laporan = form.save(commit=False)
             laporan.project = project
             laporan.save()
+            messages.success("Laporan berhasil dikirim ke donatur!")
             return redirect('home_p')
     else:
         form = FormLaporan()
@@ -63,4 +64,14 @@ def view_projek(request):
     
     return render(request, 'petani/view.html', {
         'all': all
+    })
+@login_required
+def detail_projek(request, id):
+    get = get_object_or_404(
+        Project,
+        id=id,
+        petani=request.user 
+    )
+    return render(request, 'petani/detail_projek.html', {
+        'semua_projek': get
     })

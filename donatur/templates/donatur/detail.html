@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ detail.nama }}</title>
+    {% load humanize %}
+</head>
+
+<body>
+
+    <div>
+        <p><a href="javascript:history.back()">← Kembali</a></p>
+
+        <header>
+            <h1>{{ detail.nama }}</h1>
+
+            {% if detail.foto_lahan %}
+            <img src="{{ detail.foto_lahan.url }}" alt="Foto Lahan" style="max-width: 100%; height: auto;">
+            {% else %}
+            <div style="background: #f0fdf4; padding: 40px; text-align: center; border: 1px solid #d1fae5;">
+                <p>Tidak ada foto lahan</p>
+            </div>
+            {% endif %}
+
+            <p>{{ detail.deskripsi }}</p>
+        </header>
+
+        <hr>
+
+        <section>
+            {% widthratio total_donasi detail.target_dana 100 as persen %}
+            <h3>Status Pendanaan</h3>
+            <ul>
+                <li><strong>Terkumpul:</strong> Rp {{ total_donasi|intcomma }}</li>
+                <li><strong>Target:</strong> Rp {{ detail.target_dana|intcomma }}</li>
+                <li><strong>Progres:</strong> {{ persen }}%</li>
+            </ul>
+
+            {% if persen > 80 %}
+            <p style="color: red;"><strong>🔥 Hampir penuh! Kesempatan terakhir untuk ikut mendanai</strong></p>
+            {% endif %}
+
+            <p>
+                <a href="{% url 'danai_project' detail.id %}" style="font-size: 20px; font-weight: bold;">
+                    💰 Danai Sekarang
+                </a>
+            </p>
+        </section>
+
+        <hr>
+
+        <section>
+            <div>
+                <h3>📍 Informasi Proyek</h3>
+                <p>Lokasi: {{ detail.lokasi }}</p>
+                <p>Luas Lahan: {{ detail.luas_lahan }} m²</p>
+                <p>Durasi: {{ detail.berapa_bulan }} bulan</p>
+            </div>
+
+            <div>
+                <h3>💡 Estimasi & Kebutuhan</h3>
+                <p>Estimasi Hasil: {{ detail.estimasi_hasil }}</p>
+                <p>Kebutuhan: {{ detail.kebutuhan }}</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>📊 Transparansi Laporan</h3>
+            {% for l in detail.laporan.all %}
+            <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <p><strong>{{ l.judul }}</strong></p>
+                <p>{{ l.deskripsi }}</p>
+            </div>
+            {% empty %}
+            <p>Belum ada laporan dari petani.</p>
+            {% endfor %}
+        </section>
+
+        <hr>
+
+        <footer>
+            <h2>Jadilah bagian dari perubahan 🌱</h2>
+            <p>Dukung petani dan bantu wujudkan panen sukses</p>
+            <p>
+                <a href="{% url 'danai_project' detail.id %}">
+                    <strong>Danai Sekarang</strong>
+                </a>
+            </p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

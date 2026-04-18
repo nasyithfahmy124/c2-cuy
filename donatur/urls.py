@@ -4,4 +4,5 @@ urlpatterns = [
     path('dashboard-donatur/',views.home_page,name='home_d'),
     path('danai/<int:id>/', views.danai_project, name='danai_project'),
     path('laporan/<int:id>/', views.lihat_laporan, name='lihat_laporan'),
+    path('detail-project/<int:id>',views.detail,name='det')
 ]

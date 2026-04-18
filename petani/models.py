@@ -10,28 +10,17 @@ STATUS_CHOICES = [
 
 class Project(models.Model):
     petani = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    # dasar
     nama = models.CharField(max_length=100)
     deskripsi = models.TextField(null=True)
-
-    # validasi
     lokasi = models.CharField(max_length=200, null=True)
     luas_lahan = models.IntegerField(null=True)
     foto_lahan = models.ImageField(upload_to='lahan/', null=True)
-
-    # dana
     target_dana = models.IntegerField(null=True)
     kebutuhan = models.TextField(null=True)
     estimasi_hasil = models.IntegerField(null=True)
     dana_terkumpul = models.IntegerField(default=0)
-    # waktu
-    # tanggal_mulai = models.DateField(null=True)
-    # estimasi_panen = models.DateField(null=True)
     berapa_bulan = models.CharField(max_length=200) 
-    # status
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
-
     
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')

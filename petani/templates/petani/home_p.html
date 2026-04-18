@@ -5,70 +5,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P2P Agro-Funding - Dasbor Petani</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="bg-gray-50 font-sans leading-normal tracking-normal">
+
     {% if messages %}
-    <ul>
+    <div class="max-w-4xl mx-auto mt-4 px-4">
         {% for message in messages %}
-        <li>{{ message }}</li>
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-2 shadow-sm rounded" role="alert">
+            <p>{{ message }}</p>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
     {% load humanize %}
 
-    <header>
-        <nav>
-            <h1>🌾 Halo, Pak/Bu {{ user.username }}</h1>
-            <p>Selamat datang kembali, Petani Bijak.</p>
-        </nav>
-    </header>
-
-    
-
-    <main>
-        <section>
-            <h2>Dana Terkumpul Saat Ini:</h2>
+    <nav class="bg-emerald-700 p-4 shadow-lg text-white">
+        <div class="container mx-auto flex justify-between items-center">
             <div>
-                <strong>Rp {{ dana|intcomma }},00</strong>
+                <h1 class="text-2xl font-bold flex items-center">
+                    <span class="mr-2">🌾</span> Halo, {{ user.username }}
+                </h1>
+                <p class="text-emerald-100 text-sm">Selamat datang kembali, Petani Bijak.</p>
             </div>
-            <p>
-                Update terakhir: <span>{{ waktu }}</span>
-            </p>
+            <div class="space-x-4 text-sm font-medium">
+                <a href="{% url 'landing' %}" class="hover:text-emerald-200 transition">Beranda</a>
+                <a href="{% url 'gantipw' %}" class="hover:text-emerald-200 transition">Keamanan</a>
+                <a href="{% url 'logout' %}"
+                    class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition shadow-md">Keluar</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+
+        <section
+            class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8 flex flex-col md:flex-row items-center justify-between">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-gray-500 uppercase tracking-wider text-sm font-semibold">Dana Terkumpul Saat Ini</h2>
+                <div class="text-4xl font-extrabold text-emerald-600 mt-1">
+                    Rp {{ dana|intcomma }},00
+                </div>
+                <p class="text-gray-400 text-xs mt-2 italic">
+                    <i class="far fa-clock mr-1"></i> Update terakhir: {{ waktu }}
+                </p>
+            </div>
+            <div class="bg-emerald-50 p-4 rounded-full">
+                <i class="fas fa-wallet text-emerald-500 text-3xl"></i>
+            </div>
         </section>
 
-        <hr>
-
-        <section>
-            <h3>Apa itu Platform Inklusi Pertanian?</h3>
-            <p>
-                Ini adalah tempat Pak/Bu Tani mendapatkan <strong>modal usaha</strong> (bibit, pupuk, alat)
-                langsung dari masyarakat yang ingin membantu. Di sini, kita bukan hanya bertani,
-                tapi menjadi <strong>mitra bisnis</strong> yang profesional dan jujur.
-            </p>
+        <section class="mb-10 bg-emerald-600 rounded-2xl p-8 text-white shadow-xl overflow-hidden relative">
+            <div class="relative z-10 md:w-2/3">
+                <h3 class="text-2xl font-bold mb-3">Apa itu Platform Inklusi Pertanian?</h3>
+                <p class="text-emerald-50 leading-relaxed">
+                    Ini adalah tempat Pak/Bu Tani mendapatkan <span class="font-bold underline">modal usaha</span>
+                    (bibit, pupuk, alat) langsung dari masyarakat. Di sini, kita bukan hanya bertani,
+                    tapi menjadi mitra bisnis yang profesional dan jujur.
+                </p>
+            </div>
+            <i
+                class="fas fa-seedling absolute right-[-20px] bottom-[-20px] text-emerald-500 opacity-20 text-9xl transform -rotate-12"></i>
         </section>
 
-        <section>
-            <div>
-                <a href="{% url 'projek' %}">
-                    <h3>BUAT PROJEK BARU</h3>
-                    <p>Ajukan modal untuk bibit atau alat tani</p>
-                </a>
-            </div>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="{% url 'projek' %}"
+                class="group bg-white p-6 rounded-2xl border-2 border-transparent hover:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-emerald-100 p-4 rounded-xl group-hover:bg-emerald-500 transition-colors">
+                        <i class="fas fa-plus-circle text-emerald-600 group-hover:text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">BUAT PROJEK BARU</h3>
+                        <p class="text-gray-500">Ajukan modal untuk bibit atau alat tani</p>
+                    </div>
+                </div>
+            </a>
 
-            <div>
-                <a href="{% url 'allp' %}">
-                    <h3>LIHAT PROJEK SAYA</h3>
-                    <p>Pantau laporan dan perkembangan lahan</p>
-                </a>
-            </div>
+            <a href="{% url 'allp' %}"
+                class="group bg-white p-6 rounded-2xl border-2 border-transparent hover:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-emerald-100 p-4 rounded-xl group-hover:bg-emerald-500 transition-colors">
+                        <i class="fas fa-tasks text-emerald-600 group-hover:text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">LIHAT PROJEK SAYA</h3>
+                        <p class="text-gray-500">Pantau laporan dan perkembangan lahan</p>
+                    </div>
+                </div>
+            </a>
         </section>
     </main>
 
-    <hr>
-    
-    <footer>
-        <p>Meningkatkan Taraf Hidup Petani Indonesia melalui Teknologi</p>
+    <footer class="mt-12 py-8 bg-gray-100 border-t border-gray-200">
+        <div class="text-center">
+            <p class="text-gray-600 font-medium italic">"Meningkatkan Taraf Hidup Petani Indonesia melalui Teknologi"
+            </p>
+            <p class="text-gray-400 text-sm mt-2">&copy; 2024 P2P Agro-Funding Indonesia</p>
+        </div>
     </footer>
 
 </body>

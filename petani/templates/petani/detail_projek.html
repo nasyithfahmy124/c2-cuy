@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Detail Projek</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-10">
+        <h1 class="text-2xl font-bold mb-4">{{ semua_projek.nama }}</h1>
+
+        <p><strong>Deskripsi:</strong> {{ semua_projek.deskripsi }}</p>
+        <p><strong>Lokasi:</strong> {{ semua_projek.lokasi }}</p>
+        <p><strong>Luas:</strong> {{ semua_projek.luas_lahan }} m²</p>
+        <p><strong>Target:</strong> Rp {{ semua_projek.target_dana }}</p>
+
+        {% if semua_projek.foto_lahan %}
+        <img src="{{ semua_projek.foto_lahan.url }}" class="mt-4 rounded">
+        {% endif %}
+    </div>
+    <a href="{% url 'allp' %}">kembali</a>
+</body>
+
+</html>
