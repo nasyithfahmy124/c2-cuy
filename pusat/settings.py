@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'akun',
     'petani',
     'donatur',
-    'dashboard'
+    'dashboard',
+    'edukasi',
     
 ]
 

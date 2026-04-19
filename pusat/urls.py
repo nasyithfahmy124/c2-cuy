@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('petani.urls')),
     path('', include('donatur.urls')),
     path('', include('dashboard.urls')),
+    path('', include('edukasi.urls')),
 ]
 
 if settings.DEBUG:

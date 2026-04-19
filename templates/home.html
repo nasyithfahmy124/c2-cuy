@@ -31,6 +31,15 @@
             animation-delay: 300ms;
         }
 
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         @keyframes fadeInUp {
             to {
                 opacity: 1;
@@ -58,8 +67,8 @@
                 <ul class="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-500">
                     <li><a href="#home" class="hover:text-gray-900 transition-colors">Beranda</a></li>
                     <li><a href="#tentang" class="hover:text-gray-900 transition-colors">Tentang Kami</a></li>
-                    <li><a href="#proyek" class="hover:text-gray-900 transition-colors">Daftar Kebutuhan</a></li>
                     <li><a href="#dampak" class="hover:text-gray-900 transition-colors">Dampak</a></li>
+                    <li><a href="#proyek" class="hover:text-gray-900 transition-colors">Daftar Kebutuhan</a></li>
                 </ul>
 
                 <div class="hidden md:flex items-center gap-4">
@@ -242,54 +251,138 @@
         </div>
     </section>
 
-    <section id="proyek" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-                <div class="max-w-2xl">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-3">Daftar Kebutuhan Aktif</h2>
-                    <p class="text-gray-500 text-lg">Pilih proyek yang ingin Anda dukung hari ini dan lihat langsung
-                        dampaknya bagi petani.</p>
-                </div>
-                <a href="#"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 font-semibold text-gray-700 hover:bg-gray-50 transition-colors">
-                    Lihat Semua Proyek
-                </a>
+    <section id="proyek" class="bg-gray-50 pb-24">
+
+        <div class="bg-jejak-primary pt-24 pb-48 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div
+                class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 left-10 w-40 h-40 bg-jejak-secondary/20 rounded-full blur-2xl pointer-events-none">
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div
-                    class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow group">
-                    <div class="h-48 bg-gray-100 relative overflow-hidden">
-                        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="Thumbnail"
-                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div
-                            class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-md text-xs font-bold text-gray-800">
-                            Sleman, DIY</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2">Pengadaan 20 Karung Kompos Organik
-                        </h3>
+            <div class="max-w-7xl mx-auto text-center relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Daftar Kebutuhan Petani</h2>
+                <p class="text-white/80 max-w-2xl mx-auto text-lg leading-relaxed">
+                    Pilih proyek yang ingin Anda dukung hari ini. Semua daftar kebutuhan di bawah ini telah diverifikasi
+                    oleh tim JejakDaya.
+                </p>
+            </div>
+        </div>
 
-                        <div class="mb-4">
-                            <div class="flex justify-between text-sm font-semibold mb-2">
-                                <span class="text-jejak-primary">5 Karung Terkumpul</span>
-                                <span class="text-gray-500">Target: 20</span>
-                            </div>
-                            <div class="w-full bg-gray-100 rounded-full h-2">
-                                <div class="bg-jejak-primary h-2 rounded-full" style="width: 25%"></div>
-                            </div>
+        <div class="max-w-7xl mx-auto relative z-20 -mt-32">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+
+                {% for project in projects %}
+                <div
+                    class="group bg-white rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500 overflow-hidden flex flex-col">
+
+                    <div class="relative h-56 overflow-hidden bg-gray-100">
+                        {% if project.foto_lahan %}
+                        <img src="{{ project.foto_lahan.url }}" alt="{{ project.nama }}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                            <i class="ph-fill ph-plant text-5xl text-gray-400"></i>
+                        </div>
+                        {% endif %}
+
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent">
                         </div>
 
-                        <a href="#"
-                            class="block w-full text-center py-3 rounded-lg bg-gray-50 border border-gray-200 text-gray-700 font-semibold hover:bg-jejak-primary hover:text-white hover:border-jejak-primary transition-colors mt-6">
-                            Lihat Detail
-                        </a>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold text-gray-800 flex items-center gap-1.5 shadow-sm">
+                                <i class="ph-fill ph-map-pin text-jejak-accent"></i> {{ project.lokasi|default:"Lokasi
+                                belum diatur" }}
+                            </span>
+                        </div>
+
+                        <div class="absolute top-4 right-4">
+                            <span class="px-3 py-1.5 rounded-full text-xs font-bold text-white flex items-center gap-1.5 shadow-sm backdrop-blur-md
+                    {% if project.status == 'pending' %}bg-yellow-500/90
+                    {% elif project.status == 'aktif' %}bg-green-500/90
+                    {% else %}bg-blue-500/90{% endif %}">
+                                {{ project.get_status_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 md:p-8 flex-grow flex flex-col">
+
+                        <h3
+                            class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-jejak-primary transition-colors">
+                            {{ project.nama }}
+                        </h3>
+                        <p class="text-gray-500 text-sm mb-6 line-clamp-2 leading-relaxed">
+                            {{ project.kebutuhan|default:project.deskripsi|truncatechars:100 }}
+                        </p>
+
+                        <div class="mt-auto">
+
+                            <div class="mb-6">
+                                <div class="flex justify-between items-end mb-2">
+                                    <div>
+                                        <p class="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wider">
+                                            Sumber Daya Terkumpul</p>
+                                        <p class="text-lg font-bold text-jejak-primary">Rp {{ project.dana_terkumpul }}
+                                            <span class="text-sm text-gray-500 font-medium">/ Rp {{ project.target_dana
+                                                }}</span>
+                                        </p>
+                                    </div>
+                                    <span class="text-xl font-extrabold text-gray-900">{{ project.persentase }}%</span>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                    <div class="bg-jejak-primary h-full rounded-full relative transition-all duration-1000"
+                                        style="width: {{ project.persentase }}%">
+                                        <div class="absolute top-0 left-0 bottom-0 right-0 bg-white/20 animate-pulse">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="{% url 'detail' project.id %}"
+                                class="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold border border-jejak-primary/20 hover:bg-jejak-primary hover:text-white transition-all duration-300">
+                                Pantau Proyek <i class="ph-bold ph-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-span-1 md:col-span-2 lg:col-span-3">
+                    <div
+                        class="flex flex-col items-center justify-center py-20 px-6 bg-gray-50/50 border-2 border-dashed border-gray-300 rounded-[2rem] text-center transition-all hover:bg-gray-50">
+
+                        <div
+                            class="w-24 h-24 bg-white shadow-sm border border-gray-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="ph-fill ph-clipboard-text text-5xl text-gray-300"></i>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Belum ada daftar kebutuhan</h3>
+                        <p class="text-gray-500 text-sm max-w-sm mx-auto mb-8 leading-relaxed">
+                            Anda belum memiliki atau mendaftarkan kebutuhan sumber daya apapun saat ini.
+                        </p>
+
+                        <a href="{% url 'projek' %}"
+                            class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-jejak-primary text-white text-sm font-bold hover:bg-jejak-primary/90 shadow-lg shadow-jejak-primary/20 transition-all active:scale-95">
+                            <i class="ph-bold ph-plus text-lg"></i> Ajukan Kebutuhan Baru
+                        </a>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#kebutuhan"
+                    class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white border border-gray-200 font-semibold text-gray-700 shadow-sm hover:border-jejak-primary hover:text-jejak-primary transition-all">
+                    Jelajahi Semua Kebutuhan <i class="ph-bold ph-arrow-right"></i>
+                </a>
             </div>
         </div>
     </section>
-
     <footer class="bg-gray-900 pt-16 pb-8 text-white border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
