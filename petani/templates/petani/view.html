@@ -1,110 +1,126 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Proyek Saya - AgroFunding</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Kelola Lahan Saya - JejakDaya</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
+        .project-card { 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .project-card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+    </style>
 </head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
-<body class="bg-gray-50 font-sans leading-normal tracking-normal text-gray-800">
+    {% include 'petani/partials/navbar.html' %}
 
-    <nav class="bg-emerald-700 p-4 shadow-lg text-white sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold flex items-center">
-                <i class="fas fa-leaf mr-2"></i> Kelola Proyek Tani
-            </h1>
-            <a href="{% url 'home_p' %}"
-                class="bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm transition font-semibold shadow-sm">
-                <i class="fas fa-home mr-1"></i> Kembali
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-10 md:py-16">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate-fade-in-up">
+            <div>
+                <div class="flex items-center gap-2 text-jejak-secondary font-bold text-xs uppercase tracking-[0.2em] mb-3">
+                    <i class="ph-fill ph-folders"></i> Manajemen Portofolio
+                </div>
+                <h1 class="text-3xl md:text-4xl font-black text-jejak-primary tracking-tight">Daftar Proyek Saya</h1>
+            </div>
+            <a href="{% url 'projek' %}" class="inline-flex items-center gap-2 px-6 py-3.5 bg-jejak-primary text-white rounded-2xl font-black text-sm shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95">
+                <i class="ph-bold ph-plus-circle text-lg"></i> Ajukan Lahan Baru
             </a>
         </div>
-    </nav>
 
-    <main class="container mx-auto px-4 py-10">
-
-        <div class="mb-10 text-center md:text-left">
-            <h2 class="text-3xl font-extrabold text-gray-900">Proyek Pertanian Anda</h2>
-            <p class="text-gray-500 mt-2">Pantau perkembangan lahan dan perbarui laporan secara berkala.</p>
+        <div class="flex flex-wrap gap-4 mb-8 animate-fade-in-up delay-100">
+            <div class="flex-grow md:max-w-xs relative">
+                <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" placeholder="Cari nama lahan..." class="w-full bg-white border border-gray-100 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-jejak-primary/5 transition-all">
+            </div>
+            <div class="flex gap-2">
+                <button class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-jejak-primary hover:bg-gray-50 transition-all">Semua</button>
+                <button class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-gray-400 hover:text-jejak-primary transition-all">Aktif</button>
+                <button class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-gray-400 hover:text-jejak-primary transition-all">Selesai</button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up delay-200">
             {% for project in all %}
-            <div
-                class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group">
-
-                <div class="relative overflow-hidden">
+            <div class="project-card bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden flex flex-col shadow-sm">
+                <div class="h-48 relative overflow-hidden group">
                     {% if project.foto_lahan %}
-                    <img src="{{ project.foto_lahan.url }}"
-                        class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="{{ project.foto_lahan.url }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     {% else %}
-                    <div class="h-48 bg-emerald-50 flex items-center justify-center text-emerald-200">
-                        <i class="fas fa-image text-6xl opacity-30"></i>
-                    </div>
+                        <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                            <i class="ph-fill ph-plant text-4xl text-gray-300"></i>
+                        </div>
                     {% endif %}
-
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    
                     <div class="absolute top-4 right-4">
-                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm 
-                        {% if project.status == 'aktif' %} bg-emerald-500 text-white 
-                        {% elif project.status == 'selesai' %} bg-blue-500 text-white 
-                        {% else %} bg-yellow-400 text-gray-800 {% endif %}">
-                            {{ project.status }}
+                        <span class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white shadow-lg backdrop-blur-md
+                            {% if project.status == 'pending' %}bg-orange-500/80
+                            {% elif project.status == 'aktif' %}bg-jejak-secondary/80
+                            {% else %}bg-blue-500/80{% endif %}">
+                            {{ project.get_status_display }}
                         </span>
                     </div>
                 </div>
 
-                <div class="p-6 flex-grow">
-                    <h3 class="text-xl font-bold text-gray-800 mb-2 truncate">
+                <div class="p-8 flex-grow flex flex-col">
+                    <div class="flex items-center gap-2 text-[10px] font-bold text-jejak-secondary uppercase tracking-widest mb-2">
+                        <i class="ph-fill ph-map-pin"></i> {{ project.lokasi }}
+                    </div>
+                    <h3 class="text-xl font-black text-jejak-primary mb-4 line-clamp-2 leading-tight">
                         {{ project.nama }}
                     </h3>
-                    <p class="text-gray-600 text-sm line-clamp-2 mb-4">
-                        {{ project.deskripsi }}
-                    </p>
 
-                    <div class="border-t border-gray-100 pt-4 mt-2">
-                        <div class="flex items-center text-gray-400 text-xs">
-                            <i class="fas fa-map-marker-alt mr-1"></i>
-                            <span>Lokasi: Terverifikasi oleh Sistem</span>
+                    <div class="space-y-2 mb-8">
+                        <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
+                            <span class="text-gray-400">Progres Pendanaan</span>
+                            <span class="text-jejak-primary">{{ project.persentase }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                            <div class="bg-jejak-primary h-full transition-all duration-1000" style="width: {{ project.persentase }}%"></div>
                         </div>
                     </div>
-                </div>
 
-                <div class="p-6 pt-0 mt-auto flex flex-col space-y-2">
-                    <a href="{% url 'tambah_laporan' project.id %}"
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl font-bold transition flex items-center justify-center">
-                        <i class="fas fa-plus-circle mr-2 text-sm"></i> Tambah Laporan
-                    </a>
-
-                    <a href="{% url 'detail' project.id %}"
-                        class="w-full bg-white border border-emerald-600 text-emerald-600 hover:bg-emerald-50 text-center py-2.5 rounded-xl font-bold transition">
-                        Detail Proyek
-                    </a>
+                    <div class="mt-auto grid grid-cols-2 gap-3">
+                        <a href="{% url 'detail' project.id %}" class="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold text-xs hover:bg-jejak-primary hover:text-white transition-all group">
+                            <i class="ph-bold ph-eye text-base"></i> Detail
+                        </a>
+                        <a href="{% url 'tambah_laporan' project.id %}" class="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-jejak-secondary text-white font-bold text-xs hover:shadow-lg hover:shadow-jejak-secondary/20 transition-all active:scale-95">
+                            <i class="ph-bold ph-scroll text-base"></i> Lapor
+                        </a>
+                    </div>
                 </div>
             </div>
-
             {% empty %}
-            <div
-                class="col-span-full py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200 text-center shadow-sm">
-                <div class="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-folder-open text-gray-300 text-3xl"></i>
+            <div class="col-span-full py-24 bg-white/50 border-2 border-dashed border-gray-200 rounded-[3rem] text-center flex flex-col items-center justify-center">
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100 mb-6">
+                    <i class="ph-fill ph-folders text-4xl text-gray-200"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-700">Belum Ada Proyek</h3>
-                <p class="text-gray-400 max-w-xs mx-auto mt-2">Anda belum memiliki proyek pertanian yang terdaftar di
-                    sistem kami.</p>
-                <a href="#"
-                    class="mt-6 inline-block bg-emerald-600 text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-emerald-700 transition">Buat
-                    Proyek Sekarang</a>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Belum Ada Proyek Lahan</h3>
+                <p class="text-gray-500 text-sm max-w-sm mx-auto mb-8">Anda belum memiliki daftar proyek yang diajukan. Mulai ajukan kebutuhan lahan Anda sekarang.</p>
+                <a href="{% url 'projek' %}" class="px-8 py-3.5 rounded-2xl bg-jejak-primary text-white font-black text-sm shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all">
+                    Ajukan Proyek Pertama
+                </a>
             </div>
             {% endfor %}
         </div>
+
     </main>
 
-    <footer class="mt-20 py-10 bg-gray-100 border-t border-gray-200 text-center">
-        <p class="text-gray-500 text-sm">P2P Agro-Funding - Dashboard Petani Profesional</p>
-    </footer>
+    {% include 'petani/partials/footer.html' %}
 
 </body>
-
-</html> 
+</html>

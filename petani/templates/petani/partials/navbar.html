@@ -1,0 +1,35 @@
+{% load static %}
+<nav class="glass-nav sticky top-0 z-50 border-b border-jejak-primary/5 px-4 md:px-8 h-20 flex items-center justify-between shadow-sm transition-all">
+    <div class="flex items-center gap-4 animate-fade-in-up">
+        <div class="relative">
+            <div class="w-11 h-11 rounded-full bg-jejak-primary border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
+                {% if user.foto %}
+                    <img src="{{ user.foto.url }}" class="w-full h-full object-cover">
+                {% else %}
+                    <i class="ph-fill ph-user text-white text-xl"></i>
+                {% endif %}
+            </div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-jejak-secondary uppercase tracking-widest">Inkubator Lahan,</p>
+            <h2 class="text-sm font-extrabold text-jejak-primary leading-tight">Halo, {{ user.username }}!</h2>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-4">
+        <a href="{% url 'pusat_edukasi' %}" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold text-sm hover:bg-jejak-primary hover:text-white transition-all group">
+            <i class="ph-fill ph-book-open text-lg"></i>
+            <span class="hidden md:block">Docs SOP</span>
+        </a>
+        <a href="{% url 'home_p' %}" class="w-11 h-11 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-400 hover:text-jejak-accent hover:border-jejak-accent transition-all shadow-sm" title="Beranda Utama">
+            <i class="ph-fill ph-house-line text-xl"></i>
+        </a>
+        <form action="{% url 'logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="w-11 h-11 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                <i class="ph-bold ph-sign-out text-xl"></i>
+            </button>
+        </form>
+    </div>
+</nav>
