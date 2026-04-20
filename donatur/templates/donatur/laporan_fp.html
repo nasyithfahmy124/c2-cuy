@@ -1,27 +1,69 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Laporan: {{ project.nama }}</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
-<body>
-    <h2>Laporan Project: {{ project.nama }}</h2>
-    
-    {% for l in laporan %}
-    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-        <h3>{{ l.judul }}</h3>
-        <p>{{ l.deskripsi }}</p>
-        <p>Pengeluaran: Rp {{ l.jumlah_pengeluaran }}</p>
-        <p>Tanggal: {{ l.tanggal }}</p>
-    
-        {% if l.bukti %}
-        <img src="{{ l.bukti.url }}" width="200">
-        {% endif %}
-    </div>
-    {% empty %}
-    <p>Belum ada laporan dari petani</p>
-    {% endfor %}
-    <a href="{% url 'home_d' %}">back to home</a>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 px-4 md:px-8 h-16 flex items-center justify-between">
+        <a href="{% url 'home_d' %}" class="text-sm font-bold text-gray-500 hover:text-jejak-primary transition-colors flex items-center gap-2">
+            <i class="ph-bold ph-arrow-left"></i> Kembali ke Dasbor
+        </a>
+        <span class="text-xs font-bold text-jejak-primary bg-jejak-primary/10 px-3 py-1 rounded-full uppercase tracking-widest"><i class="ph-fill ph-files"></i> Histori Laporan</span>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-10">
+        <div class="text-center mb-12 animate-fade-in-up">
+            <h1 class="text-3xl font-black text-jejak-primary mb-2">Transparansi Aktivitas</h1>
+            <p class="text-gray-500 font-medium">Lahan: <strong class="text-gray-800">{{ project.nama }}</strong></p>
+        </div>
+
+        <div class="space-y-8 animate-fade-in-up delay-100">
+            {% for l in laporan %}
+            <div class="bg-white p-6 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col md:flex-row gap-8 hover:shadow-md transition-all">
+                
+                {% if l.bukti %}
+                <div class="w-full md:w-48 h-48 rounded-[1.5rem] overflow-hidden flex-shrink-0 border border-gray-100">
+                    <img src="{{ l.bukti.url }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                </div>
+                {% endif %}
+                
+                <div class="flex-grow flex flex-col justify-center">
+                    <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
+                        <h3 class="text-xl font-black text-jejak-primary">{{ l.judul }}</h3>
+                        <span class="px-3 py-1 bg-gray-100 rounded-lg text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                            <i class="ph-fill ph-calendar"></i> {{ l.tanggal|date:"d M Y" }}
+                        </span>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6 leading-relaxed">{{ l.deskripsi }}</p>
+                    
+                    <div class="mt-auto inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 text-red-600 rounded-xl w-fit">
+                        <i class="ph-fill ph-receipt text-lg"></i>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-widest leading-none">Pengeluaran Barang</p>
+                            <p class="text-sm font-black">Rp {{ l.jumlah_pengeluaran|intcomma }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="py-20 bg-white/50 border-2 border-dashed border-gray-200 rounded-[3rem] text-center">
+                <i class="ph-fill ph-files text-5xl text-gray-200 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Lahan Masih Kosong</h3>
+                <p class="text-gray-500 text-sm">Petani belum mengirimkan update harian untuk lahan ini.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
 </body>
 </html>

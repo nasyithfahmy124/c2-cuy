@@ -15,3 +15,10 @@ def dashboard_admin(request):
     return render(request, 'dashboard/home.html', {
         'projects': projects
     })
+
+def home_awal(request):
+    proyek_aktif = Project.objects.filter(status='aktif').annotate(
+        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+    ).order_by('-id') #
+
+    return render(request, '')
