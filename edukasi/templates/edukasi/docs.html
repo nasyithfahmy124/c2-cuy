@@ -13,11 +13,8 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        /* Sembunyikan scrollbar tapi tetep bisa scroll (khusus sidebar) */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Styling tambahan untuk konten dari WYSIWYG Editor (Prose) */
         .prose h2 { color: #1F4D3A; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
         .prose h3 { color: #1F2933; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
         .prose p { color: #4B5563; line-height: 1.75; margin-bottom: 1.25rem; }
@@ -194,4 +191,59 @@
                             <i class="ph-fill ph-lightbulb text-2xl text-jejak-secondary shrink-0"></i>
                             <div>
                                 <h4 class="text-jejak-primary font-bold mb-1 mt-0">Tips Petani Pro</h4>
-                                <p class="text-sm text-gray-700 m
+                                <p class="text-sm text-gray-700 m-0">
+                                    Selalu campurkan pekatan A ke dalam air terlebih dahulu dan aduk rata, JANGAN mencampur pekatan A dan B secara langsung karena akan menggumpal.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    </article>
+
+                <div class="mt-20 pt-8 border-t border-gray-200">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="text-center md:text-left">
+                            <p class="text-sm font-bold text-gray-900">Apakah dokumen ini membantu?</p>
+                            <p class="text-xs text-gray-500">Berikan masukan untuk menyempurnakan SOP.</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:text-jejak-primary hover:border-jejak-primary hover:bg-jejak-primary/5 transition-all">
+                                <i class="ph-bold ph-thumbs-up text-lg"></i> Ya, Mantap
+                            </button>
+                            <button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:text-jejak-accent hover:border-jejak-accent hover:bg-jejak-accent/5 transition-all">
+                                <i class="ph-bold ph-thumbs-down text-lg"></i> Bingung
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            {% else %}
+            <div class="h-full flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-24 h-24 bg-gray-50 border border-gray-100 shadow-sm rounded-full flex items-center justify-center mb-6">
+                    <i class="ph-fill ph-books text-5xl text-gray-300"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Pusat SOP Sedang Disusun</h2>
+                <p class="text-gray-500 max-w-sm">Tim Agronomi JejakDaya sedang merumuskan modul dan panduan terbaik untuk Anda.</p>
+            </div>
+            {% endif %}
+
+        </main>
+    </div>
+
+    <script>
+        const btn = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        btn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>
