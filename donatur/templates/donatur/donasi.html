@@ -1,22 +1,66 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Danai {{ project.nama }}</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
-<body>
-    <h2>Danai Proyek: {{ project.nama }}</h2>
-    
-    <p>Target: {{ project.target_dana }}</p>
-    <p>Terkumpul: {{ project.dana_terkumpul }}</p>
-    
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Kirim Donasi</button>
-    </form>
-    
-    <a href="{% url 'home_d' %}">Kembali</a>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-lg w-full bg-white/80 backdrop-blur-xl rounded-[3rem] shadow-2xl p-8 md:p-10 border border-white animate-fade-in-up">
+        
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-jejak-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 text-jejak-accent shadow-sm">
+                <i class="ph-fill ph-plant text-3xl"></i>
+            </div>
+            <h2 class="text-2xl font-black text-jejak-primary mb-2">Dukung Petani Muda</h2>
+            <p class="text-gray-500 text-sm">Proyek: <strong class="text-gray-800">{{ project.nama }}</strong></p>
+        </div>
+
+        <div class="bg-gray-50 rounded-2xl p-4 mb-8 flex justify-between items-center border border-gray-100">
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kekurangan Dana</p>
+                <p class="font-black text-jejak-primary">Rp {{ project.target_dana|intcomma }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Terkumpul</p>
+                <p class="font-bold text-gray-600">Rp {{ project.dana_terkumpul|intcomma }}</p>
+            </div>
+        </div>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="p-3 rounded-xl bg-red-50 text-red-600 text-xs font-bold border border-red-200">
+                {{ form.jumlah.errors }}
+            </div>
+            {% endif %}
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-jejak-primary uppercase tracking-wider ml-1">Nominal Bantuan (Rp)</label>
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 text-gray-400 font-bold">Rp</span>
+                    <input type="number" name="jumlah" class="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 pl-12 text-lg font-bold text-gray-800 transition-all focus:outline-none focus:ring-4 focus:ring-jejak-primary/10 focus:border-jejak-primary" placeholder="50000" required>
+                </div>
+                <p class="text-xs text-gray-400 ml-1 mt-1">*Dana ditahan di sistem Escrow untuk transparansi.</p>
+            </div>
+
+            <button type="submit" class="w-full py-4 rounded-2xl bg-jejak-primary text-white font-black text-lg shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95">
+                Kirim Dukungan Sekarang
+            </button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <a href="{% url 'home_d' %}" class="text-sm font-bold text-gray-400 hover:text-red-500 transition-colors">Batal</a>
+        </div>
+    </div>
+
 </body>
 </html>

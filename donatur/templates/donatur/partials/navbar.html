@@ -1,0 +1,20 @@
+<nav class="glass-nav sticky top-0 z-50 px-4 md:px-8 h-[76px] flex items-center justify-between shadow-sm bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <div class="flex items-center gap-4 animate-fade-in-up">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-jejak-accent to-orange-400 border-2 border-white shadow-md flex items-center justify-center overflow-hidden">
+            <i class="ph-fill ph-hand-coins text-white text-xl"></i>
+        </div>
+        <div>
+            <p class="text-[10px] font-bold text-jejak-secondary uppercase tracking-widest leading-none mb-1">Investor Kebaikan,</p>
+            <h2 class="text-sm font-extrabold text-jejak-primary leading-none">Halo, {{ user.username }}!</h2>
+        </div>
+    </div>
+    <div class="flex items-center gap-3">
+        <a href="{% url 'pusat_edukasi' %}" class="px-5 py-2.5 rounded-xl bg-white text-jejak-primary font-bold text-sm hover:shadow-md transition-all border border-gray-100 flex items-center gap-2">
+            <i class="ph-fill ph-book-open"></i> Docs & SOP
+        </a>
+        <form action="{% url 'logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="w-11 h-11 flex items-center justify-center rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm"><i class="ph-bold ph-sign-out text-xl"></i></button>
+        </form>
+    </div>
+</nav>

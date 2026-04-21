@@ -1,97 +1,103 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
-    <title>{{ detail.nama }}</title>
-    {% load humanize %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ detail.nama }} - Detail Lahan</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
-<body>
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 px-4 md:px-8 h-16 flex items-center">
+        <a href="{% url 'home_d' %}" class="text-sm font-bold text-gray-500 hover:text-jejak-primary transition-colors flex items-center gap-2">
+            <i class="ph-bold ph-arrow-left"></i> Kembali ke Eksplorasi
+        </a>
+    </nav>
 
-    <div>
-        <p><a href="javascript:history.back()">← Kembali</a></p>
-
-        <header>
-            <h1>{{ detail.nama }}</h1>
-
+    <main class="max-w-5xl mx-auto px-4 md:px-8 py-10">
+        
+        <div class="w-full h-[300px] md:h-[400px] rounded-[3rem] overflow-hidden shadow-2xl relative border-4 border-white mb-10 animate-fade-in-up">
             {% if detail.foto_lahan %}
-            <img src="{{ detail.foto_lahan.url }}" alt="Foto Lahan" style="max-width: 100%; height: auto;">
+                <img src="{{ detail.foto_lahan.url }}" class="w-full h-full object-cover">
             {% else %}
-            <div style="background: #f0fdf4; padding: 40px; text-align: center; border: 1px solid #d1fae5;">
-                <p>Tidak ada foto lahan</p>
-            </div>
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center"><i class="ph-fill ph-plant text-7xl text-gray-300"></i></div>
             {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-8 left-8 pr-8">
+                <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight mb-2">{{ detail.nama }}</h1>
+                <p class="text-gray-300 text-sm md:text-base line-clamp-2 max-w-2xl">{{ detail.deskripsi }}</p>
+            </div>
+        </div>
 
-            <p>{{ detail.deskripsi }}</p>
-        </header>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-up delay-100">
+            <div class="md:col-span-2 space-y-8">
+                
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <h3 class="text-xl font-black text-jejak-primary mb-6 flex items-center gap-2"><i class="ph-fill ph-map-trifold"></i> Informasi Lahan</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lokasi</p>
+                            <p class="font-bold text-gray-800">{{ detail.lokasi }}</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Luas Lahan</p>
+                            <p class="font-bold text-gray-800">{{ detail.luas_lahan }} m²</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Durasi</p>
+                            <p class="font-bold text-gray-800">{{ detail.berapa_bulan }} Bulan</p>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-2xl">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Estimasi Hasil</p>
+                            <p class="font-bold text-gray-800">{{ detail.estimasi_hasil }}</p>
+                        </div>
+                    </div>
+                </div>
 
-        <hr>
-
-        <section>
-            {% widthratio total_donasi detail.target_dana 100 as persen %}
-            <h3>Status Pendanaan</h3>
-            <ul>
-                <li><strong>Terkumpul:</strong> Rp {{ total_donasi|intcomma }}</li>
-                <li><strong>Target:</strong> Rp {{ detail.target_dana|intcomma }}</li>
-                <li><strong>Progres:</strong> {{ persen }}%</li>
-            </ul>
-
-            {% if persen > 80 %}
-            <p style="color: red;"><strong>🔥 Hampir penuh! Kesempatan terakhir untuk ikut mendanai</strong></p>
-            {% endif %}
-
-            <p>
-                <a href="{% url 'danai_project' detail.id %}" style="font-size: 20px; font-weight: bold;">
-                    💰 Danai Sekarang
-                </a>
-            </p>
-        </section>
-
-        <hr>
-
-        <section>
-            <div>
-                <h3>📍 Informasi Proyek</h3>
-                <p>Lokasi: {{ detail.lokasi }}</p>
-                <p>Luas Lahan: {{ detail.luas_lahan }} m²</p>
-                <p>Durasi: {{ detail.berapa_bulan }} bulan</p>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <h3 class="text-xl font-black text-jejak-primary mb-6 flex items-center gap-2"><i class="ph-fill ph-scroll"></i> Transparansi Laporan</h3>
+                    <div class="space-y-4">
+                        {% for l in detail.laporan.all %}
+                        <div class="p-5 border border-gray-100 rounded-2xl bg-gray-50/50 hover:bg-white hover:shadow-sm transition-all">
+                            <h4 class="font-bold text-gray-900 mb-1">{{ l.judul }}</h4>
+                            <p class="text-sm text-gray-500">{{ l.deskripsi }}</p>
+                        </div>
+                        {% empty %}
+                        <p class="text-sm text-gray-400 italic text-center py-4">Petani belum mengirimkan laporan progres.</p>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
 
             <div>
-                <h3>💡 Estimasi & Kebutuhan</h3>
-                <p>Estimasi Hasil: {{ detail.estimasi_hasil }}</p>
-                <p>Kebutuhan: {{ detail.kebutuhan }}</p>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-lg shadow-jejak-primary/10 sticky top-24">
+                    {% widthratio total_donasi detail.target_dana 100 as persen %}
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Terkumpul</p>
+                    <h2 class="text-3xl font-black text-jejak-primary mb-2">Rp {{ total_donasi|intcomma }}</h2>
+                    <p class="text-sm text-gray-500 mb-6">dari target <span class="font-bold text-gray-800">Rp {{ detail.target_dana|intcomma }}</span></p>
+
+                    <div class="w-full bg-gray-100 h-3 rounded-full mb-3 overflow-hidden">
+                        <div class="bg-jejak-secondary h-full" style="width: {{ persen }}%"></div>
+                    </div>
+                    <p class="text-right text-xs font-bold text-jejak-secondary mb-8">{{ persen }}% Tercapai</p>
+
+                    {% if persen|add:"0" >= 100 %}
+                        <div class="w-full py-4 rounded-xl bg-gray-100 text-gray-500 font-bold text-center border border-gray-200">
+                            Pendanaan Penuh 🎉
+                        </div>
+                    {% else %}
+                        <a href="{% url 'danai_project' detail.id %}" class="block w-full py-4 rounded-xl bg-jejak-primary text-white font-black text-center shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95">
+                            <i class="ph-bold ph-hand-coins"></i> Berikan Dukungan
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-        </section>
-
-        <hr>
-
-        <section>
-            <h3>📊 Transparansi Laporan</h3>
-            {% for l in detail.laporan.all %}
-            <div style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <p><strong>{{ l.judul }}</strong></p>
-                <p>{{ l.deskripsi }}</p>
-            </div>
-            {% empty %}
-            <p>Belum ada laporan dari petani.</p>
-            {% endfor %}
-        </section>
-
-        <hr>
-
-        <footer>
-            <h2>Jadilah bagian dari perubahan 🌱</h2>
-            <p>Dukung petani dan bantu wujudkan panen sukses</p>
-            <p>
-                <a href="{% url 'danai_project' detail.id %}">
-                    <strong>Danai Sekarang</strong>
-                </a>
-            </p>
-        </footer>
-    </div>
-
+        </div>
+    </main>
 </body>
-
 </html>

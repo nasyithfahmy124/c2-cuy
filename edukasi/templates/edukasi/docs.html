@@ -13,11 +13,8 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        /* Sembunyikan scrollbar tapi tetep bisa scroll (khusus sidebar) */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Styling tambahan untuk konten dari WYSIWYG Editor (Prose) */
         .prose h2 { color: #1F4D3A; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
         .prose h3 { color: #1F2933; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
         .prose p { color: #4B5563; line-height: 1.75; margin-bottom: 1.25rem; }
@@ -194,7 +191,12 @@
                             <i class="ph-fill ph-lightbulb text-2xl text-jejak-secondary shrink-0"></i>
                             <div>
                                 <h4 class="text-jejak-primary font-bold mb-1 mt-0">Tips Petani Pro</h4>
-                                <p class="text-sm text-gray-700"
-                    
+                                <p class="text-sm text-gray-700 m-0">
+                                    Selalu campurkan pekatan A ke dalam air terlebih dahulu dan aduk rata, JANGAN mencampur pekatan A dan B
+                                    secara langsung karena akan menggumpal.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
-            
+                    </article>
