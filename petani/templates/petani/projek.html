@@ -1,24 +1,177 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
-    <h1>form minta sumbangan</h1>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formd.as_p }}
-        <button type="submit">buat projek</button>
-    </form>
-
-    <a href="{% url 'home_p' %}">Home</a>
+    <title>Ajukan Kebutuhan Lahan - JejakDaya</title>
     
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .form-input { 
+            @apply w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 outline-none transition-all focus:border-jejak-primary focus:ring-4 focus:ring-jejak-primary/5 text-sm font-medium;
+        }
+    </style>
+</head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex flex-col">
+
+    {% include 'petani/partials/navbar.html' %}
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
+        
+        <div class="mb-10 animate-fade-in-up">
+            <h1 class="text-3xl md:text-4xl font-black text-jejak-primary tracking-tight mb-2">Ajukan Kebutuhan Baru 🪴</h1>
+            <p class="text-gray-500 font-medium">Lengkapi data di bawah untuk mulai mendapatkan dukungan sumber daya.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            
+            <form method="post" enctype="multipart/form-data" class="lg:col-span-7 space-y-8 animate-fade-in-up delay-100">
+                {% csrf_token %}
+                
+                {% if messages %}
+                <div class="space-y-2">
+                    {% for message in messages %}
+                    <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm font-bold flex items-center gap-2">
+                        <i class="ph ph-info text-lg"></i> {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="glass-card p-6 md:p-8 rounded-[2.5rem] border border-white shadow-sm space-y-6">
+                    
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Nama Proyek Lahan</label>
+                        <input type="text" name="nama" id="id_nama" placeholder="Contoh: Budidaya Melon Hidroponik Fase 1" class="form-input" required oninput="updatePreview()">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Lokasi Lahan</label>
+                            <div class="relative">
+                                <i class="ph ph-map-pin absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" name="lokasi" id="id_lokasi" placeholder="Sleman, Yogyakarta" class="form-input pl-11" required oninput="updatePreview()">
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Target Nilai Barang (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">Rp</span>
+                                <input type="number" name="target_dana" id="id_target_dana" placeholder="5.000.000" class="form-input pl-11" required oninput="updatePreview()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Rincian Kebutuhan (PENTING)</label>
+                        <textarea name="kebutuhan" id="id_kebutuhan" rows="3" placeholder="Sebutkan barang yang Anda butuhkan (Contoh: 20 Karung Kompos, 5kg Benih Melon)" class="form-input resize-none" required></textarea>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Foto Kondisi Lahan</label>
+                        <label class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:bg-white/50 hover:border-jejak-primary transition-all group">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i class="ph ph-image-square text-3xl text-gray-300 group-hover:text-jejak-primary mb-2 transition-colors"></i>
+                                <p class="text-xs text-gray-500 font-bold group-hover:text-jejak-primary transition-colors">Klik untuk upload foto</p>
+                            </div>
+                            <input type="file" name="foto_lahan" id="id_foto_lahan" class="hidden" accept="image/*" onchange="previewImage(this)">
+                        </label>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Estimasi Durasi (Bulan)</label>
+                        <input type="text" name="berapa_bulan" id="id_berapa_bulan" placeholder="Contoh: 3 Bulan" class="form-input" required oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-grow py-4 rounded-2xl bg-jejak-primary text-white font-black text-lg shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95">
+                        Ajukan Proyek Sekarang
+                    </button>
+                    <a href="{% url 'home_p' %}" class="px-8 py-4 rounded-2xl bg-white text-gray-400 font-bold text-center border border-gray-100 hover:text-red-500 transition-all">Batal</a>
+                </div>
+            </form>
+
+            <div class="lg:col-span-5 relative">
+                <div class="sticky top-32 space-y-6">
+                    <h3 class="text-xs font-black text-jejak-secondary uppercase tracking-[0.2em] ml-2">Live Preview Card</h3>
+                    
+                    <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-jejak-primary/10 border border-white animate-float">
+                        <div class="h-52 bg-gray-100 relative overflow-hidden">
+                            <img id="prev_img" src="{% static 'assets/img/dakstop_bg.png' %}" class="w-full h-full object-cover opacity-60">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6">
+                                <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase border border-white/20 tracking-widest">
+                                    MENUNGGU VERIFIKASI
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-8">
+                            <h4 id="prev_nama" class="text-2xl font-black text-jejak-primary mb-2">Nama Proyek Anda</h4>
+                            <div class="flex items-center gap-2 text-gray-400 text-xs font-bold mb-6">
+                                <i class="ph ph-map-pin"></i> <span id="prev_lokasi">Lokasi Lahan</span>
+                            </div>
+                            
+                            <div class="w-full bg-gray-100 h-3 rounded-full mb-3 overflow-hidden">
+                                <div class="bg-jejak-primary h-full w-0 transition-all duration-1000"></div>
+                            </div>
+                            <div class="flex justify-between items-center mb-8">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase">Target Dukungan</p>
+                                    <p class="text-lg font-black text-jejak-primary">Rp <span id="prev_dana">0</span></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase">Durasi</p>
+                                    <p id="prev_bulan" class="text-sm font-bold text-gray-900">-- Bulan</p>
+                                </div>
+                            </div>
+
+                            <div class="py-4 border-t border-dashed border-gray-100 text-center">
+                                <p class="text-[10px] font-bold text-gray-400 uppercase italic">Preview ini menunjukkan tampilan bagi Investor</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-3xl bg-jejak-secondary/10 border border-jejak-secondary/20">
+                        <div class="flex gap-4">
+                            <i class="ph-fill ph-lightbulb-filament text-3xl text-jejak-secondary"></i>
+                            <p class="text-xs text-gray-600 leading-relaxed">
+                                <strong class="text-jejak-primary">Pro Tip:</strong> Proyek dengan foto lahan yang terang dan deskripsi kebutuhan yang detail 80% lebih cepat mendapatkan dukungan barang.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function updatePreview() {
+            document.getElementById('prev_nama').innerText = document.getElementById('id_nama').value || 'Nama Proyek Anda';
+            document.getElementById('prev_lokasi').innerText = document.getElementById('id_lokasi').value || 'Lokasi Lahan';
+            document.getElementById('prev_bulan').innerText = document.getElementById('id_berapa_bulan').value || '-- Bulan';
+            
+            let dana = document.getElementById('id_target_dana').value;
+            document.getElementById('prev_dana').innerText = dana ? parseInt(dana).toLocaleString('id-ID') : '0';
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('prev_img').src = e.target.result;
+                    document.getElementById('prev_img').classList.remove('opacity-60');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
 </body>
 </html>

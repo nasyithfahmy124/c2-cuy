@@ -1,27 +1,204 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html>
-
+<html lang="id">
 <head>
-    <title>Detail Projek</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Lahan: {{ semua_projek.nama }} - JejakDaya</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
+        .timeline-line { width: 2px; background: repeating-linear-gradient(to bottom, #468432 0, #468432 5px, transparent 5px, transparent 10px); }
+    </style>
 </head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
-<body class="bg-gray-100">
+    {% include 'petani/partials/navbar.html' %}
 
-    <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow mt-10">
-        <h1 class="text-2xl font-bold mb-4">{{ semua_projek.nama }}</h1>
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-10">
+        
+        <div class="flex flex-col lg:flex-row gap-8 mb-12 animate-fade-in-up">
+            <div class="w-full lg:w-1/2 h-[300px] md:h-[450px] rounded-[3rem] overflow-hidden shadow-2xl relative border-4 border-white">
+                {% if semua_projek.foto_lahan %}
+                    <img src="{{ semua_projek.foto_lahan.url }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <i class="ph-fill ph-plant text-7xl text-gray-300"></i>
+                    </div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div class="absolute bottom-8 left-8">
+                    <span class="px-4 py-2 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] mb-3 inline-block">
+                        {{ semua_projek.get_status_display }}
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                        {{ semua_projek.nama }}
+                    </h1>
+                </div>
+            </div>
 
-        <p><strong>Deskripsi:</strong> {{ semua_projek.deskripsi }}</p>
-        <p><strong>Lokasi:</strong> {{ semua_projek.lokasi }}</p>
-        <p><strong>Luas:</strong> {{ semua_projek.luas_lahan }} m²</p>
-        <p><strong>Target:</strong> Rp {{ semua_projek.target_dana }}</p>
+            <div class="w-full lg:w-1/2 flex flex-col gap-6">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 flex-grow">
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 class="text-xl font-black text-jejak-primary tracking-tight">Status Inkubasi</h3>
+                        <div class="text-right">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Durasi Proyek</p>
+                            <p class="font-black text-jejak-secondary">{{ semua_projek.berapa_bulan }}</p>
+                        </div>
+                    </div>
 
-        {% if semua_projek.foto_lahan %}
-        <img src="{{ semua_projek.foto_lahan.url }}" class="mt-4 rounded">
-        {% endif %}
-    </div>
-    <a href="{% url 'allp' %}">kembali</a>
+                    <div class="space-y-4 mb-10">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Dukungan Barang Terkumpul</p>
+                                <p class="text-3xl font-black text-jejak-primary">Rp {{ semua_projek.dana_terkumpul|intcomma }}</p>
+                            </div>
+                            <p class="text-4xl font-black text-jejak-secondary">{{ semua_projek.persentase }}%</p>
+                        </div>
+                        <div class="w-full bg-gray-100 h-4 rounded-full overflow-hidden">
+                            <div class="bg-gradient-to-r from-jejak-primary to-jejak-secondary h-full transition-all duration-1000 shadow-[0_0_15px_rgba(70,132,50,0.3)]" style="width: {{ semua_projek.persentase }}%"></div>
+                        </div>
+                        <p class="text-xs font-medium text-gray-400 italic text-center">Menuju target: Rp {{ semua_projek.target_dana|intcomma }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-jejak-bg border border-gray-100">
+                            <i class="ph-fill ph-map-pin text-jejak-accent text-xl mb-2"></i>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Lokasi Lahan</p>
+                            <p class="text-sm font-bold text-jejak-primary">{{ semua_projek.lokasi }}</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-jejak-bg border border-gray-100">
+                            <i class="ph-fill ph-ruler text-jejak-secondary text-xl mb-2"></i>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Luas Lahan</p>
+                            <p class="text-sm font-bold text-jejak-primary">{{ semua_projek.luas_lahan }} m²</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'tambah_laporan' semua_projek.id %}" class="w-full py-5 rounded-[1.5rem] bg-jejak-primary text-white font-black text-lg shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-3">
+                    <i class="ph-bold ph-plus-circle"></i> Update Laporan Harian
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            <div class="lg:col-span-2 space-y-8 animate-fade-in-up delay-100">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100">
+                    <h3 class="text-2xl font-black text-jejak-primary mb-6">Detail Rincian Kebutuhan</h3>
+                    <div class="prose prose-sm max-w-none text-gray-600 leading-relaxed bg-jejak-bg/50 p-6 rounded-2xl border border-gray-100 italic">
+                        {{ semua_projek.kebutuhan|linebreaks }}
+                    </div>
+                    
+                    <div class="mt-8 flex items-center gap-4 p-4 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700">
+                        <i class="ph-fill ph-info text-2xl"></i>
+                        <p class="text-xs font-semibold italic">Sistem JejakDaya menahan dana donasi di sistem escrow dan mencairkannya langsung dalam bentuk barang sesuai rincian di atas.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-black text-jejak-primary px-4">Aktivitas Lahan Terbaru</h3>
+                    {% if semua_projek.laporan.all %}
+                        {% for lap in semua_projek.laporan.all|dictsortreversed:"id" %}
+                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
+                            <div class="w-full md:w-32 h-32 rounded-2xl bg-gray-100 overflow-hidden flex-shrink-0">
+                                {% if lap.bukti %}
+                                    <img src="{{ lap.bukti.url }}" class="w-full h-full object-cover">
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="text-lg font-bold text-jejak-primary">{{ lap.judul }}</h4>
+                                    <span class="text-[10px] font-bold text-gray-300 uppercase">Rp {{ lap.jumlah_pengeluaran|intcomma }}</span>
+                                </div>
+                                <p class="text-sm text-gray-500 mb-4">{{ lap.deskripsi|truncatechars:150 }}</p>
+                                <div class="flex items-center gap-2 text-[10px] font-bold text-jejak-secondary uppercase tracking-widest">
+                                    <i class="ph ph-calendar"></i> {{ lap.project.nama }} • Selesai
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-10 bg-white border-2 border-dashed border-gray-100 rounded-[2.5rem] text-center">
+                            <i class="ph-fill ph-scroll text-5xl text-gray-100 mb-4"></i>
+                            <p class="text-gray-400 font-bold">Belum ada laporan yang dikirim.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="animate-fade-in-up delay-200">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 sticky top-32">
+                    <h3 class="text-xl font-black text-jejak-primary mb-8">Timeline Inkubasi</h3>
+                    
+                    <div class="relative space-y-12">
+                        <div class="absolute left-4 top-2 bottom-2 timeline-line"></div>
+
+                        <div class="relative flex gap-6 items-start">
+                            <div class="w-8 h-8 rounded-full bg-jejak-primary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-primary/30">
+                                <i class="ph-bold ph-check"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-jejak-primary uppercase tracking-widest">Pengajuan</h4>
+                                <p class="text-[11px] text-gray-400">Proyek berhasil diverifikasi admin.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative flex gap-6 items-start">
+                            <div class="w-8 h-8 rounded-full bg-jejak-secondary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-secondary/30">
+                                02
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-jejak-primary uppercase tracking-widest">Pendanaan Barang</h4>
+                                <p class="text-[11px] text-gray-400">Sedang mengumpulkan dukungan investor.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative flex gap-6 items-start opacity-30">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-black z-10">
+                                03
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-widest">Proses Tanam</h4>
+                                <p class="text-[11px] text-gray-400">Input laporan harian untuk donatur.</p>
+                            </div>
+                        </div>
+
+                        <div class="relative flex gap-6 items-start opacity-30">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-black z-10">
+                                04
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-widest">Bagi Hasil</h4>
+                                <p class="text-[11px] text-gray-400">Distribusi hasil panen sesuai nisbah.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 pt-8 border-t border-gray-100">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Butuh Panduan?</p>
+                        <a href="{% url 'pusat_edukasi' %}" class="flex items-center gap-3 p-4 rounded-2xl bg-jejak-secondary/10 text-jejak-secondary font-bold text-xs hover:bg-jejak-secondary hover:text-white transition-all">
+                            <i class="ph-fill ph-book-open text-xl"></i> Baca SOP Budidaya
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-16 text-center">
+            <a href="{% url 'allp' %}" class="text-sm font-bold text-gray-400 hover:text-jejak-primary transition-colors flex items-center justify-center gap-2">
+                <i class="ph-bold ph-arrow-left"></i> Kembali ke Daftar Lahan
+            </a>
+        </div>
+    </main>
+
+    {% include 'petani/partials/footer.html' %}
+
 </body>
-
 </html>

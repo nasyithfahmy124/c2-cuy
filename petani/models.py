@@ -21,6 +21,12 @@ class Project(models.Model):
     dana_terkumpul = models.IntegerField(default=0)
     berapa_bulan = models.CharField(max_length=200) 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    @property
+    def persentase(self):
+        if self.target_dana and self.target_dana > 0:
+            hasil = int((self.dana_terkumpul / self.target_dana) * 100)
+            return min(hasil, 100) # Biar mentok di 100% kalau berlebih
+        return 0
     
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')

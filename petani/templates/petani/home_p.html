@@ -1,87 +1,150 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>P2P Agro-Funding - Dasbor Petani</title>
     {% load humanize %}
+
+    <title>Dasbor Petani Milenial - JejakDaya</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
+        .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card-hover:hover { transform: translateY(-8px); shadow: 0 20px 40px rgba(31, 77, 58, 0.1); }
+    </style>
+
 </head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased">
 
-<body>
+    {% include 'petani/partials/navbar.html' %}
 
-    {% if messages %}
-    <div>
-        {% for message in messages %}
-        <div role="alert">
-            <p>{{ message }}</p>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <nav>
-        <div>
-            <h1>🌾 Halo, {{ user.username }}</h1>
-            <p>Selamat datang kembali, Petani Bijak.</p>
-        </div>
-        <ul>
-            <li><a href="{% url 'landing' %}">Beranda</a></li>
-            <li><a href="{% url 'gantipw' %}">Keamanan</a></li>
-            <li><a href="{% url 'logout' %}">Keluar</a></li>
-        </ul>
-    </nav>
-
-    <main>
-
-        <section>
-            <div>
-                <h2>Dana Terkumpul Saat Ini</h2>
-                <div>
-                    Rp {{ dana|intcomma }},00
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
+        
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up delay-100">
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110">
+                    <i class="ph-fill ph-wallet text-9xl"></i>
                 </div>
-                <p>
-                    Update terakhir: {{ waktu }}
-                </p>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Total Dukungan Barang</p>
+                <h3 class="text-3xl font-black text-jejak-primary">Rp {{ dana|intcomma }}</h3>
+                <div class="mt-4 flex items-center gap-2 text-jejak-secondary text-xs font-bold">
+                    <i class="ph-bold ph-trend-up"></i> +12% dari bulan lalu
+                </div>
             </div>
-        </section>
 
-        <section>
-            <div>
-                <h3>Apa itu Platform Inklusi Pertanian?</h3>
-                <p>
-                    Ini adalah tempat Pak/Bu Tani mendapatkan <strong>modal usaha</strong>
-                    (bibit, pupuk, alat) langsung dari masyarakat. Di sini, kita bukan hanya bertani,
-                    tapi menjadi mitra bisnis yang profesional dan jujur.
-                </p>
-            </div>
-        </section>
-
-        <section>
-            <div>
-                <a href="{% url 'projek' %}">
-                    <h3>BUAT PROJEK BARU</h3>
-                    <p>Ajukan modal untuk bibit atau alat tani</p>
+            <div class="bg-jejak-primary p-8 rounded-[2rem] shadow-lg shadow-jejak-primary/20 text-white relative overflow-hidden group">
+                <div class="absolute -right-4 -bottom-4 text-white/10 rotate-12 transition-transform group-hover:scale-110">
+                    <i class="ph-fill ph-plant text-9xl"></i>
+                </div>
+                <p class="text-xs font-bold text-white/60 uppercase tracking-widest mb-2">Proyek Aktif</p>
+                <h3 class="text-3xl font-black">{{ projects.count }} <span class="text-lg font-medium opacity-60">Lahan</span></h3>
+                <a href="{% url 'allp' %}" class="mt-4 inline-flex items-center gap-2 text-jejak-secondary font-bold text-xs hover:text-white transition-colors">
+                    Kelola Lahan <i class="ph-bold ph-arrow-right"></i>
                 </a>
             </div>
 
-            <div>
-                <a href="{% url 'allp' %}">
-                    <h3>LIHAT PROJEK SAYA</h3>
-                    <p>Pantau laporan dan perkembangan lahan</p>
-                </a>
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 relative overflow-hidden group">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Level Inkubasi</p>
+                <h3 class="text-3xl font-black text-jejak-accent">Perintis</h3>
+                <div class="mt-4 w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+                    <div class="bg-jejak-accent h-full w-2/3 animate-pulse"></div>
+                </div>
+                <p class="mt-2 text-[10px] font-bold text-gray-400">300 XP lagi menuju level 'Mandiri'</p>
             </div>
         </section>
 
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            <div class="lg:col-span-2 space-y-6">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xl font-black text-jejak-primary tracking-tight">Pantau Perkembangan</h3>
+                    <a href="{% url 'allp' %}" class="text-sm font-bold text-jejak-secondary hover:underline">Lihat Semua</a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for project in projects|slice:":2" %}
+                        <div class="card-hover bg-white rounded-[2rem] border border-gray-100 overflow-hidden flex flex-col shadow-sm">
+                            <div class="h-40 bg-gray-100 relative overflow-hidden">
+                                {% if project.foto_lahan %}
+                                    <img src="{{ project.foto_lahan.url }}" class="w-full h-full object-cover">
+                                {% endif %}
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase border border-white/20">
+                                        {{ project.get_status_display }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h4 class="text-lg font-bold text-jejak-text mb-4">{{ project.nama }}</h4>
+                                <div class="w-full bg-gray-100 h-2 rounded-full mb-2">
+                                    <div class="bg-jejak-secondary h-full" style="width: {{ project.persentase }}%"></div>
+                                </div>
+                                <div class="flex justify-between text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-wider">
+                                    <span>Terkumpul: {{ project.persentase }}%</span>
+                                    <span>{{ project.berapa_bulan }}</span>
+                                </div>
+                                <a href="{% url 'detail' project.id %}" class="block w-full py-3 rounded-xl bg-jejak-primary text-white text-center text-sm font-bold hover:shadow-lg transition-all active:scale-95">
+                                    Detail Proyek
+                                </a>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-span-2 py-20 bg-white/50 border-2 border-dashed border-gray-200 rounded-[2.5rem] text-center">
+                            <i class="ph-fill ph-clipboard-text text-5xl text-gray-200 mb-4"></i>
+                            <p class="text-gray-400 font-bold">Belum ada proyek yang diajukan.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h3 class="text-xl font-black text-jejak-primary tracking-tight px-2">Aksi Cepat</h3>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <a href="{% url 'projek' %}" class="flex items-center gap-4 p-5 rounded-2xl bg-white border border-gray-100 hover:border-jejak-primary hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-jejak-accent/10 text-jejak-accent flex items-center justify-center text-2xl group-hover:bg-jejak-accent group-hover:text-white transition-colors">
+                            <i class="ph-fill ph-plus-circle"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-jejak-primary">Ajukan Kebutuhan</p>
+                            <p class="text-xs text-gray-400 font-medium">Minta bibit, pupuk, atau alat</p>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'pusat_edukasi' %}" class="flex items-center gap-4 p-5 rounded-2xl bg-white border border-gray-100 hover:border-jejak-secondary hover:shadow-md transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center text-2xl group-hover:bg-jejak-secondary group-hover:text-white transition-colors">
+                            <i class="ph-fill ph-lightbulb"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-jejak-primary">Panduan Budidaya</p>
+                            <p class="text-xs text-gray-400 font-medium">Baca SOP Smart Farming</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="p-6 rounded-[2rem] bg-gradient-to-br from-jejak-accent to-red-400 text-white relative overflow-hidden animate-float">
+                    <i class="ph-fill ph-quotes absolute -top-2 -left-2 text-6xl opacity-20"></i>
+                    <p class="text-xs font-bold uppercase tracking-widest mb-3 opacity-80">Tips Hari Ini</p>
+                    <p class="text-sm font-semibold leading-relaxed relative z-10">
+                        "Jangan lupa cek kadar nutrisi AB Mix di tandon setiap pagi. Tanaman Melon paling butuh perhatian di minggu ke-3!"
+                    </p>
+                </div>
+            </div>
+
+        </div>
     </main>
 
-    <footer>
-        <div>
-            <p><em>"Meningkatkan Taraf Hidup Petani Indonesia melalui Teknologi"</em></p>
-            <p>&copy; 2024 P2P Agro-Funding Indonesia</p>
-        </div>
-    </footer>
+    {% include 'petani/partials/footer.html' %}
+
 
 </body>
-
 </html>

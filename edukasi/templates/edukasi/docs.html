@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if materi_aktif %}{{ materi_aktif.judul }}{% else %}Pusat Edukasi{% endif %} - JejakDaya</title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        /* Sembunyikan scrollbar tapi tetep bisa scroll (khusus sidebar) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Styling tambahan untuk konten dari WYSIWYG Editor (Prose) */
+        .prose h2 { color: #1F4D3A; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; }
+        .prose h3 { color: #1F2933; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        .prose p { color: #4B5563; line-height: 1.75; margin-bottom: 1.25rem; }
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; color: #4B5563; margin-bottom: 1.25rem; }
+        .prose li { margin-bottom: 0.5rem; }
+        .prose strong { color: #1F2933; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased h-screen overflow-hidden flex flex-col selection:bg-jejak-secondary selection:text-white">
+
+    <nav class="h-[72px] border-b border-gray-200/60 bg-[#Fdfbf7] flex items-center justify-between px-4 sm:px-6 lg:px-8 z-50 flex-shrink-0 shadow-sm">
+        <div class="flex items-center gap-4">
+            <button id="sidebar-toggle" class="lg:hidden text-gray-500 hover:text-jejak-primary focus:outline-none transition-colors">
+                <i class="ph ph-list text-2xl"></i>
+            </button>
+            
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 rounded-xl bg-jejak-primary text-white flex items-center justify-center shadow-md shadow-jejak-primary/20 group-hover:scale-105 transition-transform">
+                    <i class="ph-fill ph-book-open text-lg"></i>
+                </div>
+                <span class="text-xl font-extrabold tracking-tight text-jejak-primary hidden sm:block">Docs.</span>
+            </a>
+        </div>
+        
+        <div class="flex items-center gap-4 sm:gap-6">
+            <div class="hidden md:flex relative group">
+                <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-jejak-primary transition-colors"></i>
+                <input type="text" placeholder="Cari dokumentasi (Ctrl+K)" class="bg-white/50 border border-gray-200 text-sm rounded-full py-1.5 pl-9 pr-4 w-64 focus:outline-none focus:ring-2 focus:ring-jejak-primary/20 focus:border-jejak-primary transition-all">
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-jejak-accent/10 text-jejak-accent border border-jejak-accent/20 text-xs font-bold uppercase tracking-wider">
+                    <i class="ph-fill ph-user-circle"></i> {{ role }}
+                </span>
+                <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-500 hover:text-jejak-primary transition-colors flex items-center gap-1">
+                    Dasbor <i class="ph-bold ph-arrow-right hidden sm:inline"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <aside id="sidebar" class="w-[280px] bg-[#Fdfbf7] border-r border-gray-200/60 overflow-y-auto hide-scrollbar flex-shrink-0 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 absolute lg:relative z-40 h-full shadow-2xl lg:shadow-none">
+            
+            <div class="p-6">
+                {% for kategori in kategori_list %}
+                <div class="mb-8 animate-fade-in-up" style="animation-delay: {{ forloop.counter0 }}00ms;">
+                    <h4 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
+                        {% if kategori.icon %}<i class="ph-fill {{ kategori.icon }} text-jejak-secondary text-base"></i>{% endif %}
+                        {{ kategori.nama }}
+                    </h4>
+                    
+                    <ul class="space-y-1">
+                        {% for materi in materi_list %}
+                            {% if materi.kategori == kategori %}
+                            <li>
+                                <a href="{% url 'edukasi_detail' materi.slug %}" class="block px-3 py-2 text-sm rounded-lg transition-all duration-200 font-medium
+                                    {% if materi_aktif and materi.id == materi_aktif.id %}
+                                        bg-jejak-primary/10 text-jejak-primary font-bold shadow-sm border border-jejak-primary/10
+                                    {% else %}
+                                        text-gray-600 hover:text-jejak-primary hover:bg-black/5 border border-transparent
+                                    {% endif %}
+                                ">
+                                    {{ materi.judul }}
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+        <main class="flex-1 overflow-y-auto bg-white scroll-smooth relative">
+            
+            {% if materi_aktif %}
+            <div class="max-w-3xl mx-auto px-6 py-10 md:py-16 pb-32 animate-fade-in-up">
+                
+                <div class="mb-8">
+                    <div class="flex items-center flex-wrap gap-2 text-sm font-semibold text-jejak-secondary mb-5">
+                        <span class="px-2.5 py-1 rounded-md bg-jejak-secondary/10 border border-jejak-secondary/20">{{ materi_aktif.kategori.nama }}</span>
+                        <i class="ph-bold ph-caret-right text-gray-300"></i>
+                        <span class="flex items-center gap-1.5 text-gray-500">
+                            <i class="ph-fill ph-clock"></i> {{ materi_aktif.waktu_baca }} mnt baca
+                        </span>
+                    </div>
+                    
+                    <h1 class="text-3xl md:text-4xl lg:text-[2.5rem] font-extrabold text-jejak-text tracking-tight leading-[1.15] mb-4">
+                        {{ materi_aktif.judul }}
+                    </h1>
+                    
+                    <p class="text-xs text-gray-400 font-medium">Diperbarui: {{ materi_aktif.updated_at|date:"d M Y" }}</p>
+                </div>
+
+                {% if materi_aktif.video_url %}
+                <div class="w-full aspect-video bg-gray-900 rounded-2xl mb-10 overflow-hidden shadow-lg border border-gray-100 relative group">
+                    <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="Video Thumbnail" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-16 h-16 bg-jejak-accent text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(199,107,78,0.5)] cursor-pointer hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-play text-2xl ml-1"></i>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <article class="prose prose-lg max-w-none text-gray-600">
+                    
+                    {{ materi_aktif.konten|safe }}
+                    
+                    {% if not materi_aktif.konten %}
+                    <p class="text-lg leading-relaxed mb-6">
+                        Selamat datang di dokumentasi SOP JejakDaya. Halaman ini menjelaskan langkah-langkah teknis terkait fase <strong>{{ materi_aktif.judul }}</strong> agar panen Anda maksimal.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-jejak-primary mt-10 mb-4 border-b border-gray-100 pb-2">1. Persiapan Kebutuhan</h2>
+                    <p class="mb-4">Pastikan Anda telah mengecek kondisi cuaca dan ketersediaan logistik berikut sebelum memulai prosedur pemindahan bibit.</p>
+    
+                    <ul class="list-disc pl-5 mb-6 space-y-2 text-gray-600">
+                        <li>Rockwool yang sudah dibasahi (Kelembapan 80%).</li>
+                        <li>Bibit unggul yang sudah direndam air hangat 15 menit.</li>
+                        <li>Nampan semai bersih (bebas jamur).</li>
+                    </ul>
+
+                    <div class="bg-red-50 border-l-4 border-jejak-accent p-5 rounded-r-xl my-8">
+                        <div class="flex gap-3">
+                            <i class="ph-fill ph-warning-circle text-2xl text-jejak-accent shrink-0"></i>
+                            <div>
+                                <h4 class="text-jejak-accent font-bold mb-1 mt-0">Klausul Gagal Panen (Penting!)</h4>
+                                <p class="text-sm text-red-900/80 m-0">
+                                    Segala jenis kegagalan panen yang diakibatkan oleh <strong>kelalaian SOP</strong> (misal: telat menyiram lebih dari 2 hari berturut-turut) tidak termasuk dalam skema <em>Ethical Risk-Sharing</em>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-jejak-primary mt-10 mb-4 border-b border-gray-100 pb-2">2. Manajemen Nutrisi (AB Mix)</h2>
+                    <p class="mb-4">Takaran nutrisi sangat bergantung pada usia tanaman. Gunakan alat ukur TDS Meter untuk akurasi maksimal.</p>
+
+                    <div class="overflow-hidden rounded-xl border border-gray-200 my-6 shadow-sm">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-700">
+                                    <th class="py-3 px-4 font-bold border-b border-gray-200">Usia (HST)</th>
+                                    <th class="py-3 px-4 font-bold border-b border-gray-200">Target PPM</th>
+                                    <th class="py-3 px-4 font-bold border-b border-gray-200">Takaran Air</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600">
+                                <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+                                    <td class="py-3 px-4">0 - 7 Hari</td>
+                                    <td class="py-3 px-4 font-semibold text-jejak-secondary">300 - 400</td>
+                                    <td class="py-3 px-4 text-xs font-mono bg-gray-100/50 rounded inline-block mt-2 ml-4">1L Air : 2ml A : 2ml B</td>
+                                </tr>
+                                <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+                                    <td class="py-3 px-4">8 - 14 Hari</td>
+                                    <td class="py-3 px-4 font-semibold text-jejak-secondary">600 - 800</td>
+                                    <td class="py-3 px-4 text-xs font-mono bg-gray-100/50 rounded inline-block mt-2 ml-4">1L Air : 4ml A : 4ml B</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50/50">
+                                    <td class="py-3 px-4">15 - 30 Hari</td>
+                                    <td class="py-3 px-4 font-semibold text-jejak-secondary">1000 - 1200</td>
+                                    <td class="py-3 px-4 text-xs font-mono bg-gray-100/50 rounded inline-block mt-2 ml-4">1L Air : 6ml A : 6ml B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="bg-jejak-secondary/10 border-l-4 border-jejak-secondary p-5 rounded-r-xl my-8">
+                        <div class="flex gap-3">
+                            <i class="ph-fill ph-lightbulb text-2xl text-jejak-secondary shrink-0"></i>
+                            <div>
+                                <h4 class="text-jejak-primary font-bold mb-1 mt-0">Tips Petani Pro</h4>
+                                <p class="text-sm text-gray-700"
+                    
+                    {% endif %}
+            
