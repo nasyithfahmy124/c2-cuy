@@ -11,6 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
+    <style>
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .form-input { 
+            @apply w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 outline-none transition-all focus:border-jejak-primary focus:ring-4 focus:ring-jejak-primary/5 text-sm font-medium;
+        }
+    </style>
 </head>
 
 <body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex flex-col">
