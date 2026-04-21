@@ -21,6 +21,7 @@ class Project(models.Model):
     dana_terkumpul = models.IntegerField(default=0)
     berapa_bulan = models.CharField(max_length=200) 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    
     @property
     def persentase(self):
         if self.target_dana and self.target_dana > 0:

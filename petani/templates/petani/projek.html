@@ -12,14 +12,25 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
-        .form-input { @apply w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 outline-none transition-all focus:border-jejak-primary focus:ring-4 focus:ring-jejak-primary/5 text-sm font-medium;}
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .form-input {
+            @apply w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-jejak-primary focus:border-transparent focus:bg-white;
+        }
+
+        .form-label {
+            @apply block text-xs font-bold text-jejak-primary uppercase tracking-wider mb-2 ml-1;
+        }
     </style>
 </head>
 
 <body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex flex-col">
 
     {% include 'petani/partials/navbar.html' %}
+
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
 
@@ -36,16 +47,6 @@
                 class="lg:col-span-7 space-y-6 animate-fade-in-up delay-100">
                 {% csrf_token %}
 
-                {% if messages %}
-                <div class="space-y-2">
-                    {% for message in messages %}
-                    <div
-                        class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm font-bold flex items-center gap-2">
-                        <i class="ph-fill ph-info text-lg"></i> {{ message }}
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
 
                 {% if formd.errors %}
                 <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-bold">
@@ -77,6 +78,13 @@
                                 <i class="ph ph-map-pin absolute left-4 text-gray-400 text-lg"></i>
                                 <input type="text" name="lokasi" id="id_lokasi" placeholder="Sleman, Yogyakarta"
                                     class="form-input pl-12" required oninput="updatePreview()">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Luas Lahan (m²)</label>
+                            <div class="relative flex items-center">
+                                <input type="number" name="luas_lahan" id="id_luas_lahan" placeholder="Contoh: 100" class="form-input pl-12"
+                                    min="1" required>
                             </div>
                         </div>
                         <div>

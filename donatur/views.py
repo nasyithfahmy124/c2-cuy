@@ -13,7 +13,6 @@ def home_page(request):
         total_donasi=Sum('donasi__jumlah')
     ).order_by('-total_donasi')
 
-    # fallback kalau None → jadi 0
     for p in projects:
         if p.total_donasi is None:
             p.total_donasi = 0

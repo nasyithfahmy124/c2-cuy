@@ -13,7 +13,7 @@ def home_page(request):
     project__petani=request.user).aggregate(total=Sum('jumlah'))['total'] or 0
 
     waktu = datetime.now()
-    projects = Project.objects.filter(petani=request.user)
+    projects = Project.objects.filter(petani=request.user).order_by("-id")
     return render(request,'petani/home_p.html',{
         'waktu' : waktu,
         'dana' : dana_masuk,
@@ -28,6 +28,8 @@ def donasi(request):
             project = form.save(commit=False)
             project.petani = request.user
             project.save()
+
+
             messages.success(request,'Permintaan anda sedang dalam verifikasi, harap tunggu')
             return redirect('home_p')
     else:
@@ -60,7 +62,7 @@ def laporan(request, project_id):
 
 @login_required 
 def view_projek(request):
-    all = Project.objects.filter(petani=request.user)
+    all = Project.objects.filter(petani=request.user).order_by("-id")
     
     return render(request, 'petani/view.html', {
         'all': all

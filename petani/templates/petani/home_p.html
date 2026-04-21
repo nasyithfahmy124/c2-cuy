@@ -26,6 +26,17 @@
 
     {% include 'petani/partials/navbar.html' %}
 
+    {% if messages %}
+    <div class="space-y-2">
+        {% for message in messages %}
+        <div
+            class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-sm font-bold flex items-center gap-2">
+            <i class="ph-fill ph-info text-lg"></i> {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
         
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up delay-100">
