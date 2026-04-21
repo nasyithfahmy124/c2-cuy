@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+.form-input {
+    @apply ...
+}
 .glass-pill {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(16px);
