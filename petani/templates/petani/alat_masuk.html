@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'home_p' %}">home</a>
+    <h2>Barang Masuk</h2>
+
+    
+    {% for b in alat %}
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+    
+        <p><b>Project:</b> {{ b.project.nama }}</p>
+        <p><b>Donatur:</b> {{ b.donatur.username }}</p>
+    
+        <p><b>Barang:</b>
+            {% if b.nama_barang_custom %}
+            {{ b.nama_barang_custom }}
+            {% elif b.kebutuhan %}
+            {{ b.kebutuhan.nama_barang }}
+            {% else %}
+            -
+            {% endif %}
+        </p>
+    
+        <p><b>Jumlah:</b> {{ b.jumlah }}</p>
+        <p><b>Status:</b> {{ b.status }}</p>
+    
+    </div>
+    {% empty %}
+    <p>Belum ada barang masuk</p>
+    {% endfor %}
+
+    
+</body>
+</html>

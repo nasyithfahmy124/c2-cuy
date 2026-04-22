@@ -7,4 +7,36 @@ class Donasi(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     jumlah = models.IntegerField()
     tanggal = models.DateTimeField(auto_now_add=True)
+    
     dana_terkumpul = models.IntegerField(default=0)
+
+class DonasiBarang(models.Model):
+    STATUS_CHOICES = [
+        ('diajukan', 'Diajukan'),
+        ('disetujui', 'Disetujui'),
+        ('ditolak', 'Ditolak'),
+        ('dikirim', 'Dikirim'),
+    ]
+
+    donatur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    # pilih dari kebutuhan
+    kebutuhan = models.ForeignKey(
+        'petani.KebutuhanBarang',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    # kalau custom
+    nama_barang_custom = models.CharField(max_length=100, null=True, blank=True)
+
+    jumlah = models.IntegerField()
+    deskripsi = models.TextField(null=True, blank=True)
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='diajukan')
+    tanggal = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nama_barang_custom or (self.kebutuhan.nama_barang if self.kebutuhan else "Barang")

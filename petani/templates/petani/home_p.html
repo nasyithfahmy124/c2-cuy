@@ -37,6 +37,21 @@
     </div>
     {% endif %}
 
+
+    <p class="text-3xl font-black text-jejak-primary">
+        {{ alat }}
+    </p>
+    <p class="text-sm text-gray-400">
+        Total Barang Masuk
+        <a href="{% url 'alat_in' %}">lihat barang masuk</a>
+    </p>
+
+
+
+
+
+
+
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
         
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up delay-100">
@@ -49,6 +64,13 @@
                 <div class="mt-4 flex items-center gap-2 text-jejak-secondary text-xs font-bold">
                     <i class="ph-bold ph-trend-up"></i> +12% dari bulan lalu
                 </div>
+
+                <a href="{% url 'riwayat_donasi' %}" class="btn">
+                    Lihat Riwayat Donasi
+                </a>
+
+
+
             </div>
 
             <div class="bg-jejak-primary p-8 rounded-[2rem] shadow-lg shadow-jejak-primary/20 text-white relative overflow-hidden group">

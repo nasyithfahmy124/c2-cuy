@@ -19,6 +19,10 @@
 <body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
     {% include 'petani/partials/navbar.html' %}
+    
+
+    <h3>Barang dari Donatur</h3>
+    
 
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-10">
         
@@ -56,7 +60,7 @@
                         <div class="flex justify-between items-end">
                             <div>
                                 <p class="text-xs font-bold text-gray-400 uppercase mb-1">Dukungan Barang Terkumpul</p>
-                                <p class="text-3xl font-black text-jejak-primary">Rp {{ semua_projek.dana_terkumpul|intcomma }}</p>
+                                <p class="text-3xl font-black text-jejak-primary">Rp {{ total_donasi|intcomma }}</p>
                             </div>
                             <p class="text-4xl font-black text-jejak-secondary">{{ semua_projek.persentase }}%</p>
                         </div>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone   
+
 STATUS_CHOICES = [
     ('pending', 'Menunggu'),
     ('aktif', 'Sedang Didanai'),
@@ -24,11 +25,21 @@ class Project(models.Model):
     
     @property
     def persentase(self):
+        from django.apps import apps
+        from django.db.models import Sum
+
+        Donasi = apps.get_model('donatur', 'Donasi')
+
+        total = Donasi.objects.filter(project=self).aggregate(
+            Sum('jumlah')
+        )['jumlah__sum'] or 0
+
         if self.target_dana and self.target_dana > 0:
-            hasil = int((self.dana_terkumpul / self.target_dana) * 100)
-            return min(hasil, 100) # Biar mentok di 100% kalau berlebih
+            hasil = (total / self.target_dana) * 100
+            return round(hasil, 1)  # ← tampilkan desimal
+
         return 0
-    
+        
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')
     judul = models.CharField(max_length=100)
@@ -39,3 +50,29 @@ class Laporan(models.Model):
 
     def __str__(self):
         return self.judul
+
+class KebutuhanBarang(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='kebutuhan_barang')
+    
+    nama_barang = models.CharField(max_length=100)
+    jumlah_dibutuhkan = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.nama_barang} ({self.project.nama})"
+from django.apps import apps
+from django.db.models import Sum
+
+@property
+def progress_barang(self):
+    DonasiBarang = apps.get_model('donatur', 'DonasiBarang')
+
+    total = DonasiBarang.objects.filter(
+        project=self,
+        status='disetujui'
+    ).aggregate(Sum('jumlah'))['jumlah__sum'] or 0
+
+    target = self.kebutuhan_barang.aggregate(
+        Sum('jumlah_dibutuhkan')
+    )['jumlah_dibutuhkan__sum'] or 1
+
+    return round((total / target) * 100, 1)

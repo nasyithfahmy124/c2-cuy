@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Donasi Alat untuk {{ project.nama }}</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+    
+        <label>Pilih Barang (opsional):</label>
+        <select name="kebutuhan">
+            <option value="">-- Pilih dari kebutuhan --</option>
+            {% for k in kebutuhan %}
+            <option value="{{ k.id }}">
+                {{ k.nama_barang }} (butuh {{ k.jumlah_dibutuhkan }})
+            </option>
+            {% endfor %}
+        </select>
+    
+        <br><br>
+    
+        <label>Atau isi manual:</label>
+        <input type="text" name="nama_barang_custom" placeholder="Nama barang">
+    
+        <br><br>
+    
+        <label>Jumlah:</label>
+        <input type="number" name="jumlah" required>
+    
+        <br><br>
+    
+        <label>Deskripsi:</label>
+        <textarea name="deskripsi"></textarea>
+    
+        <br><br>
+    
+        <button type="submit">Kirim Donasi Barang</button>
+    </form>
+    <a href="{% url 'home_d' %}">kembali</a>
+</body>
+</html>

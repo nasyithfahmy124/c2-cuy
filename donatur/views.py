@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import FormDonasi
+from .forms import FormDonasi,FormDonasiBarang
 from petani.models import Project
 from django.db.models import Sum
 from .models import Donasi
@@ -11,7 +11,7 @@ from django.contrib import messages
 def home_page(request):
     projects = Project.objects.filter(status='aktif').annotate(
         total_donasi=Sum('donasi__jumlah')
-    ).order_by('-total_donasi')
+    ).order_by('-id')
 
     for p in projects:
         if p.total_donasi is None:
@@ -110,6 +110,32 @@ def danai_project(request, id):
     return render(request, 'donatur/donasi.html', {
         'form': form,
         'project': project
+    })
+    
+@login_required
+def donasi_barang(request, id):
+    project = get_object_or_404(Project, id=id)
+
+    if request.method == 'POST':
+        form = FormDonasiBarang(request.POST)
+
+        if form.is_valid():
+            barang = form.save(commit=False)
+            barang.donatur = request.user
+            barang.project = project
+            barang.save()
+
+            messages.success(request, "Donasi alat berhasil diajukan!")
+            return redirect('home_d', id=project.id)
+    else:
+        form = FormDonasiBarang()
+
+    kebutuhan = project.kebutuhan_barang.all()
+
+    return render(request, 'donatur/donasi_barang.html', {
+        'form': form,
+        'project': project,
+        'kebutuhan': kebutuhan
     })
 
 @login_required
