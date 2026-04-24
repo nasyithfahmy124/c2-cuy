@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+from petani.models import Project
 from .forms import *
 
 # ==========================================
@@ -27,14 +30,19 @@ def mulai_redirect(request):
         return redirect('public_home')
     
 def public_home(request):
-    # Merender halaman templates/home.html (Untuk tamu/belum login)
-    return render(request, 'home.html')
+    projects = Project.objects.filter(status='aktif').annotate(
+        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+    ).order_by('-id')
+
+    return render(request, 'login/home_page.html', {
+        'projects': projects
+    })
 
 @login_required
 def home_page(request):
-    # Merender halaman dasbor (Untuk user yang sudah login)
-    # Sesuaikan path template-nya sesuai struktur foldermu
-    return render(request, 'login/home_page.html')
+    projects = Project.objects.filter(status='aktif').annotate(
+        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+    ).order_by('-id')
 
 
 # ==========================================
