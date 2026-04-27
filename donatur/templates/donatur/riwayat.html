@@ -69,29 +69,37 @@
             <h2>Riwayat Donasi Saya</h2>
     
             ```
-            {% if riwayat %}
-            {% for item in riwayat %}
+            {% if semua %}
+            {% for item in semua %}
             <div class="card">
+            
                 <div class="title">
                     {{ item.project.nama }}
                 </div>
-    
+            
+                {% if item.tipe == 'uang' %}
                 <div class="info">
-                    Jumlah Donasi:
-                    <span class="jumlah">
-                        Rp {{ item.jumlah }}
-                    </span>
+                    Donasi Uang:
+                    <span class="jumlah">Rp {{ item.jumlah }}</span>
                 </div>
-                
+                {% else %}
+                <div class="info">
+                    Donasi Barang:
+                    {{ item }}
+                    ({{ item.jumlah }} unit)
+                </div>
+                {% endif %}
+            
                 <div class="info">
                     Tanggal:
                     {{ item.tanggal|date:"d M Y H:i" }}
                 </div>
-    
+            
                 <div class="info">
-                    Lokasi Project:
+                    Lokasi:
                     {{ item.project.lokasi }}
                 </div>
+            
             </div>
             {% endfor %}
             {% else %}
@@ -99,9 +107,6 @@
                 Belum ada riwayat donasi.
             </div>
             {% endif %}
-            ```
-    
-        </div>
     
     </body>
     

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .forms import FormDonasi,FormLaporan
 from django.contrib import messages
-from .models import Project,Laporan
+from .models import Project,Laporan,KebutuhanBarang
 from django.db.models import Sum
 from donatur.models import Donasi,DonasiBarang
 # Create your views here.

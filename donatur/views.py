@@ -4,8 +4,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FormDonasi,FormDonasiBarang
 from petani.models import Project,Laporan
 from django.db.models import Sum
-from .models import Donasi
+from .models import Donasi,DonasiBarang
 from django.contrib import messages
+from itertools import chain
+
+
 # Create your views here.
 @login_required
 def home_page(request):
@@ -86,8 +89,8 @@ def donasi_barang(request, id):
             barang.project = project
             barang.save()
 
-            messages.success(request, "Donasi alat berhasil diajukan!")
-            return redirect('home_d', id=project.id)
+            messages.success(request, "Bantuan alat berhasil!")
+            return redirect('home_d')
     else:
         form = FormDonasiBarang()
 
@@ -123,9 +126,23 @@ def detail(request, id):
     })
 @login_required 
 def detail_donasi(request):
-    riwayat = Donasi.objects.all().order_by('-id')
+    riwayat = Donasi.objects.filter(donatur=request.user)
+    riwayat_barang = DonasiBarang.objects.filter(donatur=request.user)
+
+    for r in riwayat:
+        r.tipe = 'uang'
+
+    for b in riwayat_barang:
+        b.tipe = 'barang'
+
+    semua_riwayat = sorted(
+        chain(riwayat, riwayat_barang),
+        key=lambda x: x.tanggal,
+        reverse=True
+    )
+
     return render(request,'donatur/riwayat.html',{
-        'riwayat' : riwayat
+        'semua': semua_riwayat
     })
     
 @login_required

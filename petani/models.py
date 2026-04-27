@@ -22,6 +22,7 @@ class Project(models.Model):
     dana_terkumpul = models.IntegerField(default=0)
     berapa_bulan = models.CharField(max_length=200) 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    no_hp = models.CharField(max_length=15) 
     
     @property
     def persentase(self):
