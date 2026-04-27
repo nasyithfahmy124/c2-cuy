@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+    
+    <html lang="id">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Laporan Donasi Saya</title>
+        <style>
+            body {
+                font-family: Arial;
+                background: #f4f6f8;
+                padding: 20px;
+            }
+    
+            .container {
+                max-width: 900px;
+                margin: auto;
+            }
+    
+            .card {
+                background: white;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+    
+            .title {
+                font-weight: bold;
+                font-size: 18px;
+            }
+    
+            .project {
+                color: #2c7;
+                margin-bottom: 5px;
+            }
+    
+            img {
+                max-width: 100%;
+                margin-top: 10px;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    
+    <body>
+    
+        <div class="container">
+            <h2>Laporan dari Donasi Saya</h2>
+    
+            ```
+            {% if laporan %}
+            {% for item in laporan %}
+            <div class="card">
+                <div class="project">
+                    Project: {{ item.project.nama }}
+                </div>
+    
+                <div class="title">
+                    {{ item.judul }}
+                </div>
+    
+                <p>{{ item.deskripsi }}</p>
+    
+                <p>
+                    Pengeluaran: Rp {{ item.jumlah_pengeluaran }}
+                </p>
+    
+                <p>
+                    Tanggal: {{ item.tanggal|date:"d M Y" }}
+                </p>
+    
+                {% if item.bukti %}
+                <img src="{{ item.bukti.url }}">
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>Belum ada laporan dari donasi kamu.</p>
+            {% endif %}
+        
+    
+        </div>
+    
+    </body>
+    
+    </html>
+
+</body>
+</html>

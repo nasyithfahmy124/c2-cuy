@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>riwayat donasi</h1>
+    
+    <!DOCTYPE html>
+    <a href="{% url 'home_d' %}">kembali</a>
+    <html lang="id">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Riwayat Donasi</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f6f8;
+                margin: 0;
+                padding: 20px;
+            }
+    
+            h2 {
+                text-align: center;
+            }
+    
+            .container {
+                max-width: 900px;
+                margin: auto;
+            }
+    
+            .card {
+                background: white;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+    
+            .title {
+                font-size: 18px;
+                font-weight: bold;
+            }
+    
+            .info {
+                margin-top: 5px;
+                color: #555;
+            }
+    
+            .jumlah {
+                color: green;
+                font-weight: bold;
+            }
+    
+            .empty {
+                text-align: center;
+                color: #888;
+                margin-top: 50px;
+            }
+        </style>
+    </head>
+    
+    <body>
+    
+        <div class="container">
+            <h2>Riwayat Donasi Saya</h2>
+    
+            ```
+            {% if riwayat %}
+            {% for item in riwayat %}
+            <div class="card">
+                <div class="title">
+                    {{ item.project.nama }}
+                </div>
+    
+                <div class="info">
+                    Jumlah Donasi:
+                    <span class="jumlah">
+                        Rp {{ item.jumlah }}
+                    </span>
+                </div>
+                
+                <div class="info">
+                    Tanggal:
+                    {{ item.tanggal|date:"d M Y H:i" }}
+                </div>
+    
+                <div class="info">
+                    Lokasi Project:
+                    {{ item.project.lokasi }}
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty">
+                Belum ada riwayat donasi.
+            </div>
+            {% endif %}
+            ```
+    
+        </div>
+    
+    </body>
+    
+    </html>
+
+</body>
+</html>

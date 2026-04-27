@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FormDonasi,FormDonasiBarang
-from petani.models import Project
+from petani.models import Project,Laporan
 from django.db.models import Sum
 from .models import Donasi
 from django.contrib import messages
@@ -27,45 +27,6 @@ def home_page(request):
         'total_project': total_project,
         'total_petani': total_petani
     })
-
-# @login_required
-# def danai_project(request, id):
-#     project = get_object_or_404(Project, id=id)
-
-#     if project.status != 'aktif':
-#         return redirect('home_d')  # atau tampilkan error
-
-#     if request.method == 'POST':
-#         form = FormDonasi(request.POST)
-#         if form.is_valid():
-#             jumlah = form.cleaned_data['jumlah']
-#             sisa = project.target_dana - project.dana_terkumpul
-
-#             if jumlah > sisa:
-#                 form.add_error('jumlah', f'Maksimal donasi: {sisa}')
-#             else:
-#                 funding = form.save(commit=False)
-#                 funding.donatur = request.user
-#                 funding.project = project
-#                 funding.save()
-
-#                 project.dana_terkumpul += jumlah
-
-#                 if project.dana_terkumpul >= project.target_dana:
-#                     project.status = 'selesai'
-#                 else:
-#                     project.status = 'aktif'
-
-#                 project.save()
-
-#                 return redirect('home_d')
-#     else:
-#         form = FormDonasi()
-
-#     return render(request, 'donatur/donasi.html', {
-#         'form': form,
-#         'project': project
-#     })
 
 @login_required
 def danai_project(request, id):
@@ -160,4 +121,21 @@ def detail(request, id):
         'detail': det,
         'total_donasi': total
     })
+@login_required 
+def detail_donasi(request):
+    riwayat = Donasi.objects.all().order_by('-id')
+    return render(request,'donatur/riwayat.html',{
+        'riwayat' : riwayat
+    })
+    
+@login_required
+def laporan_donatur(request):
+    project_ids = Donasi.objects.filter(
+        donatur=request.user).values_list('project_id', flat=True)
+    laporan = Laporan.objects.filter(
+        project_id__in=project_ids
+    ).order_by('-tanggal')
 
+    return render(request, 'donatur/laporan_donatur.html', {
+        'laporan': laporan
+    })

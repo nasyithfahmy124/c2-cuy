@@ -23,28 +23,6 @@ def home_page(request):
         'projects': projects,
         'alat' : total_alat 
     })
-# @login_required
-# def donasi(request):
-    
-#     if request.method == 'POST':
-#         form = FormDonasi(request.POST, request.FILES)
-#         if form.is_valid():
-#             project = form.save(commit=False)
-#             project.petani = request.user
-#             project.save()
-
-
-#             messages.success(request,'Permintaan anda sedang dalam verifikasi, harap tunggu')
-#             return redirect('home_p')
-#     else:
-#         form = FormDonasi()
-
-#     return render(request, 'petani/projek.html', {
-#         'formd': form,
-        
-#         })
-
-
 
 @login_required
 def donasi(request):
