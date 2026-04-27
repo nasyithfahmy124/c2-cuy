@@ -6,7 +6,6 @@ from datetime import datetime
 from .forms import FormDonasi,FormLaporan
 from django.contrib import messages
 from .models import KebutuhanBarang, Project,Laporan
->>>>>>> ca8943a (initial commit)
 from django.db.models import Sum
 from donatur.models import Donasi,DonasiBarang
 import json
