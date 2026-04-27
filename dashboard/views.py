@@ -3,16 +3,31 @@ from django.db.models import Sum
 from django.db.models.functions import Coalesce
 from petani.models import Project
 from donatur.models import Donasi
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-def validasi_project(request, id):
-    project = get_object_or_404(Project, id=id)
+def admin_only(user):
+    return user.is_staff  
 
-    project.status = 'aktif'
-    project.save()
+def formlog(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    return redirect('dashboard_admin')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.is_staff:
+            login(request, user)
+            return redirect('dashboard_admin')
+        else:
+            messages.error(request, "Login gagal atau bukan admin")
+
+    return render(request, 'dashboard/login.html')
 
 
+@login_required
+@user_passes_test(admin_only)
 def dashboard_admin(request):
     projects = Project.objects.filter(
         status='pending'
@@ -33,3 +48,15 @@ def dashboard_admin(request):
         'total_project': total_project,
         'total_petani': total_petani
     })
+
+
+@login_required
+@user_passes_test(admin_only)
+def validasi_project(request, id):
+    project = get_object_or_404(Project, id=id)
+
+    project.status = 'aktif'
+    project.save()
+
+    return redirect('dashboard_admin')
+
