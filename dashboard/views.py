@@ -36,7 +36,7 @@ def dashboard_admin(request):
     proyek_aktif = Project.objects.filter(
         status='aktif'
     ).annotate(
-        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+        total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
     ).order_by('-id')
     total_dana = Donasi.objects.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
     total_project = projects.count()

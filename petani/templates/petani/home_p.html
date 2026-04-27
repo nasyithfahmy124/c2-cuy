@@ -19,6 +19,13 @@
         .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
         .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .card-hover:hover { transform: translateY(-8px); shadow: 0 20px 40px rgba(31, 77, 58, 0.1); }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
     </style>
 
 </head>
@@ -68,48 +75,69 @@
 
         <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-28 md:-mt-36 lg:-mt-44 mb-20">
             
-            <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up delay-300">
-                
-                <div class="bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110">
-                            <i class="ph-fill ph-wallet text-9xl"></i>
-                        </div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Dukungan Dana</p>
-                        <h3 class="text-3xl font-black text-jejak-primary relative z-10">Rp {{ dana|default:0|intcomma }}</h3>
+            <div class="max-w-7xl mx-auto relative z-20 -mt-28 md:-mt-36 lg:-mt-44 mb-16">
+            
+        <section class="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-6 px-4 md:px-8 pb-8 pt-4 hide-scrollbar animate-fade-in-up delay-300">
+            
+            <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-wallet text-9xl"></i>
                     </div>
-                    <a href="{% url 'riwayat_donasi' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-50 text-gray-600 font-bold text-xs hover:bg-gray-100 hover:text-jejak-primary transition-all border border-gray-200 relative z-10">
-                        <i class="ph-bold ph-clock-counter-clockwise"></i> Riwayat Donasi
-                    </a>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Dukungan Dana</p>
+                    <h3 class="text-3xl font-black text-jejak-primary relative z-10 whitespace-nowrap">Rp {{ dana|default:0|intcomma }}</h3>
                 </div>
+                <a href="{% url 'riwayat_donasi' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-50 text-gray-600 font-bold text-xs hover:bg-gray-100 hover:text-jejak-primary transition-all border border-gray-200 relative z-10">
+                    <i class="ph-bold ph-clock-counter-clockwise"></i> Riwayat Donasi
+                </a>
+            </div>
 
-                <div class="bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110">
-                            <i class="ph-fill ph-package text-9xl"></i>
-                        </div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Barang Masuk</p>
-                        <h3 class="text-3xl font-black text-jejak-accent relative z-10">{{ alat|default:0 }} <span class="text-sm font-bold opacity-60">Barang</span></h3>
+            <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-package text-9xl"></i>
                     </div>
-                    <a href="{% url 'alat_in' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-jejak-accent/10 text-jejak-accent font-bold text-xs hover:bg-jejak-accent hover:text-white transition-all relative z-10">
-                        <i class="ph-bold ph-box-arrow-down"></i> Lihat Barang Masuk
-                    </a>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Barang Masuk</p>
+                    <h3 class="text-3xl font-black text-jejak-accent relative z-10">{{ alat|default:0 }} <span class="text-sm font-bold opacity-60">Barang</span></h3>
                 </div>
+                <a href="{% url 'alat_in' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-jejak-accent/10 text-jejak-accent font-bold text-xs hover:bg-jejak-accent hover:text-white transition-all relative z-10">
+                    <i class="ph-bold ph-box-arrow-down"></i> Lihat Barang Masuk
+                </a>
+            </div>
 
-                <div class="bg-gradient-to-br from-jejak-primary to-[#143a29] p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group card-hover flex flex-col justify-between">
-                    <div>
-                        <div class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110">
-                            <i class="ph-fill ph-plant text-9xl"></i>
-                        </div>
-                        <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2 relative z-10">Proyek Aktif</p>
-                        <h3 class="text-3xl font-black relative z-10">{{ projects|length|default:0 }} <span class="text-lg font-medium opacity-60">Lahan</span></h3>
+            <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-gradient-to-br from-jejak-primary to-[#143a29] p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-plant text-9xl"></i>
                     </div>
-                    <a href="{% url 'allp' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white hover:text-jejak-primary transition-all border border-white/20 relative z-10">
-                        <i class="ph-bold ph-kanban"></i> Kelola Lahan
-                    </a>
+                    <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2 relative z-10">Proyek Aktif</p>
+                    <h3 class="text-3xl font-black relative z-10">{{ projects|length|default:0 }} <span class="text-lg font-medium opacity-60">Lahan</span></h3>
                 </div>
+                <a href="{% url 'allp' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white hover:text-jejak-primary transition-all border border-white/20 relative z-10">
+                    <i class="ph-bold ph-kanban"></i> Kelola Lahan
+                </a>
+            </div>
 
-            </section>
+            <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-medal text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Level Inkubasi</p>
+                    <h3 class="text-3xl font-black text-jejak-accent relative z-10">Perintis</h3>
+                    <div class="mt-4 w-full bg-gray-100 h-2 rounded-full overflow-hidden relative z-10">
+                        <div class="bg-gradient-to-r from-jejak-accent to-red-400 h-full w-2/3 animate-pulse"></div>
+                    </div>
+                </div>
+                <p class="mt-4 text-[10px] font-bold text-gray-400 relative z-10 flex items-center gap-2">
+                    <i class="ph-fill ph-info text-lg"></i> 300 XP lagi menuju level 'Mandiri'
+                </p>
+            </div>
+
+            <div class="w-4 md:w-8 shrink-0"></div>
+
+        </section>
+        </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 
@@ -142,14 +170,14 @@
                                     <h4 class="text-lg font-bold text-gray-900 mb-4 line-clamp-2 leading-tight">{{ project.nama }}</h4>
                                     
                                     <div class="mt-auto">
-                                        {% widthratio project.dana_terkumpul|default:0 project.target_dana 100 as persen %}
+                                        {% widthratio project.total_donasi project.target_dana 100 as persen %}
                                         <div class="w-full bg-gray-100 h-2 rounded-full mb-3 overflow-hidden">
                                             <div class="bg-gradient-to-r from-jejak-primary to-jejak-secondary h-full relative" style="width: {{ persen }}%">
                                                 <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
                                             </div>
                                         </div>
                                         <div class="flex justify-between items-end text-[10px] font-bold text-gray-400 mb-6 uppercase tracking-wider">
-                                            <span>Rp {{ project.dana_terkumpul|default:0|intcomma }} ({{ persen }}%)</span>
+                                            <span>Rp {{ project.total_donasi|default:0|intcomma }} ({{ persen }}%)</span>
                                             <span>Target: Rp {{ project.target_dana|intcomma }}</span>
                                         </div>
                                         

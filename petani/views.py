@@ -1,11 +1,16 @@
+from collections import defaultdict
+
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .forms import FormDonasi,FormLaporan
 from django.contrib import messages
-from .models import Project,Laporan,KebutuhanBarang
+from .models import KebutuhanBarang, Project,Laporan
+>>>>>>> ca8943a (initial commit)
 from django.db.models import Sum
 from donatur.models import Donasi,DonasiBarang
+import json
+
 # Create your views here.
 @login_required
 def home_page(request):
@@ -61,9 +66,22 @@ def riwayat_donasi(request):
         project__petani=request.user
     ).select_related('donatur', 'project').order_by('-tanggal')
 
+
+    total = riwayat.aggregate(total=Sum('jumlah'))['total'] or 0
+    count = riwayat.count()
     return render(request, 'petani/riwayat_donasi.html', {
-        'riwayat': riwayat
+        'riwayat': riwayat,
+        'total_donasi': total,
+        'jumlah_donasi': count
     })
+# def riwayat_donasi(request):
+#     riwayat = Donasi.objects.filter(
+#         project__petani=request.user
+#     ).select_related('donatur', 'project').order_by('-tanggal')
+
+#     return render(request, 'petani/riwayat_donasi.html', {
+#         'riwayat': riwayat
+#     })
 
 @login_required
 def laporan(request, project_id):
@@ -113,8 +131,55 @@ def detail_projek(request, id):
 def alat_masuk(request):
     barang_masuk = DonasiBarang.objects.filter(
         project__petani=request.user
-    ).order_by('-id')
+    )
+
+    kebutuhan = KebutuhanBarang.objects.filter(
+        project__petani=request.user
+    )
+
+    data = defaultdict(lambda: {"masuk": 0, "target": 0})
+
+    for k in kebutuhan:
+        data[k.nama_barang]["target"] += k.jumlah_dibutuhkan
+
+    for b in barang_masuk:
+        nama = b.nama_barang_custom or (b.kebutuhan.nama_barang if b.kebutuhan else "Lainnya")
+        data[nama]["masuk"] += b.jumlah
+
+    tracking = []
+    total_masuk = 0
+    total_target = 0
+
+    for nama, val in data.items():
+        masuk = val["masuk"]
+        target = val["target"] or 1
+
+        persen = round((masuk / target) * 100, 1)
+
+        tracking.append({
+            "nama": nama,
+            "masuk": masuk,
+            "target": target,
+            "persen": persen
+        })
+
+        total_masuk += masuk
+        total_target += target
+
+    labels = [item["nama"] for item in tracking]
+    data_masuk = [item["masuk"] for item in tracking]
+    data_target = [item["target"] for item in tracking]
+
+    progress_total = round((total_masuk / total_target) * 100, 1) if total_target else 0
 
     return render(request, 'petani/alat_masuk.html', {
-        'alat': barang_masuk
+        'alat': barang_masuk.order_by('-id'),
+        'tracking': tracking,
+        'total_barang': total_masuk,
+        'total_kebutuhan': total_target,
+        'progress_total': progress_total,
+
+        'labels': json.dumps(labels),
+        'data_masuk': json.dumps(data_masuk),
+        'data_target': json.dumps(data_target),
     })

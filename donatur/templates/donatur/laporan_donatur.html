@@ -1,98 +1,92 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Laporan Proyek - JejakDaya</title>
+    
+    <script src="[https://unpkg.com/@phosphor-icons/web](https://unpkg.com/@phosphor-icons/web)"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap)" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-heading, h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .card-hover { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1); }
+    </style>
 </head>
-<body>
-    <!DOCTYPE html>
-    
-    <html lang="id">
-    
-    <head>
-        <meta charset="UTF-8">
-        <title>Laporan Donasi Saya</title>
-        <style>
-            body {
-                font-family: Arial;
-                background: #f4f6f8;
-                padding: 20px;
-            }
-    
-            .container {
-                max-width: 900px;
-                margin: auto;
-            }
-    
-            .card {
-                background: white;
-                padding: 15px;
-                margin-bottom: 15px;
-                border-radius: 10px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-    
-            .title {
-                font-weight: bold;
-                font-size: 18px;
-            }
-    
-            .project {
-                color: #2c7;
-                margin-bottom: 5px;
-            }
-    
-            img {
-                max-width: 100%;
-                margin-top: 10px;
-                border-radius: 8px;
-            }
-        </style>
-    </head>
-    
-    <body>
-    
-        <div class="container">
-            <h2>Laporan dari Donasi Saya</h2>
-    
-            ```
+<body class="bg-jejak-bg text-gray-800 antialiased min-h-screen flex flex-col selection:bg-jejak-primary selection:text-white">
+
+    {% include 'donatur/partials/navbar.html' %}
+
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 md:px-8 py-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {% if laporan %}
-            {% for item in laporan %}
-            <div class="card">
-                <div class="project">
-                    Project: {{ item.project.nama }}
+                {% for item in laporan %}
+                <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden flex flex-col h-full card-hover group">
+                    
+                    {% if item.bukti %}
+                    <div class="h-64 w-full relative overflow-hidden shrink-0">
+                        <img src="{{ item.bukti.url }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Bukti Laporan">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                            <span class="px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="ph-fill ph-calendar-blank"></i> {{ item.tanggal|date:"d M Y" }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="p-6 md:p-8 flex-grow flex flex-col {% if not item.bukti %}pt-8{% endif %} relative">
+                        
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="w-2 h-2 rounded-full bg-jejak-secondary"></span>
+                            <p class="text-xs font-bold text-jejak-secondary uppercase tracking-widest truncate">{{ item.project.nama }}</p>
+                        </div>
+
+                        <h3 class="text-xl font-black text-gray-900 font-heading leading-snug mb-3 group-hover:text-jejak-primary transition-colors">{{ item.judul }}</h3>
+                        
+                        <p class="text-sm text-gray-600 leading-relaxed font-medium mb-6 flex-grow">{{ item.deskripsi }}</p>
+
+                        <div class="mt-auto pt-5 border-t border-gray-100 flex justify-between items-center">
+                            {% if not item.bukti %}
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                                    <i class="ph-fill ph-calendar-blank text-base"></i> {{ item.tanggal|date:"d M Y" }}
+                                </span>
+                            {% else %}
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Detail Anggaran</span>
+                            {% endif %}
+                            
+                            {% if item.jumlah_pengeluaran > 0 %}
+                            <div class="text-right">
+                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Pengeluaran</p>
+                                <p class="text-sm font-black text-red-500 font-heading bg-red-50 px-2.5 py-1 rounded-md">Rp {{ item.jumlah_pengeluaran|intcomma }}</p>
+                            </div>
+                            {% else %}
+                            <div class="text-right">
+                                <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Status</p>
+                                <p class="text-xs font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-md">Terdokumentasi</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
                 </div>
-    
-                <div class="title">
-                    {{ item.judul }}
-                </div>
-    
-                <p>{{ item.deskripsi }}</p>
-    
-                <p>
-                    Pengeluaran: Rp {{ item.jumlah_pengeluaran }}
-                </p>
-    
-                <p>
-                    Tanggal: {{ item.tanggal|date:"d M Y" }}
-                </p>
-    
-                {% if item.bukti %}
-                <img src="{{ item.bukti.url }}">
-                {% endif %}
-            </div>
-            {% endfor %}
+                {% endfor %}
             {% else %}
-            <p>Belum ada laporan dari donasi kamu.</p>
+                <div class="col-span-full py-24 bg-white/60 border-2 border-dashed border-gray-200 rounded-[2.5rem] text-center shadow-sm">
+                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-gray-100">
+                        <i class="ph-fill ph-scroll text-4xl text-gray-300"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2 font-heading">Belum Ada Laporan</h3>
+                    <p class="text-gray-500 font-medium max-w-sm mx-auto text-sm">Petani dari proyek yang Anda dukung belum mengunggah pembaruan status lahan.</p>
+                </div>
             {% endif %}
-        
-    
         </div>
-    
-    </body>
-    
-    </html>
+    </main>
 
 </body>
 </html>

@@ -2,10 +2,13 @@
 module.exports = {
   content: [
     "./templates/**/*.html",
-    "./**/templates/**/*.html",
-    "./static/js/**/*.js",
-    "./**/static/js/**/*.js",
     "./akun/templates/**/*.html",
+    "./petani/templates/**/*.html",
+    "./donatur/templates/**/*.html",
+    "./dashboard/templates/**/*.html",
+    "./edukasi/templates/**/*.html",
+
+    "./static/js/**/*.js",
   ],
   theme: {
     extend: {
@@ -16,7 +19,6 @@ module.exports = {
         jejak: {
           primary: '#1F4D3A',
           secondary: '#468432',
-          third: '#468432',
           accent: '#C76B4E',
           bg: '#F7F3EA',
           text: '#1F2933',

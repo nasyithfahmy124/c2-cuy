@@ -31,7 +31,7 @@ def mulai_redirect(request):
     
 def public_home(request):
     projects = Project.objects.filter(status='aktif').annotate(
-        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+        total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
     ).order_by('-id')
 
     return render(request, 'login/home_page.html', {
@@ -41,7 +41,7 @@ def public_home(request):
 @login_required
 def home_page(request):
     projects = Project.objects.filter(status='aktif').annotate(
-        total_donasi=Coalesce(Sum('donasi__jumlah'), 0)
+        total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
     ).order_by('-id')
 
 

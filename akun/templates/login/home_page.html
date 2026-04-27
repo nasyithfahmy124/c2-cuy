@@ -246,12 +246,12 @@
                         </p>
 
                         <div class="mt-auto">
-                            {% widthratio project.dana_terkumpul|default:0 project.target_dana 100 as persen %}
+                            {% widthratio project.total_donasi project.target_dana 100 as persen %}
                             <div class="mb-6">
                                 <div class="flex justify-between items-end mb-2">
                                     <div>
                                         <p class="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wider">Sumber Daya Terkumpul</p>
-                                        <p class="text-lg font-bold text-jejak-primary">Rp {{ project.dana_terkumpul|default:0|intcomma }}
+                                        <p class="text-lg font-bold text-jejak-primary">Rp {{ project.total_donasi|default:0|intcomma }}
                                             <span class="text-sm text-gray-500 font-medium">/ Rp {{ project.target_dana|intcomma }}</span>
                                         </p>
                                     </div>

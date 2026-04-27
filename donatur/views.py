@@ -3,22 +3,23 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FormDonasi,FormDonasiBarang
 from petani.models import Project,Laporan
-from django.db.models import Sum
+
+from django.db.models import Sum, Value
 from .models import Donasi,DonasiBarang
 from django.contrib import messages
 from itertools import chain
-
+from django.db.models.functions import Coalesce
 
 # Create your views here.
 @login_required
 def home_page(request):
     projects = Project.objects.filter(status='aktif').annotate(
-        total_donasi=Sum('donasi__jumlah')
+        total_donasi_db=Sum('donasi__jumlah')
     ).order_by('-id')
 
-    for p in projects:
-        if p.total_donasi is None:
-            p.total_donasi = 0
+    projects = Project.objects.filter(status='aktif').annotate(
+    total_donasi_db=Coalesce(Sum('donasi__jumlah'), Value(0))
+)
 
     total_dana = Donasi.objects.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
     total_project = projects.count()
@@ -122,7 +123,7 @@ def detail(request, id):
 
     return render(request, 'donatur/detail.html', {
         'detail': det,
-        'total_donasi': total
+        'total_donasi_db': total
     })
 @login_required 
 def detail_donasi(request):
@@ -144,7 +145,6 @@ def detail_donasi(request):
     return render(request,'donatur/riwayat.html',{
         'semua': semua_riwayat
     })
-    
 @login_required
 def laporan_donatur(request):
     project_ids = Donasi.objects.filter(

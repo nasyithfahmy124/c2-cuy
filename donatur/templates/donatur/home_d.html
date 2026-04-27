@@ -12,11 +12,21 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        .glass-nav { background: rgba(253, 251, 247, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.3); }
-        .project-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(31, 77, 58, 0.15); }
-        /* Animasi tambahan buat hero */
+        .body { font-family: 'Inter', sans-serif; }
+        .font-heading, h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .glass-nav { background: rgba(253, 251, 247, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); }
+        
+        .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 25px 50px -12px rgba(31, 77, 58, 0.15); }
+        
+        /* Hilangkan Scrollbar tapi tetap bisa di-scroll */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         @keyframes subtleZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
-        .hero-bg { animation: subtleZoom 20s infinite alternate ease-in-out; }
+        .hero-bg { animation: subtleZoom 25s infinite alternate ease-in-out; }
     </style>
 </head>
 <body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex flex-col">
@@ -44,39 +54,39 @@
 
     <main class="flex-grow w-full relative">
         
-        <div class="relative w-full h-[650px] lg:h-[750px] overflow-hidden">
+        <div class="relative w-full h-[550px] lg:h-[700px] overflow-hidden rounded-b-[2.5rem] md:rounded-b-[3rem] shadow-sm">
             <img src="{% static 'assets/img/dakstop_bg.png' %}" class="hero-bg absolute inset-0 w-full h-full object-cover" alt="Background Pertanian">
             
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0a2e1d] via-[#1F4D3A]/90 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-jejak-bg via-transparent to-transparent opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-[#072415]/95 via-[#1F4D3A]/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-transparent to-transparent opacity-90"></div>
             
-            <div class="absolute inset-0 flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto w-full z-10 pb-20 md:pb-32">
+            <div class="absolute inset-0 flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto w-full z-10 pb-20 md:pb-32 pt-10">
                 
                 {% if messages %}
                 <div class="mb-6 max-w-xl animate-fade-in-up">
                     {% for message in messages %}
-                    <div class="px-4 py-3 rounded-xl bg-green-500/20 backdrop-blur-md border border-green-400/30 text-white text-sm font-bold flex items-center gap-2 shadow-lg">
-                        <i class="ph-fill ph-check-circle text-xl text-green-400"></i> {{ message }}
+                    <div class="px-4 py-3 rounded-xl bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-bold flex items-center gap-3 shadow-lg">
+                        <i class="ph-fill ph-check-circle text-xl text-green-300"></i> {{ message }}
                     </div>
                     {% endfor %}
                 </div>
                 {% endif %}
 
                 <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-[10px] md:text-xs uppercase tracking-[0.2em] mb-6 w-max animate-fade-in-up delay-75 shadow-lg">
-                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Zero-Cash Funding Ecosystem
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Sistem Manajemen Lahan Pintar
                 </span>
                 
-                <h1 class="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight animate-fade-in-up delay-100 max-w-3xl drop-shadow-xl">
-                    Wujudkan Panen Raya, <br>
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-black text-white leading-[1.1] mb-6 tracking-tight animate-fade-in-up delay-100 max-w-3xl drop-shadow-xl font-heading">
+                    Wujudkan Panen, <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-jejak-secondary">Berdayakan Petani.</span>
                 </h1>
                 
-                <p class="text-base md:text-lg text-gray-200 font-medium mb-10 max-w-xl leading-relaxed animate-fade-in-up delay-150">
-                    Setiap rupiah yang Anda salurkan ditransformasikan langsung menjadi bibit, pupuk, dan alat berkualitas. Pantau transparansi lahan secara *real-time*.
+                <p class="text-sm md:text-base lg:text-lg text-gray-200 font-medium mb-10 max-w-xl leading-relaxed animate-fade-in-up delay-150">
+                    Setiap dukungan yang Anda salurkan ditransformasikan langsung menjadi sarana produksi pertanian yang tepat guna.
                 </p>
                 
                 <div class="flex flex-wrap gap-4 animate-fade-in-up delay-200">
-                    <a href="#eksplorasi" class="px-8 py-4 bg-jejak-accent text-white rounded-2xl font-black shadow-[0_0_40px_rgba(199,107,78,0.4)] hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2">
+                    <a href="#eksplorasi" class="px-8 py-4 bg-jejak-accent text-white rounded-2xl font-black shadow-[0_0_30px_rgba(199,107,78,0.4)] hover:-translate-y-1 transition-all active:scale-95 flex items-center gap-2 uppercase tracking-widest text-sm">
                         <i class="ph-bold ph-compass text-xl"></i> Eksplorasi Lahan
                     </a>
                 </div>
@@ -87,34 +97,78 @@
         <a href="{% url 'laporan_donatur' %}">
             Lihat Semua Laporan Donasi Saya
         </a>
-        <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-24 md:-mt-32 mb-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in-up delay-300">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-24 md:-mt-32 lg:-mt-40 mb-8">
+            <section class="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-6 pb-4 pt-4 hide-scrollbar animate-fade-in-up delay-300 -mx-4 px-4 md:mx-0 md:px-0">
                 
-                <div class="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 text-jejak-primary/5 rotate-12 group-hover:rotate-0 transition-transform duration-500">
-                        <i class="ph-fill ph-money text-9xl"></i>
+                <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center glass-card p-8 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden group flex flex-col justify-center">
+                    <div class="absolute -right-6 -bottom-6 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110 group-hover:-rotate-6 duration-500">
+                        <i class="ph-fill ph-money text-[150px]"></i>
                     </div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 relative z-10">Total Dana Tersalurkan</p>
-                    <h3 class="text-4xl font-black text-jejak-primary relative z-10 tracking-tight">Rp {{ total_dana|intcomma }}</h3>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 relative z-10">Total Tersalurkan</p>
+                    <h3 class="text-3xl lg:text-4xl font-black text-jejak-primary relative z-10 font-heading whitespace-nowrap">Rp {{ total_dana|intcomma }}</h3>
                 </div>
 
-                <div class="bg-gradient-to-br from-jejak-primary to-[#143a29] p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 text-white/5 rotate-12 group-hover:rotate-0 transition-transform duration-500">
-                        <i class="ph-fill ph-plant text-9xl"></i>
+                <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-gradient-to-br from-[#0D3020] to-jejak-primary p-8 rounded-[2.5rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group flex flex-col justify-center">
+                    <div class="absolute -right-6 -bottom-6 text-white/5 rotate-12 transition-transform group-hover:scale-110 group-hover:-rotate-6 duration-500">
+                        <i class="ph-fill ph-plant text-[150px]"></i>
                     </div>
-                    <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-1 relative z-10">Proyek Terdanai</p>
-                    <h3 class="text-4xl font-black text-white relative z-10 tracking-tight">{{ total_project }} <span class="text-lg font-bold opacity-60">Lahan Aktif</span></h3>
+                    <p class="text-[10px] font-bold text-green-300 uppercase tracking-[0.2em] mb-2 relative z-10">Proyek Aktif</p>
+                    <h3 class="text-3xl lg:text-4xl font-black relative z-10 font-heading">{{ total_project }} <span class="text-base font-medium opacity-60">Lahan</span></h3>
                 </div>
 
-                <div class="bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group">
-                    <div class="absolute -right-4 -top-4 text-jejak-accent/5 rotate-12 group-hover:rotate-0 transition-transform duration-500">
-                        <i class="ph-fill ph-users-three text-9xl"></i>
+                <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center glass-card p-8 rounded-[2.5rem] shadow-xl shadow-gray-200/50 border border-white relative overflow-hidden group flex flex-col justify-center">
+                    <div class="absolute -right-6 -bottom-6 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110 group-hover:-rotate-6 duration-500">
+                        <i class="ph-fill ph-users-three text-[150px]"></i>
                     </div>
-                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1 relative z-10">Petani Terbantu</p>
-                    <h3 class="text-4xl font-black text-jejak-accent relative z-10 tracking-tight">{{ total_petani }} <span class="text-lg font-bold opacity-60">Mitra</span></h3>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 relative z-10">Petani Terbantu</p>
+                    <h3 class="text-3xl lg:text-4xl font-black text-jejak-accent relative z-10 font-heading">{{ total_petani }} <span class="text-base font-bold opacity-60">Mitra</span></h3>
                 </div>
-            </div>
+                
+                <div class="w-1 shrink-0 md:hidden"></div>
+            </section>
         </div>
+
+        <div class="max-w-7xl mx-auto px-4 md:px-8 mb-20 animate-fade-in-up delay-300">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <a href="{% url 'riwayat_d' %}" class="group relative overflow-hidden bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-jejak-primary/10 hover:border-jejak-primary/20 transition-all duration-300 hover:-translate-y-1 flex items-center justify-between">
+                    <div class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110 group-hover:-rotate-6 duration-500">
+                        <i class="ph-fill ph-clock-counter-clockwise text-[120px]"></i>
+                    </div>
+                    <div class="flex items-center gap-5 relative z-10">
+                        <div class="w-14 h-14 rounded-2xl bg-jejak-primary/10 text-jejak-primary flex items-center justify-center text-2xl group-hover:bg-jejak-primary group-hover:text-white transition-colors">
+                            <i class="ph-fill ph-receipt"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-gray-900 font-heading mb-0.5 group-hover:text-jejak-primary transition-colors">Riwayat Dukungan</h4>
+                            <p class="text-xs font-medium text-gray-500 line-clamp-1">Pantau rincian aliran dana yang telah disalurkan.</p>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-jejak-primary/10 group-hover:text-jejak-primary transition-colors relative z-10 shrink-0">
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </div>
+                </a>
+
+                <a href="{% url 'laporan_donatur' %}" class="group relative overflow-hidden bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-jejak-secondary/10 hover:border-jejak-secondary/20 transition-all duration-300 hover:-translate-y-1 flex items-center justify-between">
+                    <div class="absolute -right-4 -bottom-4 text-jejak-secondary/5 rotate-12 transition-transform group-hover:scale-110 group-hover:-rotate-6 duration-500">
+                        <i class="ph-fill ph-files text-[120px]"></i>
+                    </div>
+                    <div class="flex items-center gap-5 relative z-10">
+                        <div class="w-14 h-14 rounded-2xl bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center text-2xl group-hover:bg-jejak-secondary group-hover:text-white transition-colors">
+                            <i class="ph-fill ph-scroll"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-black text-gray-900 font-heading mb-0.5 group-hover:text-jejak-secondary transition-colors">Laporan Aktivitas</h4>
+                            <p class="text-xs font-medium text-gray-500 line-clamp-1">Cek progres lahan dari mitra yang Anda dukung.</p>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-jejak-secondary/10 group-hover:text-jejak-secondary transition-colors relative z-10 shrink-0">
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </div>
+                </a>
+
+            </div>
+        </div>  
 
         <div id="eksplorasi" class="max-w-7xl mx-auto px-4 md:px-8 pb-20">
             <div class="mb-10 flex items-center justify-between">

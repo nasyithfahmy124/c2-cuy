@@ -1,136 +1,197 @@
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tracking Lahan: {{ semua_projek.nama }} - JejakDaya</title>
     
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         .timeline-line { width: 2px; background: repeating-linear-gradient(to bottom, #468432 0, #468432 5px, transparent 5px, transparent 10px); }
+        
+        .card-hover { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(31, 77, 58, 0.1); }
     </style>
 </head>
 <body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
     {% include 'petani/partials/navbar.html' %}
     
-
-    <h3>Barang dari Donatur</h3>
-    
-
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-10">
         
         <div class="flex flex-col lg:flex-row gap-8 mb-12 animate-fade-in-up">
             <div class="w-full lg:w-1/2 h-[300px] md:h-[450px] rounded-[3rem] overflow-hidden shadow-2xl relative border-4 border-white">
                 {% if semua_projek.foto_lahan %}
-                    <img src="{{ semua_projek.foto_lahan.url }}" class="w-full h-full object-cover">
+                    <img src="{{ semua_projek.foto_lahan.url }}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105">
                 {% else %}
                     <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                         <i class="ph-fill ph-plant text-7xl text-gray-300"></i>
                     </div>
                 {% endif %}
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                <div class="absolute bottom-8 left-8">
-                    <span class="px-4 py-2 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] mb-3 inline-block">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-8 left-8 right-8">
+                    <span class="px-4 py-2 rounded-xl bg-white/20 backdrop-blur-md border border-white/20 text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-3 inline-block shadow-sm">
                         {{ semua_projek.get_status_display }}
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                    <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight font-heading">
                         {{ semua_projek.nama }}
                     </h1>
                 </div>
             </div>
 
             <div class="w-full lg:w-1/2 flex flex-col gap-6">
-                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 flex-grow">
-                    <div class="flex justify-between items-center mb-8">
-                        <h3 class="text-xl font-black text-jejak-primary tracking-tight">Status Inkubasi</h3>
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 flex-grow relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-8 relative z-10">
+                        <h3 class="text-xl md:text-2xl font-black text-jejak-primary tracking-tight font-heading">Status Inkubasi</h3>
                         <div class="text-right">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Durasi Proyek</p>
-                            <p class="font-black text-jejak-secondary">{{ semua_projek.berapa_bulan }}</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Durasi Proyek</p>
+                            <p class="font-black text-jejak-secondary bg-jejak-secondary/10 px-3 py-1 rounded-lg inline-block">{{ semua_projek.berapa_bulan }} Bulan</p>
                         </div>
                     </div>
 
-                    <div class="space-y-4 mb-10">
+                    <div class="space-y-4 mb-10 relative z-10">
                         <div class="flex justify-between items-end">
                             <div>
-                                <p class="text-xs font-bold text-gray-400 uppercase mb-1">Dukungan Barang Terkumpul</p>
-                                <p class="text-3xl font-black text-jejak-primary">Rp {{ total_donasi|intcomma }}</p>
+                                <p class="text-[11px] font-bold text-gray-400 uppercase mb-1 tracking-widest">Dukungan Terkumpul</p>
+                                <p class="text-3xl md:text-4xl font-black text-jejak-primary font-heading whitespace-nowrap">Rp {{ total_donasi|intcomma }}</p>
                             </div>
-                            <p class="text-4xl font-black text-jejak-secondary">{{ semua_projek.persentase }}%</p>
+                            <p class="text-4xl md:text-5xl font-black text-jejak-secondary font-heading">{{ semua_projek.persentase }}%</p>
                         </div>
-                        <div class="w-full bg-gray-100 h-4 rounded-full overflow-hidden">
-                            <div class="bg-gradient-to-r from-jejak-primary to-jejak-secondary h-full transition-all duration-1000 shadow-[0_0_15px_rgba(70,132,50,0.3)]" style="width: {{ semua_projek.persentase }}%"></div>
+                        <div class="w-full bg-gray-100 h-3.5 rounded-full overflow-hidden shadow-inner">
+                            <div class="bg-gradient-to-r from-jejak-primary to-jejak-secondary h-full transition-all duration-1000 shadow-[0_0_15px_rgba(70,132,50,0.3)] relative" style="width: {{ semua_projek.persentase }}%">
+                                <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                            </div>
                         </div>
-                        <p class="text-xs font-medium text-gray-400 italic text-center">Menuju target: Rp {{ semua_projek.target_dana|intcomma }}</p>
+                        <div class="flex justify-between text-xs font-bold uppercase tracking-widest text-gray-400">
+                            <span>Target Dana</span>
+                            <span class="text-gray-900">Rp {{ semua_projek.target_dana|intcomma }}</span>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 rounded-2xl bg-jejak-bg border border-gray-100">
-                            <i class="ph-fill ph-map-pin text-jejak-accent text-xl mb-2"></i>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase">Lokasi Lahan</p>
-                            <p class="text-sm font-bold text-jejak-primary">{{ semua_projek.lokasi }}</p>
+                    <div class="grid grid-cols-2 gap-4 relative z-10">
+                        <div class="p-4 md:p-5 rounded-2xl bg-gray-50 border border-gray-100 group hover:border-jejak-primary/30 transition-colors">
+                            <i class="ph-fill ph-map-pin text-jejak-accent text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lokasi Lahan</p>
+                            <p class="text-sm font-bold text-jejak-primary mt-0.5">{{ semua_projek.lokasi }}</p>
                         </div>
-                        <div class="p-4 rounded-2xl bg-jejak-bg border border-gray-100">
-                            <i class="ph-fill ph-ruler text-jejak-secondary text-xl mb-2"></i>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase">Luas Lahan</p>
-                            <p class="text-sm font-bold text-jejak-primary">{{ semua_projek.luas_lahan }} m²</p>
+                        <div class="p-4 md:p-5 rounded-2xl bg-gray-50 border border-gray-100 group hover:border-jejak-secondary/30 transition-colors">
+                            <i class="ph-fill ph-ruler text-jejak-secondary text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Luas Lahan</p>
+                            <p class="text-sm font-bold text-jejak-primary mt-0.5">{{ semua_projek.luas_lahan }} m²</p>
                         </div>
                     </div>
                 </div>
 
-                <a href="{% url 'tambah_laporan' semua_projek.id %}" class="w-full py-5 rounded-[1.5rem] bg-jejak-primary text-white font-black text-lg shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-3">
-                    <i class="ph-bold ph-plus-circle"></i> Update Laporan Harian
+                <a href="{% url 'tambah_laporan' semua_projek.id %}" class="w-full py-4 md:py-5 rounded-[1.5rem] bg-jejak-primary text-white font-black text-sm md:text-base uppercase tracking-widest shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 hover:shadow-2xl transition-all text-center flex items-center justify-center gap-3 active:scale-95">
+                    <i class="ph-bold ph-plus-circle text-xl"></i> Update Laporan Harian
                 </a>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
             
-            <div class="lg:col-span-2 space-y-8 animate-fade-in-up delay-100">
-                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100">
-                    <h3 class="text-2xl font-black text-jejak-primary mb-6">Detail Rincian Kebutuhan</h3>
-                    <div class="prose prose-sm max-w-none text-gray-600 leading-relaxed bg-jejak-bg/50 p-6 rounded-2xl border border-gray-100 italic">
+            <div class="lg:col-span-2 space-y-10 animate-fade-in-up delay-100">
+                
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-5">
+                        <i class="ph-fill ph-clipboard-text text-9xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-jejak-primary mb-6 font-heading relative z-10">Detail Rincian Kebutuhan</h3>
+                    <div class="prose prose-sm max-w-none text-gray-700 font-medium leading-relaxed bg-gray-50 p-6 md:p-8 rounded-3xl border border-gray-100 relative z-10">
                         {{ semua_projek.kebutuhan|linebreaks }}
                     </div>
                     
-                    <div class="mt-8 flex items-center gap-4 p-4 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700">
-                        <i class="ph-fill ph-info text-2xl"></i>
-                        <p class="text-xs font-semibold italic">Sistem JejakDaya menahan dana donasi di sistem escrow dan mencairkannya langsung dalam bentuk barang sesuai rincian di atas.</p>
+                    <div class="mt-8 flex items-start md:items-center gap-4 p-5 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700 relative z-10 shadow-sm">
+                        <i class="ph-fill ph-info text-2xl shrink-0 mt-1 md:mt-0"></i>
+                        <p class="text-xs font-semibold leading-relaxed">Sistem JejakDaya menahan dana donasi di sistem escrow dan mencairkannya langsung dalam bentuk sarana produksi pertanian sesuai rincian di atas.</p>
                     </div>
                 </div>
 
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100">
+                    <h3 class="text-2xl font-black text-jejak-primary mb-6 font-heading">Distribusi Logistik Lahan</h3>
+                    
+                    {% if barang_masuk %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {% for item in barang_masuk %}
+                        <div class="p-5 rounded-2xl border border-gray-100 bg-gray-50/50 hover:bg-white card-hover relative overflow-hidden group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-jejak-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            
+                            <div class="flex gap-4 items-center mb-4">
+                                <div class="w-12 h-12 rounded-xl bg-jejak-accent/10 text-jejak-accent flex items-center justify-center text-2xl shrink-0">
+                                    <i class="ph-fill ph-package"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-gray-900 leading-tight line-clamp-1">{{ item }}</p>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1"><i class="ph-bold ph-calendar-blank"></i> {{ item.tanggal|date:"d M Y" }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-end border-t border-gray-100 pt-4">
+                                <div>
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jumlah</p>
+                                    <p class="text-lg font-black text-jejak-primary font-heading">{{ item.jumlah }} <span class="text-xs text-gray-500 font-bold">Unit</span></p>
+                                </div>
+                                <span class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg border {% if item.status|lower == 'diterima' or item.status|lower == 'berhasil' %}bg-green-50 text-green-600 border-green-200{% else %}bg-orange-50 text-orange-500 border-orange-200{% endif %}">
+                                    {{ item.status }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="py-12 bg-gray-50 border-2 border-dashed border-gray-200 rounded-3xl text-center">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100 rotate-3">
+                            <i class="ph-fill ph-box-open text-3xl text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-900 font-bold heading">Belum ada distribusi logistik</p>
+                        <p class="text-xs text-gray-500 font-medium mt-1">Barang/sarana produksi akan muncul di sini setelah diproses.</p>
+                    </div>
+                    {% endif %}
+                </div>
+
                 <div class="space-y-6">
-                    <h3 class="text-2xl font-black text-jejak-primary px-4">Aktivitas Lahan Terbaru</h3>
+                    <h3 class="text-2xl font-black text-jejak-primary px-4 font-heading">Laporan Aktivitas Harian</h3>
                     {% if semua_projek.laporan.all %}
                         {% for lap in semua_projek.laporan.all|dictsortreversed:"id" %}
-                        <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-6 hover:shadow-md transition-shadow">
-                            <div class="w-full md:w-32 h-32 rounded-2xl bg-gray-100 overflow-hidden flex-shrink-0">
+                        <div class="bg-white p-5 md:p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col md:flex-row gap-5 md:gap-6 card-hover group">
+                            <div class="w-full md:w-40 h-40 md:h-32 rounded-2xl bg-gray-100 overflow-hidden flex-shrink-0 relative">
                                 {% if lap.bukti %}
-                                    <img src="{{ lap.bukti.url }}" class="w-full h-full object-cover">
+                                    <img src="{{ lap.bukti.url }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-50">
+                                        <i class="ph-fill ph-camera-slash text-4xl text-gray-300"></i>
+                                    </div>
                                 {% endif %}
+                                <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
                             </div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h4 class="text-lg font-bold text-jejak-primary">{{ lap.judul }}</h4>
-                                    <span class="text-[10px] font-bold text-gray-300 uppercase">Rp {{ lap.jumlah_pengeluaran|intcomma }}</span>
+                            <div class="flex-grow flex flex-col justify-center">
+                                <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-2 gap-2">
+                                    <h4 class="text-lg font-bold text-gray-900 font-heading leading-tight group-hover:text-jejak-primary transition-colors">{{ lap.judul }}</h4>
+                                    <span class="text-[11px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100 w-fit whitespace-nowrap">Rp {{ lap.jumlah_pengeluaran|intcomma }}</span>
                                 </div>
-                                <p class="text-sm text-gray-500 mb-4">{{ lap.deskripsi|truncatechars:150 }}</p>
-                                <div class="flex items-center gap-2 text-[10px] font-bold text-jejak-secondary uppercase tracking-widest">
-                                    <i class="ph ph-calendar"></i> {{ lap.project.nama }} • Selesai
+                                <p class="text-sm text-gray-500 mb-4 line-clamp-2 leading-relaxed">{{ lap.deskripsi }}</p>
+                                <div class="flex items-center gap-2 text-[10px] font-bold text-jejak-secondary uppercase tracking-widest mt-auto">
+                                    <i class="ph-fill ph-calendar-check text-lg"></i> Laporan Masuk
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
                     {% else %}
-                        <div class="p-10 bg-white border-2 border-dashed border-gray-100 rounded-[2.5rem] text-center">
-                            <i class="ph-fill ph-scroll text-5xl text-gray-100 mb-4"></i>
-                            <p class="text-gray-400 font-bold">Belum ada laporan yang dikirim.</p>
+                        <div class="p-12 bg-white border-2 border-dashed border-gray-200 rounded-[2.5rem] text-center">
+                            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
+                                <i class="ph-fill ph-scroll text-4xl text-gray-300"></i>
+                            </div>
+                            <p class="text-gray-900 font-bold text-lg font-heading">Belum ada laporan harian</p>
+                            <p class="text-sm text-gray-500 font-medium mt-1">Petani belum memperbarui status lahan ini.</p>
                         </div>
                     {% endif %}
                 </div>
@@ -138,55 +199,55 @@
 
             <div class="animate-fade-in-up delay-200">
                 <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-gray-100 sticky top-32">
-                    <h3 class="text-xl font-black text-jejak-primary mb-8">Timeline Inkubasi</h3>
+                    <h3 class="text-xl font-black text-jejak-primary mb-8 font-heading">Timeline Inkubasi</h3>
                     
                     <div class="relative space-y-12">
                         <div class="absolute left-4 top-2 bottom-2 timeline-line"></div>
 
                         <div class="relative flex gap-6 items-start">
-                            <div class="w-8 h-8 rounded-full bg-jejak-primary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-primary/30">
+                            <div class="w-8 h-8 rounded-full bg-jejak-primary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-primary/30 shrink-0">
                                 <i class="ph-bold ph-check"></i>
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-jejak-primary uppercase tracking-widest">Pengajuan</h4>
-                                <p class="text-[11px] text-gray-400">Proyek berhasil diverifikasi admin.</p>
+                                <p class="text-[11px] text-gray-500 font-medium mt-0.5">Proyek berhasil diverifikasi sistem.</p>
                             </div>
                         </div>
 
                         <div class="relative flex gap-6 items-start">
-                            <div class="w-8 h-8 rounded-full bg-jejak-secondary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-secondary/30">
-                                02
+                            <div class="w-8 h-8 rounded-full bg-jejak-secondary flex items-center justify-center text-white text-xs font-black z-10 shadow-lg shadow-jejak-secondary/30 shrink-0">
+                                <div class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></div>
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-jejak-primary uppercase tracking-widest">Pendanaan Barang</h4>
-                                <p class="text-[11px] text-gray-400">Sedang mengumpulkan dukungan investor.</p>
+                                <h4 class="text-sm font-bold text-jejak-primary uppercase tracking-widest">Distribusi Logistik</h4>
+                                <p class="text-[11px] text-gray-500 font-medium mt-0.5">Mengumpulkan & menyalurkan barang.</p>
                             </div>
                         </div>
 
-                        <div class="relative flex gap-6 items-start opacity-30">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-black z-10">
+                        <div class="relative flex gap-6 items-start opacity-40">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-black z-10 shrink-0 border border-gray-300">
                                 03
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-gray-600 uppercase tracking-widest">Proses Tanam</h4>
-                                <p class="text-[11px] text-gray-400">Input laporan harian untuk donatur.</p>
+                                <p class="text-[11px] text-gray-400 font-medium mt-0.5">Update laporan untuk transaparansi.</p>
                             </div>
                         </div>
 
-                        <div class="relative flex gap-6 items-start opacity-30">
-                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-black z-10">
+                        <div class="relative flex gap-6 items-start opacity-40">
+                            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs font-black z-10 shrink-0 border border-gray-300">
                                 04
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-widest">Bagi Hasil</h4>
-                                <p class="text-[11px] text-gray-400">Distribusi hasil panen sesuai nisbah.</p>
+                                <h4 class="text-sm font-bold text-gray-600 uppercase tracking-widest">Bagi Hasil Panen</h4>
+                                <p class="text-[11px] text-gray-400 font-medium mt-0.5">Distribusi sesuai siklus komoditas.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-12 pt-8 border-t border-gray-100">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Butuh Panduan?</p>
-                        <a href="{% url 'pusat_edukasi' %}" class="flex items-center gap-3 p-4 rounded-2xl bg-jejak-secondary/10 text-jejak-secondary font-bold text-xs hover:bg-jejak-secondary hover:text-white transition-all">
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Butuh Panduan Lahan?</p>
+                        <a href="{% url 'pusat_edukasi' %}" class="flex items-center gap-3 p-4 rounded-2xl bg-jejak-secondary/10 text-jejak-secondary font-bold text-xs hover:bg-jejak-secondary hover:text-white transition-all uppercase tracking-wider">
                             <i class="ph-fill ph-book-open text-xl"></i> Baca SOP Budidaya
                         </a>
                     </div>
@@ -196,8 +257,8 @@
         </div>
 
         <div class="mt-16 text-center">
-            <a href="{% url 'allp' %}" class="text-sm font-bold text-gray-400 hover:text-jejak-primary transition-colors flex items-center justify-center gap-2">
-                <i class="ph-bold ph-arrow-left"></i> Kembali ke Daftar Lahan
+            <a href="{% url 'allp' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-sm font-bold text-gray-500 uppercase tracking-widest hover:text-jejak-primary hover:border-jejak-primary/30 transition-all shadow-sm active:scale-95">
+                <i class="ph-bold ph-arrow-left text-lg"></i> Kembali ke Daftar Lahan
             </a>
         </div>
     </main>

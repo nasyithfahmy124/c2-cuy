@@ -5,16 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kirim Laporan: {{ project.nama }} - JejakDaya</title>
-    
+
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <style>
-        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-        .form-input { 
-            @apply w-full bg-white/60 border border-gray-200 rounded-xl px-4 py-3 outline-none transition-all focus:border-jejak-primary focus:ring-4 focus:ring-jejak-primary/10 text-sm font-medium text-gray-700;
+        .glass-nav {
+            background: rgba(253, 251, 247, 0.8);
+            backdrop-filter: blur(12px);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-control {
+            width: 100%;
+            border: 1px solid rgb(229 231 235);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 0.9rem 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5rem;
+            color: rgb(55 65 81);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: rgb(59 130 246);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgb(31 41 55);
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -23,116 +56,150 @@
     {% include 'petani/partials/navbar.html' %}
 
     <main class="flex-grow max-w-6xl mx-auto w-full px-4 md:px-8 py-10">
-        
+        <a href="{% url 'home_p' %}" class="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-2xl bg-white border border-gray-200 text-gray-600 font-bold text-xs uppercase tracking-[0.1em] hover:bg-gray-50 hover:text-jejak-primary hover:border-jejak-primary/30 hover:shadow-md transition-all w-fit active:scale-95 group">
+            <i class="ph-bold ph-arrow-left text-lg group-hover:-translate-x-1 transition-transform duration-300"></i>
+            Kembali ke Dasbor
+        </a>
+
         <div class="mb-10 animate-fade-in-up">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-jejak-secondary/10 text-jejak-secondary text-xs font-bold uppercase tracking-wider mb-4">
-                <i class="ph-fill ph-camera"></i> Laporan Aktivitas
+                <i class="ph-fill ph-camera"></i>
+                Laporan Aktivitas
             </div>
-            <h1 class="text-3xl md:text-4xl font-black text-jejak-primary tracking-tight mb-2">Update: {{ project.nama }}</h1>
-            <p class="text-gray-500 font-medium">Kirim laporan harian atau mingguan agar investor dapat memantau perkembangan lahan Anda.</p>
+            <h1 class="text-3xl md:text-4xl font-black text-jejak-primary tracking-tight mb-2">
+                Update: {{ project.nama }}
+            </h1>
+            <p class="text-gray-500 font-medium max-w-2xl">
+                Kirim laporan harian atau mingguan agar investor dapat memantau perkembangan lahan Anda.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-10 items-start">
             <div class="lg:col-span-2">
-                <form method="POST" enctype="multipart/form-data" class="glass-card p-6 md:p-8 rounded-[2.5rem] border border-white shadow-sm space-y-6 animate-fade-in-up delay-100">
+                <form method="POST" enctype="multipart/form-data"
+                      class="glass-card p-6 md:p-8 rounded-[2rem] border border-white shadow-sm space-y-6 animate-fade-in-up delay-100">
                     {% csrf_token %}
-                    
+
                     {% if messages %}
-                    <div class="space-y-2 mb-6">
+                    <div class="space-y-3">
                         {% for message in messages %}
-                        <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-bold flex items-center gap-2">
-                            <i class="ph-fill ph-warning-circle text-lg"></i> {{ message }}
+                        <div class="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-sm font-semibold flex items-start gap-3">
+                            <i class="ph-fill ph-warning-circle text-lg mt-0.5"></i>
+                            <span>{{ message }}</span>
                         </div>
                         {% endfor %}
                     </div>
                     {% endif %}
 
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Judul Laporan</label>
-                        <input type="text" name="judul" placeholder="Contoh: Pemupukan Minggu ke-3" class="form-input" required>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Estimasi Pengeluaran Barang (Rp)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">Rp</span>
-                            <input type="number" name="jumlah_pengeluaran" placeholder="Contoh: 150000 (Isi 0 jika tidak ada)" class="form-input pl-12" required>
+                    <div class="grid grid-cols-1 gap-5">
+                        <div>
+                            <label class="form-label" for="judul">Judul Laporan</label>
+                            <input id="judul" type="text" name="judul" placeholder="Contoh: Pemupukan Minggu ke-3" class="form-control" required
+                            >
                         </div>
-                    </div>
 
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Deskripsi Kegiatan</label>
-                        <textarea name="deskripsi" rows="4" placeholder="Ceritakan apa yang dikerjakan hari ini, kondisi cuaca, atau kendala yang dihadapi..." class="form-input resize-none" required></textarea>
-                    </div>
+                        <div>
+                            <label class="form-label" for="jumlah_pengeluaran">Estimasi Pengeluaran Barang (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold pointer-events-none"style="pointer-events: none;">
+                                    Rp
+                                </span>
+                                <input id="jumlah_pengeluaran" type="number" name="jumlah_pengeluaran" placeholder="150000 (Isi 0 jika tidak ada)" class="form-control pl-12" style="padding-left: 65px !important;" min="0" step="1" required>
+                            </div>
+                        </div>
 
-                    <div class="space-y-2">
-                        <label class="text-xs font-black text-jejak-primary uppercase tracking-widest ml-1">Foto Bukti / Kondisi Lahan</label>
-                        
-                        <div class="relative w-full h-56 border-2 border-dashed border-jejak-secondary/40 rounded-2xl bg-jejak-secondary/5 hover:bg-jejak-secondary/10 transition-colors overflow-hidden group cursor-pointer" onclick="document.getElementById('id_bukti').click()">
-                            
-                            <img id="image-preview" src="#" alt="Preview" class="absolute inset-0 w-full h-full object-cover hidden z-10">
-                            
-                            <div id="dropzone-content" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0">
-                                <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:scale-110 transition-transform">
-                                    <i class="ph-fill ph-image-square text-3xl text-jejak-secondary"></i>
+                        <div>
+                            <label class="form-label" for="deskripsi">Deskripsi Kegiatan</label>
+                            <textarea id="deskripsi" name="deskripsi" rows="5" placeholder="Ceritakan apa yang dikerjakan hari ini, kondisi cuaca, atau kendala yang dihadapi..." class="form-control resize-none min-h-[140px]" required></textarea>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Foto Bukti / Kondisi Lahan</label>
+
+                            <div
+                                class="relative w-full h-60 border-2 border-dashed border-jejak-secondary/40 rounded-3xl bg-jejak-secondary/5 hover:bg-jejak-secondary/10 transition-colors overflow-hidden group cursor-pointer"
+                                onclick="document.getElementById('id_bukti').click()"
+                            >
+                                <img id="image-preview" src="#" alt="Preview" class="absolute inset-0 w-full h-full object-cover hidden z-10">
+
+                                <div id="dropzone-content" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-0">
+                                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                                        <i class="ph-fill ph-image-square text-3xl text-jejak-secondary"></i>
+                                    </div>
+                                    <p class="text-sm font-bold text-jejak-primary">Klik untuk unggah foto</p>
+                                    <p class="text-xs text-gray-500 mt-1">Format JPG, PNG. Maks. 5MB</p>
                                 </div>
-                                <p class="text-sm font-bold text-jejak-primary">Klik untuk unggah foto</p>
-                                <p class="text-xs text-gray-500 mt-1">Format JPG, PNG (Maks. 5MB)</p>
-                            </div>
-                            
-                            <div id="change-overlay" class="absolute inset-0 bg-black/50 hidden items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <p class="text-white font-bold text-sm flex items-center gap-2">
-                                    <i class="ph-bold ph-arrows-clockwise"></i> Ganti Foto
-                                </p>
-                            </div>
 
-                            <input type="file" name="bukti" id="id_bukti" accept="image/*" class="hidden" required onchange="previewFile()">
+                                <div id="change-overlay" class="absolute inset-0 bg-black/45 hidden items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <p class="text-white font-bold text-sm flex items-center gap-2">
+                                        <i class="ph-bold ph-arrows-clockwise"></i>
+                                        Ganti Foto
+                                    </p>
+                                </div>
+
+                                <input
+                                    type="file"
+                                    name="bukti"
+                                    id="id_bukti"
+                                    accept="image/*"
+                                    class="hidden"
+                                    required
+                                    onchange="previewFile()"
+                                >
+                            </div>
                         </div>
                     </div>
 
-                    <div class="pt-4">
+                    <div class="pt-2">
                         <button type="submit" class="w-full py-4 rounded-2xl bg-jejak-primary text-white font-black text-lg shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2">
-                            <i class="ph-bold ph-paper-plane-right"></i> Kirim Laporan Sekarang
+                            <i class="ph-bold ph-paper-plane-right"></i>
+                            Kirim Laporan Sekarang
                         </button>
                     </div>
                 </form>
             </div>
 
-            <a href="{% url 'home_p' %}">Kembali</a>
-            
             <div class="lg:col-span-1 animate-fade-in-up delay-200">
-                <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-28">
+                <div class="bg-white rounded-[2rem] p-7 shadow-sm border border-gray-100 sticky top-28">
                     <h3 class="text-lg font-black text-jejak-primary mb-6 flex items-center gap-2">
-                        <i class="ph-fill ph-lightbulb-filament text-2xl text-jejak-accent"></i> Tips Laporan
+                        <i class="ph-fill ph-lightbulb-filament text-2xl text-jejak-accent"></i>
+                        Tips Laporan
                     </h3>
-                    
-                    <ul class="space-y-6">
+
+                    <ul class="space-y-5">
                         <li class="flex gap-4">
-                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0 font-bold text-sm">
                                 1
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-gray-900 mb-1">Foto Jelas & Terang</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">Ambil foto di pagi atau sore hari. Pastikan donatur bisa melihat perkembangan tanaman dengan jelas.</p>
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Ambil foto di pagi atau sore hari agar perkembangan tanaman terlihat lebih jelas.
+                                </p>
                             </div>
                         </li>
+
                         <li class="flex gap-4">
-                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0 font-bold text-sm">
                                 2
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-gray-900 mb-1">Jujur Jika Ada Kendala</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">Sistem kita mengedepankan <em>Ethical Risk-Sharing</em>. Jika ada hama atau cuaca buruk, laporkan segera.</p>
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Jika ada hama, cuaca buruk, atau kendala lain, laporkan secara singkat dan jelas.
+                                </p>
                             </div>
                         </li>
+
                         <li class="flex gap-4">
-                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0">
+                            <div class="w-8 h-8 rounded-full bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center shrink-0 font-bold text-sm">
                                 3
                             </div>
                             <div>
                                 <h4 class="text-sm font-bold text-gray-900 mb-1">Nota Pembelian</h4>
-                                <p class="text-xs text-gray-500 leading-relaxed">Jika laporan mencakup pengeluaran, pastikan foto bukti menyertakan nota belanja barang (bibit/pupuk).</p>
+                                <p class="text-xs text-gray-500 leading-relaxed">
+                                    Jika ada pengeluaran, sertakan bukti belanja seperti bibit, pupuk, atau kebutuhan lain.
+                                </p>
                             </div>
                         </li>
                     </ul>
@@ -145,7 +212,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </main>
 
@@ -156,24 +222,22 @@
             const file = fileInput.files[0];
             const dropzoneContent = document.getElementById('dropzone-content');
             const changeOverlay = document.getElementById('change-overlay');
+
+            if (!file) return;
+
             const reader = new FileReader();
 
             reader.addEventListener("load", function () {
-                // Tampilkan gambar
                 preview.src = reader.result;
                 preview.classList.remove('hidden');
-                
-                // Sembunyikan ikon upload default
+
                 dropzoneContent.classList.add('hidden');
-                
-                // Tampilkan overlay ganti foto saat di hover
+
                 changeOverlay.classList.remove('hidden');
                 changeOverlay.classList.add('flex');
             }, false);
 
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+            reader.readAsDataURL(file);
         }
     </script>
 
