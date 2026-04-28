@@ -109,32 +109,56 @@
 
             <div class="p-6">
                 {% for kategori in kategori_list %}
-                <div class="mb-8 animate-fade-in-up" style="animation-delay: {{ forloop.counter0 }}00ms;">
-                    <h4
-                        class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
-                        {% if kategori.icon %}<i
-                            class="ph-fill {{ kategori.icon }} text-jejak-secondary text-base"></i>{% endif %}
-                        {{ kategori.nama }}
-                    </h4>
+                    <div class="mb-8 animate-fade-in-up" style="animation-delay: {{ forloop.counter0 }}00ms;">
+                        <h4 class="text-[11px] font-extrabold text-gray-400 uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
+                            {% if kategori.icon %}
+                                <i class="ph-fill {{ kategori.icon }} text-jejak-secondary text-base"></i>
+                            {% endif %}
+                            {{ kategori.nama }}
+                        </h4>
 
-                    <ul class="space-y-1">
-                        {% for materi in materi_list %}
-                        {% if materi.kategori == kategori %}
-                        <li>
-                            <a href="{% url 'edukasi_detail' materi.slug %}" class="block px-3 py-2 text-sm rounded-lg transition-all duration-200 font-medium
-                                    {% if materi_aktif and materi.id == materi_aktif.id %}
-                                        bg-jejak-primary/10 text-jejak-primary font-bold shadow-sm border border-jejak-primary/10
-                                    {% else %}
-                                        text-gray-600 hover:text-jejak-primary hover:bg-black/5 border border-transparent
+                        <ul class="space-y-1">
+                            {% with ada_materi=False %}
+                                {% for materi in materi_list %}
+                                    {% if materi.kategori_id == kategori.id %}
+                                        {% with ada_materi=True %}
+                                            <li>
+                                                {% if materi.slug %}
+                                                    <a href="{% url 'edukasi_detail' materi.slug %}"
+                                                    class="block px-3 py-2 text-sm rounded-lg transition-all duration-200 font-medium
+                                                    {% if materi_aktif and materi.id == materi_aktif.id %}
+                                                        bg-jejak-primary/10 text-jejak-primary font-bold shadow-sm border border-jejak-primary/10
+                                                    {% else %}
+                                                        text-gray-600 hover:text-jejak-primary hover:bg-black/5 border border-transparent
+                                                    {% endif %}">
+                                                        {{ materi.judul }}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="#"
+                                                    class="block px-3 py-2 text-sm rounded-lg transition-all duration-200 font-medium text-red-400 bg-red-50 border border-red-100">
+                                                        [Error: Slug Kosong] {{ materi.judul }}
+                                                    </a>
+                                                {% endif %}
+                                            </li>
+                                        {% endwith %}
                                     {% endif %}
-                                ">
-                                {{ materi.judul }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>
+                                {% endfor %}
+
+                                {% if not ada_materi %}
+                                    <li>
+                                        <p class="text-xs text-gray-400 italic px-3 py-2">
+                                            Belum ada materi.
+                                        </p>
+                                    </li>
+                                {% endif %}
+                            {% endwith %}
+                        </ul>
+                    </div>
+
+                {% empty %}
+                    <p class="text-xs text-gray-400 italic">
+                        Belum ada kategori tersedia.
+                    </p>
                 {% endfor %}
             </div>
         </aside>
@@ -320,4 +344,5 @@
         overlay.addEventListener('click', toggleSidebar);
     </script>
 </body>
+
 </html>

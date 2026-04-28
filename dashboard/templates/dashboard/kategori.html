@@ -1,16 +1,176 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Kelola Kategori - JejakDaya Admin</title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/logo4.svg' %}">
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-heading, h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.5s ease-out forwards; }
+
+        .custom-django-form p {
+            margin-bottom: 1.5rem;
+        }
+        .custom-django-form label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #6b7280; /* text-gray-500 */
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            margin-left: 0.25rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .custom-django-form input[type="text"],
+        .custom-django-form input[type="number"],
+        .custom-django-form input[type="email"],
+        .custom-django-form input[type="password"],
+        .custom-django-form select,
+        .custom-django-form textarea {
+            width: 100%;
+            background-color: #f9fafb; /* bg-gray-50 */
+            border: 1px solid #e5e7eb; /* border-gray-200 */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 0.875rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #111827; /* text-gray-900 */
+            transition: all 0.2s ease-in-out;
+            outline: none;
+        }
+        .custom-django-form input:focus,
+        .custom-django-form select:focus,
+        .custom-django-form textarea:focus {
+            background-color: #ffffff;
+            border-color: #1F4D3A; /* jejak-primary */
+            box-shadow: 0 0 0 3px rgba(31, 77, 58, 0.15);
+        }
+        .custom-django-form span.helptext {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 0.3rem;
+            margin-left: 0.25rem;
+            display: block;
+        }
+        .custom-django-form ul.errorlist {
+            color: #ef4444; /* text-red-500 */
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            padding-left: 0;
+            list-style: none;
+        }
+    </style>
 </head>
-<body>
-    <a href="{% url 'dashboard_admin'  %}">Kembali</a>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Simpan</button>
-    </form>
+
+<body class="bg-jejak-bg font-sans text-gray-800 antialiased h-screen flex overflow-hidden selection:bg-jejak-primary selection:text-white">
+
+    <aside class="w-[280px] bg-white border-r border-gray-100 flex-col justify-between hidden lg:flex z-50">
+        <div class="p-6 md:p-8">
+            <div class="flex items-center gap-3 mb-12">
+                <img src="{% static 'assets/logo/logo.svg' %}" alt="Logo JejakDaya" class="w-10 h-10 object-contain drop-shadow-sm">
+                <h1 class="font-heading font-black text-xl text-gray-900 tracking-tight">Jejak<span class="text-jejak-primary">Daya</span></h1>
+            </div>
+
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Menu Utama</p>
+            <nav class="space-y-2">
+                <a href="{% url 'dashboard_admin' %}" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium text-sm transition-colors">
+                    <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
+                </a>
+                <a href="{% url 'kategori' %}" class="flex items-center gap-3 px-4 py-3 bg-jejak-primary/10 text-jejak-primary rounded-xl font-bold text-sm transition-colors relative">
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-jejak-primary rounded-r-full"></div>
+                    <i class="ph-bold ph-folder-open text-lg"></i> Kelola Kategori
+                </a>
+                <a href="{% url 'semua_materi' %}" class="flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-medium text-sm transition-colors">
+                    <i class="ph-bold ph-books text-lg"></i> Pusat Materi
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-6 md:p-8 border-t border-gray-100">
+            <div class="flex items-center gap-3 mb-6 bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-jejak-accent to-orange-400 flex items-center justify-center text-white font-bold shadow-sm">
+                    {{ user.username|make_list|first|upper|default:"A" }}
+                </div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-bold text-gray-900 truncate">{{ user.username|default:"Admin" }}</p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Administrator</p>
+                </div>
+            </div>
+            
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-xl font-bold text-sm transition-colors group">
+                    <i class="ph-bold ph-sign-out text-lg group-hover:-translate-x-1 transition-transform"></i> Keluar Sistem
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="flex-1 h-screen overflow-y-auto hide-scrollbar relative bg-jejak-bg">
+        
+        <div class="lg:hidden bg-white px-6 py-4 border-b border-gray-100 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+            <img src="{% static 'assets/img/logo1.svg' %}" alt="Logo JejakDaya Mobile" class="w-9 h-9 object-contain">
+            <a href="{% url 'dashboard_admin' %}" class="w-9 h-9 flex items-center justify-center bg-gray-50 rounded-xl text-gray-600 border border-gray-200">
+                <i class="ph-bold ph-list"></i>
+            </a>
+        </div>
+
+        <div class="p-6 md:p-8 lg:p-12 max-w-4xl mx-auto">
+            
+            <div class="mb-8 animate-fade-in-up">
+                <a href="{% url 'dashboard_admin' %}" class="inline-flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-jejak-primary transition-colors mb-4 group">
+                    <i class="ph-bold ph-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Dashboard
+                </a>
+                <h1 class="text-3xl md:text-4xl font-black text-gray-900 font-heading tracking-tight mb-2">Kelola Kategori</h1>
+                <p class="text-gray-500 font-medium text-sm md:text-base">Tambahkan kategori baru untuk mengklasifikasikan materi edukasi agribisnis.</p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/40 p-6 md:p-10 animate-fade-in-up delay-100 relative overflow-hidden">
+                
+                <div class="absolute -right-10 -top-10 text-gray-50 opacity-50 rotate-12 pointer-events-none">
+                    <i class="ph-fill ph-folder text-[200px]"></i>
+                </div>
+
+                <div class="relative z-10">
+                    <form method="POST" class="custom-django-form max-w-xl">
+                        {% csrf_token %}
+                        
+                        {{ form.as_p }}
+
+                        <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                            <button type="submit" class="px-8 py-3.5 bg-jejak-primary text-white rounded-xl font-bold shadow-lg shadow-jejak-primary/30 hover:-translate-y-1 hover:bg-[#143a29] transition-all active:scale-95 flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Kategori
+                            </button>
+                            <a href="{% url 'dashboard_admin' %}" class="px-8 py-3.5 bg-gray-50 text-gray-600 rounded-xl font-bold hover:bg-gray-100 transition-all border border-gray-200 flex items-center justify-center text-center w-full sm:w-auto">
+                                Batal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
 </body>
 </html>

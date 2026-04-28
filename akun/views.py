@@ -40,9 +40,14 @@ def public_home(request):
 
 @login_required
 def home_page(request):
-    projects = Project.objects.filter(status='aktif').annotate(
-        total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
-    ).order_by('-id')
+    user = request.user
+
+    if user.role == 'petani':
+        return redirect('home_p')
+    elif user.role == 'donatur':
+        return redirect('home_d')
+    else:
+        return redirect('public_home')
 
 
 # ==========================================

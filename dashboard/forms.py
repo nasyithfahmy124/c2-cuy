@@ -44,7 +44,7 @@ class MateriEdukasiForm(forms.ModelForm):
             'konten': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 6,
-                'placeholder': 'Isi materi (bisa HTML)'
+                'placeholder': 'Isi materi serah'
             }),
             'target_role': forms.Select(attrs={
                 'class': 'form-control'

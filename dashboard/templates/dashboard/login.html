@@ -1,24 +1,132 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login Admin - JejakDaya</title>
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        [data-animate] {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
 </head>
-<body>
-    <h2>Login Admin</h2>
-    
-    <form method="POST">
-        {% csrf_token %}
-    
-        <input type="text" name="username" placeholder="Username"><br><br>
-        <input type="password" name="password" placeholder="Password"><br><br>
-    
-        <button type="submit">Login</button>
-    </form>
-    
-    {% for message in messages %}
-    <p>{{ message }}</p>
-    {% endfor %}
+
+<body class="min-h-screen flex flex-col lg:flex-row bg-jejak-bg font-sans text-jejak-text">
+
+    <div class="flex relative bg-jejak-primary overflow-hidden w-full lg:w-1/2 min-h-[35vh] lg:min-h-screen">
+        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="JejakDaya Background"
+            class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-t from-jejak-primary via-jejak-primary/80 to-transparent"></div>
+
+        <div class="relative z-10 p-6 lg:p-12 flex flex-col justify-center lg:justify-between h-full w-full">
+            <div class="flex items-center gap-3 text-white mb-auto lg:mb-0">
+                <div
+                    class="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm">
+                    <i class="ph-fill ph-leaf text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">JejakDaya</span>
+            </div>
+
+            <div class="text-white mt-8 lg:mt-auto lg:mb-10">
+                <h1 class="text-3xl lg:text-5xl font-bold leading-tight mb-2 lg:mb-4">Portal Administrator<br>JejakDaya.
+                </h1>
+                <p class="hidden sm:block text-white/80 text-sm lg:text-lg max-w-md">Akses khusus untuk mengelola
+                    sistem, donasi, dan memantau perkembangan agribisnis secara menyeluruh.</p>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="w-full lg:w-1/2 flex flex-grow items-center justify-center p-6 sm:p-12 lg:p-24 bg-jejak-bg relative z-20 -mt-8 lg:mt-0 rounded-t-[2rem] lg:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.3)] lg:shadow-none">
+        <div class="w-full max-w-md space-y-8 lg:space-y-10" data-animate>
+
+            <div class="text-center lg:text-left mt-2 lg:mt-0">
+                <h2 class="text-3xl font-bold text-jejak-primary mb-2">Login Admin</h2>
+                <p class="text-gray-500">Silakan masukkan detail akun administrator Anda.</p>
+            </div>
+
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div
+                    class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% else %}bg-green-50 text-jejak-primary border border-jejak-secondary/30{% endif %}">
+                    <i
+                        class="ph-fill {% if message.tags == 'error' %}ph-warning-circle{% else %}ph-check-circle{% endif %} text-lg"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="space-y-2">
+                    <label for="username" class="text-sm font-semibold text-gray-700">Username</label>
+                    <div class="relative">
+                        <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" name="username" id="username" required placeholder="Masukkan username admin"
+                            class="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="password" class="text-sm font-semibold text-gray-700">Password</label>
+                    <div class="relative">
+                        <i class="ph ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="password" name="password" id="password" required
+                            placeholder="Masukkan password admin"
+                            class="w-full pl-11 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
+                        <button type="button" onclick="togglePassword('password', this)"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-jejak-primary">
+                            <i class="ph ph-eye text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox"
+                            class="w-4 h-4 rounded border-gray-300 text-jejak-primary focus:ring-jejak-primary">
+                        <span class="text-sm text-gray-600">Ingat saya</span>
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-4 bg-jejak-primary hover:bg-jejak-primary/90 text-white rounded-xl font-semibold shadow-lg shadow-jejak-primary/30 transition-all active:scale-[0.98]">
+                    Masuk ke Dasbor Admin
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElement = document.querySelector('[data-animate]');
+            if (animateElement) animateElement.classList.add('animate-fade-in-up');
+        });
+
+        function togglePassword(inputId, iconButton) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = iconButton.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('ph-eye', 'ph-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('ph-eye-slash', 'ph-eye');
+            }
+        }
+    </script>
 </body>
+
 </html>
