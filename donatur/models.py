@@ -8,7 +8,11 @@ class Donasi(models.Model):
     jumlah = models.IntegerField()
     tanggal = models.DateTimeField(auto_now_add=True)
     
-    dana_terkumpul = models.IntegerField(default=0)
+    dana_terkumpul = models.DecimalField(
+    max_digits=12,
+    decimal_places=0,
+    default=0
+)
 
 class DonasiBarang(models.Model):
     STATUS_CHOICES = [
