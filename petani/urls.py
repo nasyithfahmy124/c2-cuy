@@ -8,6 +8,7 @@ urlpatterns = [
     path('petani/laporan/tambah/<int:project_id>/', views.laporan, name='tambah_laporan'),
     path('petani/semua-projek/',views.view_projek,name='allp'),
     path('petani/detail/<int:id>/',views.detail_projek,name='detail'),
+    path('petani/<int:id>/hapus-project/',views.hapus_project,name="delete"),
     path('petani/petani/alat-masuk/',views.alat_masuk,name='alat_in'),
     path('petani/riwayat-donasi/', views.riwayat_donasi, name='riwayat_donasi'),
 ]

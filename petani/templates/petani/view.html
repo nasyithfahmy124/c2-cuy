@@ -126,6 +126,16 @@
                             <i class="ph-bold ph-scroll text-base"></i> Lapor
                         </a>
                     </div>
+
+                    <div>
+                        <form action="{% url 'delete' project.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="delete" type="submit">Hapus Project</button>
+                        </form>
+
+                    </div>
+
+
                 </div>
             </div>
             {% empty %}

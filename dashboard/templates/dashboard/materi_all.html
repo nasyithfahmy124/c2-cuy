@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Semua materi</h1>
+    <!DOCTYPE html>
+    <html lang="id">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>Semua Materi Edukasi</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    
+    <body class="bg-gray-100">
+        
+
+        <a href="{% url 'dashboard_admin'  %}">Kembali</a>
+        <div class="max-w-6xl mx-auto py-10 px-6">
+    
+            <h1 class="text-3xl font-bold mb-6">📚 Semua Materi Edukasi</h1>
+    
+            <div class="grid md:grid-cols-2 gap-6">
+    
+                {% for m in materi %}
+                <div class="bg-white shadow rounded-xl p-6">
+    
+                    <!-- Kategori -->
+                    <p class="text-sm text-gray-500 mb-1">
+                        📂 {{ m.kategori.nama }}
+                    </p>
+                    
+                    <!-- Judul -->
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">
+                        {{ m.judul }}
+                    </h2>
+    
+                    <!-- Info -->
+                    <div class="text-sm text-gray-500 mb-3 flex gap-4">
+                        <span>⏱ {{ m.waktu_baca }} menit</span>
+                        <span>🎯 {{ m.get_target_role_display }}</span>
+                    </div>
+    
+                    <!-- Konten HTML -->
+                    <div class="prose max-w-none text-gray-700">
+                        {{ m.konten|safe }}
+                    </div>
+    
+                    <!-- Update -->
+                    <p class="text-xs text-gray-400 mt-4">
+                        Update: {{ m.updated_at|date:"d M Y H:i" }}
+                    </p>    
+                    <div class="flex gap-2 mt-4">
+                    
+                        <!-- EDIT -->
+                        <a href="{% url 'materi_edit' m.id %}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
+                            Edit
+                        </a>
+                    
+                        <!-- DELETE -->
+                        <a href="{% url 'materi_hapus' m.id %}" onclick="return confirm('Yakin mau hapus?')"
+                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+                            Hapus
+                        </a>
+                    
+                    </div>
+    
+                </div>
+                {% empty %}
+                <p class="text-gray-500">Belum ada materi.</p>
+                {% endfor %}
+    
+            </div>
+    
+        </div>
+    
+    </body>
+    
+    </html>
+</body>
+</html>

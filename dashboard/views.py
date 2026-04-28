@@ -6,6 +6,8 @@ from donatur.models import Donasi
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import KategoriEdukasiForm,MateriEdukasiForm
+from edukasi.models import MateriEdukasi,KategoriEdukasi
 
 def admin_only(user):
     return user.is_staff  
@@ -60,3 +62,52 @@ def validasi_project(request, id):
 
     return redirect('dashboard_admin')
 
+
+
+@login_required
+@user_passes_test(admin_only)
+def tambah_kategori(request):
+    form = KategoriEdukasiForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request,'menambah kategori berhasil!')
+        return redirect('dashboard_admin')
+    return render(request, 'dashboard/kategori.html', {'form': form})
+
+@login_required
+@user_passes_test(admin_only)
+def tambah_materi(request):
+    form = MateriEdukasiForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        messages.success(request,'menambah materi edukasi berhasil')
+        return redirect('dashboard_admin')
+    return render(request, 'dashboard/materi.html', {'form': form})
+@login_required
+@user_passes_test(admin_only)
+def lihat_materi(request):
+    materi = MateriEdukasi.objects.all()
+    
+    return render(request,'dashboard/materi_all.html',{
+        'materi' : materi
+    })
+    
+@login_required
+@user_passes_test(admin_only)
+def edit_materi(request, id):
+    materi = get_object_or_404(MateriEdukasi, id=id)
+    form = MateriEdukasiForm(request.POST or None, instance=materi)
+    if form.is_valid():
+        form.save()
+        return redirect('semua_materi')
+    return render(request, 'dashboard/editmateri.html', {
+        'form': form,
+        'title': 'Edit Materi'
+    })
+
+@login_required
+@user_passes_test(admin_only)
+def hapus_materi(request, id):
+    materi = get_object_or_404(MateriEdukasi, id=id)
+    materi.delete()
+    return redirect('semua_materi')

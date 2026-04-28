@@ -73,14 +73,6 @@ def riwayat_donasi(request):
         'total_donasi': total,
         'jumlah_donasi': count
     })
-# def riwayat_donasi(request):
-#     riwayat = Donasi.objects.filter(
-#         project__petani=request.user
-#     ).select_related('donatur', 'project').order_by('-tanggal')
-
-#     return render(request, 'petani/riwayat_donasi.html', {
-#         'riwayat': riwayat
-#     })
 
 @login_required
 def laporan(request, project_id):
@@ -125,6 +117,14 @@ def detail_projek(request, id):
         'total_donasi': total,
         'barang_masuk': barang_masuk
     })
+
+@login_required
+def hapus_project(request,id):
+    hps = get_object_or_404(Project,id=id,petani = request.user)
+    if request.method == "POST" :
+        hps.delete()
+        messages.success(request,"Hapus project berhasil bos")
+        return redirect('home_p')
 
 @login_required
 def alat_masuk(request):

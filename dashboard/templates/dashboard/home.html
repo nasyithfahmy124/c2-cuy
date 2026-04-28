@@ -1,106 +1,163 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
+    <title>Dashboard Admin - JejakDaya</title>
 
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'jejak-primary': '#1F4D3A',
+                        'jejak-secondary': '#4ade80',
+                        'jejak-accent': '#C76B4E',
+                        'jejak-bg': '#F8FAFC',
+                        'jejak-text': '#0a2e1d',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-nav { background: rgba(253, 251, 247, 0.8); backdrop-filter: blur(12px); }
+        .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(31, 77, 58, 0.1); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
+    </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body class="bg-jejak-bg font-sans text-jejak-text antialiased">
 
-    <div class="max-w-6xl mx-auto py-10 px-6">
-
-        <!-- Header -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">
-            Dashboard Admin 👋
-        </h1>
-
-        <!-- Statistik -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-            <!-- Total Dana -->
-            <div class="bg-white shadow rounded-xl p-6">
-                <p class="text-gray-500 text-sm">Total Dana</p>
-                <h2 class="text-2xl font-bold text-green-600">
-                    Rp {{ total_dana|floatformat:0 }}
-                </h2>
-            </div>
-
-            <!-- Total Project -->
-            <div class="bg-white shadow rounded-xl p-6">
-                <p class="text-gray-500 text-sm">Project Pending</p>
-                <h2 class="text-2xl font-bold text-blue-600">
-                    {{ total_project }}
-                </h2>
-            </div>
-
-            <!-- Total Petani -->
-            <div class="bg-white shadow rounded-xl p-6">
-                <p class="text-gray-500 text-sm">Total Petani</p>
-                <h2 class="text-2xl font-bold text-purple-600">
-                    {{ total_petani }}
-                </h2>
-            </div>
-
+    <div class="relative w-full h-[300px] overflow-hidden bg-jejak-primary">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0a2e1d] via-[#1F4D3A]/90 to-transparent"></div>
+        <div class="absolute inset-0 flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto w-full z-10">
+            <h1 class="text-4xl md:text-5xl font-black text-white leading-tight animate-fade-in-up">
+                Dashboard <span class="text-jejak-secondary">Admin</span> 👋
+            </h1>
+            <p class="text-gray-300 mt-2 font-medium animate-fade-in-up delay-100">
+                Kelola ekosistem digitalisasi lahan dan verifikasi pertumbuhan petani.
+            </p>
         </div>
-
-        <!-- Proyek Aktif -->
-        <div class="bg-white shadow rounded-xl p-6 mb-10">
-            <p class="text-gray-500 text-sm">Total Proyek Aktif</p>
-            <h2 class="text-2xl font-bold text-green-600">
-                {{ proyek_aktif|length }}
-            </h2>
-        </div>
-
-        <!-- List Project Pending -->
-        <h2 class="text-xl font-semibold text-gray-700 mb-4">
-            Proyek Menunggu Validasi
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            {% for p in projects %}
-            <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
-
-                <!-- Gambar -->
-                {% if p.foto_lahan %}
-                <img src="{{ p.foto_lahan.url }}" class="w-full h-40 object-cover">
-                {% else %}
-                <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-400">
-                    Tidak ada gambar
-                </div>
-                {% endif %}
-
-                <!-- Konten -->
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-800 mb-1">
-                        {{ p.nama }}
-                    </h3>
-
-                    <p class="text-sm text-gray-500 mb-3">
-                        📍 {{ p.lokasi }}
-                    </p>
-
-                    <!-- Tombol -->
-                    <a href="{% url 'validasi_project' p.id %}"
-                        class="inline-block w-full text-center bg-green-500 hover:bg-green-600 text-white text-sm font-semibold py-2 rounded-lg transition">
-                        ✔ Validasi
-                    </a>
-                </div>
-
-            </div>
-            {% empty %}
-            <p class="text-gray-500">Tidak ada proyek pending.</p>
-            {% endfor %}
-
-        </div>
-
     </div>
 
-</body>
+    <main class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-20 mb-20">
+        
+        <div class="flex flex-wrap gap-4 mb-10 animate-fade-in-up">
+            <a href="{% url 'kategori' %}" class="px-6 py-3 bg-white text-jejak-primary rounded-2xl font-bold shadow-lg hover:bg-jejak-accent hover:text-white transition-all flex items-center gap-2 border border-white/50">
+                <i class="ph-bold ph-plus-circle"></i> Kategori
+            </a>
+            <a href="{% url 'materi' %}" class="px-6 py-3 bg-white text-jejak-primary rounded-2xl font-bold shadow-lg hover:bg-jejak-secondary hover:text-white transition-all flex items-center gap-2 border border-white/50">
+                <i class="ph-bold ph-book-open-text"></i> Tambah Materi
+            </a>
+            <a href="{% url 'semua_materi' %}" class="px-6 py-3 bg-jejak-accent text-white rounded-2xl font-bold shadow-lg hover:-translate-y-1 transition-all flex items-center gap-2">
+                <i class="ph-bold ph-eye"></i> Lihat Materi
+            </a>
+        </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 animate-fade-in-up">
+            
+            <div class="bg-white/95 backdrop-blur-xl p-6 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover">
+                <div class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 group-hover:scale-110 transition-transform">
+                    <i class="ph-fill ph-wallet text-8xl"></i>
+                </div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Total Dana</p>
+                <h3 class="text-2xl font-black text-jejak-primary">Rp {{ total_dana|default:0|floatformat:0|intcomma }}</h3>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-xl p-6 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover">
+                <div class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 group-hover:scale-110 transition-transform">
+                    <i class="ph-fill ph-hourglass text-8xl"></i>
+                </div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Project Pending</p>
+                <h3 class="text-2xl font-black text-jejak-accent">{{ total_project }} <span class="text-sm opacity-60">Data</span></h3>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-xl p-6 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover">
+                <div class="absolute -right-4 -bottom-4 text-blue-500/5 rotate-12 group-hover:scale-110 transition-transform">
+                    <i class="ph-fill ph-users-three text-8xl"></i>
+                </div>
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Total Petani</p>
+                <h3 class="text-2xl font-black text-blue-600">{{ total_petani }} <span class="text-sm opacity-60">User</span></h3>
+            </div>
+
+            <div class="bg-gradient-to-br from-jejak-primary to-[#143a29] p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden group card-hover">
+                <div class="absolute -right-4 -bottom-4 text-white/5 rotate-12 group-hover:scale-110 transition-transform">
+                    <i class="ph-fill ph-plant text-8xl"></i>
+                </div>
+                <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2">Proyek Aktif</p>
+                <h3 class="text-2xl font-black">{{ proyek_aktif|length }} <span class="text-sm opacity-60">Lahan</span></h3>
+            </div>
+
+        </div>
+
+        <div class="space-y-6">
+            <div class="flex items-center justify-between px-2">
+                <h3 class="text-xl font-black text-jejak-primary tracking-tight">Proyek Menunggu Validasi</h3>
+                <span class="px-3 py-1 bg-jejak-accent/10 text-jejak-accent rounded-full text-xs font-bold">Butuh Tindakan</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for p in projects %}
+                <div class="card-hover bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden flex flex-col shadow-md">
+                    <div class="h-48 bg-gray-100 relative overflow-hidden">
+                        {% if p.foto_lahan %}
+                            <img src="{{ p.foto_lahan.url }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                                <i class="ph-fill ph-image-square text-5xl text-gray-400"></i>
+                            </div>
+                        {% endif %}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-5 flex items-center gap-2 text-white">
+                            <i class="ph-bold ph-map-pin"></i>
+                            <span class="text-xs font-bold">{{ p.lokasi }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 flex-grow flex flex-col">
+                        <h4 class="text-lg font-bold text-jejak-primary mb-6 line-clamp-2 leading-tight">
+                            {{ p.nama }}
+                        </h4>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'validasi_project' p.id %}" class="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-jejak-primary text-white text-sm font-black hover:bg-jejak-accent transition-all active:scale-95 shadow-lg shadow-jejak-primary/20">
+                                <i class="ph-bold ph-check-circle"></i> Validasi Sekarang
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full py-20 bg-white/50 border-2 border-dashed border-gray-300 rounded-[3rem] text-center">
+                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
+                        <i class="ph-fill ph-check-square-offset text-4xl text-gray-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-jejak-primary">Semua Terkendali!</h3>
+                    <p class="text-sm text-gray-500 font-medium">Tidak ada proyek yang menunggu validasi saat ini.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </main>
+
+</body>
 </html>
