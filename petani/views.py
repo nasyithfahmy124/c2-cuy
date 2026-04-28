@@ -1,5 +1,4 @@
 from collections import defaultdict
-
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -177,7 +176,6 @@ def alat_masuk(request):
         'total_barang': total_masuk,
         'total_kebutuhan': total_target,
         'progress_total': progress_total,
-
         'labels': json.dumps(labels),
         'data_masuk': json.dumps(data_masuk),
         'data_target': json.dumps(data_target),
