@@ -12,8 +12,6 @@ def pusat_edukasi(request, slug=None):
     materi_list = MateriEdukasi.objects.filter(
         target_role__in=['semua', user_role]
     ).order_by('urutan')
-
-    # 🔥 FIX UTAMA DI SINI
     if slug:
         materi_aktif = MateriEdukasi.objects.filter(
             slug=slug,
@@ -21,8 +19,6 @@ def pusat_edukasi(request, slug=None):
         ).first()
     else:
         materi_aktif = materi_list.first()
-
-    # fallback biar gak pernah None
     if not materi_aktif:
         materi_aktif = MateriEdukasi.objects.first()
 

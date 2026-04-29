@@ -50,10 +50,6 @@ def home_page(request):
         return redirect('public_home')
 
 
-# ==========================================
-# 2. AUTENTIKASI (LOGIN, REGISTER, LOGOUT)
-# ==========================================
-
 def page_login(request):
     form = LoginForm(request.POST or None)
 
@@ -82,7 +78,6 @@ def page_login(request):
 
 
 def page_register(request):
-    # Cegah user yang sudah login buka halaman register
     if request.user.is_authenticated:
         return redirect('dashboard')
 
@@ -101,13 +96,7 @@ def page_register(request):
     
 def logout_page(request):
     logout(request) 
-    # Setelah logout, kembalikan ke landing page
     return redirect('landing')
-
-
-# ==========================================
-# 3. PENGATURAN AKUN
-# ==========================================
 
 @login_required
 def gantipw(request):
