@@ -1,5 +1,16 @@
-cara menjalankan projek
-1. clone
+NOTE:
+AKUN INI ADA 3 WEB
+1. PETANI MITRA
+2. DONATUR
+3. ADMIN(login lewan url /admin-login/
+   untuk akun admin di buat di terminal ketik
+   python manage.py createsuperuser
+   lalu masukan sesuai intruksinya
+
+untuk menjalankan web jangan login 3 akun sekaligus dalam 1 device karena projek web ini belum dideploy
+
+CAEA MENJALANKAN PROJEK INI:
+1. clone projek ini
 2 aktifkan env
 python -m venv env
 3.install dependency
