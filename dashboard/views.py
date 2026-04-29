@@ -8,9 +8,27 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import KategoriEdukasiForm,MateriEdukasiForm
 from edukasi.models import MateriEdukasi,KategoriEdukasi
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
+from donatur.models import DonasiBarang
 
 def admin_only(user):
     return user.is_staff  
+
+# def formlog(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+
+#         user = authenticate(request, username=username, password=password)
+
+#         if user is not None and user.is_staff:
+#             login(request, user)
+#             return redirect('dashboard_admin')
+#         else:
+#             messages.error(request, "Login gagal atau bukan admin")
+
+#     return render(request, 'dashboard/login.html')
 
 def formlog(request):
     if request.method == 'POST':
@@ -19,11 +37,15 @@ def formlog(request):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None and user.is_staff:
-            login(request, user)
-            return redirect('dashboard_admin')
+        if user is not None:
+            print("LOGIN OK:", user.username, user.is_staff)  # debug
+            if user.is_staff:
+                login(request, user)
+                return redirect('dashboard_admin')
+            else:
+                messages.error(request, "Bukan admin")
         else:
-            messages.error(request, "Login gagal atau bukan admin")
+            messages.error(request, "Username / password salah")
 
     return render(request, 'dashboard/login.html')
 
@@ -40,15 +62,20 @@ def dashboard_admin(request):
     ).annotate(
         total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
     ).order_by('-id')
+    total_barang_dikirim = DonasiBarang.objects.aggregate(
+    total=Coalesce(Sum('jumlah'), 0)
+    )['total']
     total_dana = Donasi.objects.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
     total_project = projects.count()
     total_petani = Project.objects.values('petani').distinct().count()
+    
     return render(request, 'dashboard/home.html', {
         'projects': projects,
         'proyek_aktif': proyek_aktif,
         'total_dana': total_dana,
         'total_project': total_project,
-        'total_petani': total_petani
+        'total_petani': total_petani,
+        'total_barang_dikirim' : total_barang_dikirim
     })
 
 

@@ -12,6 +12,7 @@ urlpatterns = [
     path('petani/<int:id>/hapus-project/', views.hapus_project, name="delete"),
     path('petani/petani/alat-masuk/', views.alat_masuk, name='alat_in'),
     path('petani/riwayat-donasi/', views.riwayat_donasi, name='riwayat_donasi'),
+    path('petani/bagi-hasil',views.bagihasil,name='bagihasil')
 ]
 
 if settings.DEBUG:

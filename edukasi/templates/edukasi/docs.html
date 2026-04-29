@@ -94,7 +94,14 @@
                     class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-jejak-accent/10 text-jejak-accent border border-jejak-accent/20 text-xs font-bold uppercase tracking-wider">
                     <i class="ph-fill ph-user-circle"></i> {{ role }}
                 </span>
-                <a href="{% url 'home_p' %}"
+                <a href="{% if role == 'petani' %}
+                            {% url 'home_p' %}
+                        {% elif role == 'donatur' %}
+                            {% url 'home_d' %}
+                        {% else %}
+                            {% url 'dashboard' %}
+                        {% endif %}
+                        "
                     class="text-sm font-semibold text-gray-500 hover:text-jejak-primary transition-colors flex items-center gap-1">
                     Dasbor <i class="ph-bold ph-arrow-right hidden sm:inline"></i>
                 </a>
@@ -173,8 +180,11 @@
 
                 <div class="mb-8">
                     <div class="flex items-center flex-wrap gap-2 text-sm font-semibold text-jejak-secondary mb-5">
-                        <span class="px-2.5 py-1 rounded-md bg-jejak-secondary/10 border border-jejak-secondary/20">{{
-                            materi_aktif.kategori.nama }}</span>
+                        <span class="px-2.5 py-1 rounded-md bg-jejak-secondary/10 border border-jejak-secondary/20">{% if materi_aktif and materi_aktif.kategori %}
+                        {{ materi_aktif.kategori.nama }}
+                        {% else %}
+                        <span class="text-gray-400">Tanpa Kategori</span>
+                        {% endif %}</span>
                         <i class="ph-bold ph-caret-right text-gray-300"></i>
                         <span class="flex items-center gap-1.5 text-gray-500">
                             <i class="ph-fill ph-clock"></i> {{ materi_aktif.waktu_baca }} mnt baca

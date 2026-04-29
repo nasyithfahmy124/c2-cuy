@@ -31,6 +31,7 @@
 
     {% include 'petani/partials/navbar.html' %}
 
+    
    <main class="flex-grow w-full relative">
         
         <div class="relative w-full h-[550px] lg:h-[650px] overflow-hidden">
@@ -70,6 +71,8 @@
                 </div>
             </div>
         </div>
+
+        
 
         <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-28 md:-mt-36 lg:-mt-44 mb-20">
             
@@ -116,6 +119,8 @@
                 </a>
             </div>
 
+            
+
             <div class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
                 <div>
                     <div class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110">
@@ -134,9 +139,41 @@
 
             <div class="w-4 md:w-8 shrink-0"></div>
 
+            
+
         </section>
+
+        <div class="max-w-7xl mx-auto px-4 md:px-8 mt-6 animate-fade-in-up delay-500">
+        
+            <div
+                class="flex items-center justify-between bg-white/80 backdrop-blur-xl border border-white rounded-2xl px-5 py-4 shadow-sm">
+        
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-jejak-secondary/10 flex items-center justify-center">
+                        <i class="ph-fill ph-chart-line-up text-xl text-jejak-secondary"></i>
+                    </div>
+        
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            Fitur Utama
+                        </p>
+                        <h4 class="text-sm font-bold text-jejak-primary">
+                            Sistem Bagi Hasil
+                        </h4>
+                    </div>
+                </div>
+        
+                <a href="{% url 'bagihasil' %}"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-jejak-secondary/10 text-jejak-secondary text-xs font-bold hover:bg-jejak-secondary hover:text-white transition-all">
+                    Lihat Detail
+                    <i class="ph-bold ph-arrow-up-right"></i>
+                </a>
+        
+            </div>
+        
         </div>
 
+        </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 
                 <div class="lg:col-span-2 space-y-6">

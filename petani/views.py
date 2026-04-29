@@ -194,3 +194,7 @@ def alat_masuk(request):
         'data_masuk': json.dumps(data_masuk),
         'data_target': json.dumps(data_target),
     })
+
+@login_required
+def bagihasil(request):
+    return render(request,'petani/bagihasil.html')

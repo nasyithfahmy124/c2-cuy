@@ -5,21 +5,32 @@ from .models import KategoriEdukasi, MateriEdukasi
 @login_required
 def pusat_edukasi(request, slug=None):
     user_role = getattr(request.user, 'role', 'semua')
-    if user_role:
-        user_role = user_role.lower()
+    user_role = user_role.lower() if user_role else 'semua'
+
     kategori_list = KategoriEdukasi.objects.all().prefetch_related('materi')
-    materi_tersedia = MateriEdukasi.objects.filter(target_role__in=['semua', user_role]).order_by('urutan')
-    materi_aktif = None
+
+    materi_list = MateriEdukasi.objects.filter(
+        target_role__in=['semua', user_role]
+    ).order_by('urutan')
+
+    # 🔥 FIX UTAMA DI SINI
     if slug:
-        materi_aktif = get_object_or_404(MateriEdukasi, slug=slug, target_role__in=['semua', user_role])
+        materi_aktif = MateriEdukasi.objects.filter(
+            slug=slug,
+            target_role__in=['semua', user_role]
+        ).first()
     else:
-        materi_aktif = materi_tersedia.first()
+        materi_aktif = materi_list.first()
+
+    # fallback biar gak pernah None
+    if not materi_aktif:
+        materi_aktif = MateriEdukasi.objects.first()
 
     context = {
         'kategori_list': kategori_list,
-        'materi_list': materi_tersedia,
+        'materi_list': materi_list,
         'materi_aktif': materi_aktif,
-        'user_role': user_role,
+        'role': user_role
     }
-    
+
     return render(request, 'edukasi/docs.html', context)

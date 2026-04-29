@@ -156,3 +156,7 @@ def laporan_donatur(request):
     return render(request, 'donatur/laporan_donatur.html', {
         'laporan': laporan
     })
+    
+@login_required
+def bagihasil(request):
+    return render(request,'donatur/bagihasil.html')

@@ -33,13 +33,20 @@ class MateriEdukasi(models.Model):
         verbose_name_plural = "Materi Edukasi"
         ordering = ['kategori', 'urutan']
 
+    from django.utils.text import slugify
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            original_slug = self.slug
+            base_slug = slugify(self.judul)
+            slug = base_slug
             counter = 1
-            while MateriEdukasi.objects.filter(slug=self.slug).exists():
-                self.slug = f"{original_slug}-{counter}"
+
+            while MateriEdukasi.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
                 counter += 1
+
+            self.slug = slug
+
         super().save(*args, **kwargs)
 
     def __str__(self):
