@@ -93,13 +93,14 @@
                             Pendanaan Penuh 🎉
                         </div>
                     {% else %}
-                        <a href="{% url 'danai_project' detail.id %}" class="block w-full py-4 rounded-xl bg-jejak-primary text-white font-black text-center shadow-xl shadow-jejak-primary/20 hover:-translate-y-1 transition-all active:scale-95">
-                            <i class="ph-bold ph-hand-coins"></i> Berikan Dukungan
+                        <a href="{% url 'danai_project' detail.id %}" class="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-jejak-primary text-white font-bold uppercase tracking-widest text-sm shadow-lg shadow-jejak-primary/30 hover:-translate-y-1 hover:bg-[#143a29] transition-all active:scale-95">
+                            <i class="ph-bold ph-hand-coins text-xl"></i> Berikan Dukungan
                         </a>
                     {% endif %}
-                    <a href="{% url 'donasi_barang' detail.id %}">
-                        Donasi Alat
-                    </a>
+
+                        <a href="{% url 'donasi_barang' detail.id %}" class="flex items-center justify-center gap-2 w-full mt-3 py-4 rounded-xl bg-jejak-accent text-white font-bold uppercase tracking-widest text-sm shadow-lg shadow-jejak-accent/30 hover:-translate-y-1 hover:brightness-90 transition-all active:scale-95">
+                            <i class="ph-bold ph-package text-xl"></i> Donasi Alat
+                        </a>
                 </div>
             </div>
         </div>

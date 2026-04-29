@@ -2,10 +2,10 @@ from collections import defaultdict
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from .forms import FormDonasi,FormLaporan
+from .forms import FormDonasi, FormLaporan
 from django.contrib import messages
-from .models import KebutuhanBarang, Project,Laporan
-from django.db.models import Sum
+from .models import KebutuhanBarang, Project,Laporan  
+from django.db.models import Sum, Q
 from donatur.models import Donasi,DonasiBarang
 import json
 
@@ -95,10 +95,24 @@ def laporan(request, project_id):
 
 @login_required 
 def view_projek(request):
-    all = Project.objects.filter(petani=request.user).order_by("-id")
+    search_query = request.GET.get('q', '')
+    current_status = request.GET.get('status', 'semua')
+    all_projects = Project.objects.filter(petani=request.user).order_by("-id")
+
+    if search_query:
+        all_projects = all_projects.filter(
+            Q(nama__icontains=search_query) | Q(lokasi__icontains=search_query)
+        )
     
+    if current_status == 'aktif':
+        all_projects = all_projects.filter(status='Aktif') 
+    elif current_status == 'selesai':
+        all_projects = all_projects.filter(status='Selesai')
+
     return render(request, 'petani/view.html', {
-        'all': all
+        'all': all_projects, 
+        'search_query': search_query,
+        'current_status': current_status
     })
 
 @login_required

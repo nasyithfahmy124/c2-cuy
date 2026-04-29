@@ -55,21 +55,48 @@
             </a>
         </div>
 
-        <div class="flex flex-wrap gap-4 mb-8 animate-fade-in-up delay-100">
+        <form method="GET" action="" id="filter-form" class="flex flex-wrap gap-4 mb-8 animate-fade-in-up delay-100">
+            
+            <input type="hidden" name="status" id="status-input" value="{{ current_status|default:'semua' }}">
+
             <div class="flex-grow md:max-w-xs relative">
                 <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                <input type="text" placeholder="Cari nama lahan..."
-                    class="w-full bg-white border border-gray-100 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-jejak-primary/5 transition-all">
+                <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Cari nama lahan atau lokasi..."
+                    class="w-full bg-white border border-gray-100 rounded-xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:ring-4 focus:ring-jejak-primary/15 focus:border-jejak-primary transition-all">
             </div>
+
             <div class="flex gap-2">
-                <button
-                    class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-jejak-primary hover:bg-gray-50 transition-all">Semua</button>
-                <button
-                    class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-gray-400 hover:text-jejak-primary transition-all">Aktif</button>
-                <button
-                    class="px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm font-bold text-gray-400 hover:text-jejak-primary transition-all">Selesai</button>
+                <button type="button" onclick="applyFilter('semua')"
+                    class="px-4 py-3 rounded-xl border text-sm font-bold transition-all 
+                    {% if current_status == 'semua' or not current_status %}
+                        bg-jejak-primary/10 border-jejak-primary/20 text-jejak-primary
+                    {% else %}
+                        bg-white border-gray-100 text-gray-400 hover:text-jejak-primary hover:bg-gray-50
+                    {% endif %}">
+                    Semua
+                </button>
+                
+                <button type="button" onclick="applyFilter('aktif')"
+                    class="px-4 py-3 rounded-xl border text-sm font-bold transition-all 
+                    {% if current_status == 'aktif' %}
+                        bg-jejak-primary/10 border-jejak-primary/20 text-jejak-primary
+                    {% else %}
+                        bg-white border-gray-100 text-gray-400 hover:text-jejak-primary hover:bg-gray-50
+                    {% endif %}">
+                    Aktif
+                </button>
+                
+                <button type="button" onclick="applyFilter('selesai')"
+                    class="px-4 py-3 rounded-xl border text-sm font-bold transition-all 
+                    {% if current_status == 'selesai' %}
+                        bg-jejak-primary/10 border-jejak-primary/20 text-jejak-primary
+                    {% else %}
+                        bg-white border-gray-100 text-gray-400 hover:text-jejak-primary hover:bg-gray-50
+                    {% endif %}">
+                    Selesai
+                </button>
             </div>
-        </div>
+        </form>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up delay-200">
             {% for project in all %}
@@ -97,12 +124,13 @@
                     </div>
                 </div>
 
-                <div class="p-8 flex-grow flex flex-col">
-                    <div
-                        class="flex items-center gap-2 text-[10px] font-bold text-jejak-secondary uppercase tracking-widest mb-2">
-                        <i class="ph-fill ph-map-pin"></i> {{ project.lokasi }}
+                <div class="p-6 md:p-8 flex-grow flex flex-col bg-white">
+                    
+                    <div class="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
+                        <i class="ph-fill ph-map-pin text-jejak-secondary text-sm"></i> {{ project.lokasi }}
                     </div>
-                    <h3 class="text-xl font-black text-jejak-primary mb-4 line-clamp-2 leading-tight">
+                    
+                    <h3 class="text-xl font-black text-gray-900 mb-6 line-clamp-2 leading-snug group-hover:text-jejak-primary transition-colors">
                         {{ project.nama }}
                     </h3>
 
@@ -111,32 +139,35 @@
                             <span class="text-gray-400">Progres Pendanaan</span>
                             <span class="text-jejak-primary">{{ project.persentase }}%</span>
                         </div>
-                        <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                            <div class="bg-jejak-primary h-full transition-all duration-1000"
-                                style="width: {{ project.persentase }}%"></div>
+                        <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden border border-gray-200/50">
+                            <div class="bg-jejak-primary h-full rounded-full transition-all duration-1000 relative"
+                                style="width: {{ project.persentase }}%">
+                                <div class="absolute inset-0 bg-white/20"></div> </div>
                         </div>
                     </div>
 
-                    <div class="mt-auto grid grid-cols-2 gap-3">
-                        <a href="{% url 'detail' project.id %}"
-                            class="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold text-xs hover:bg-jejak-primary hover:text-white transition-all group">
-                            <i class="ph-bold ph-eye text-base"></i> Detail
-                        </a>
-                        <a href="{% url 'tambah_laporan' project.id %}"
-                            class="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-jejak-secondary text-white font-bold text-xs hover:shadow-lg hover:shadow-jejak-secondary/20 transition-all active:scale-95">
-                            <i class="ph-bold ph-scroll text-base"></i> Lapor
-                        </a>
-                    </div>
+                    <div class="mt-auto flex flex-col gap-3">
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="{% url 'detail' project.id %}"
+                                class="flex items-center justify-center gap-2 py-3 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold text-xs uppercase tracking-widest hover:bg-jejak-primary hover:text-white transition-all active:scale-95 shadow-sm border border-jejak-primary/10">
+                                <i class="ph-bold ph-eye text-base"></i> Detail
+                            </a>
+                            <a href="{% url 'tambah_laporan' project.id %}"
+                                class="flex items-center justify-center gap-2 py-3 rounded-xl bg-jejak-secondary text-white font-bold text-xs uppercase tracking-widest hover:brightness-95 transition-all shadow-lg shadow-jejak-secondary/30 active:scale-95">
+                                <i class="ph-bold ph-scroll text-base"></i> Lapor
+                            </a>
+                        </div>
 
-                    <div>
-                        <form action="{% url 'delete' project.id %}" method="POST">
+                        <form action="{% url 'delete' project.id %}" method="POST" class="w-full m-0" onsubmit="return confirm('Apakah Anda yakin ingin menghapus project ini secara permanen?');">
                             {% csrf_token %}
-                            <button class="delete" type="submit">Hapus Project</button>
+                            <button type="submit" 
+                                class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-red-50 text-red-500 font-bold text-xs uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all border border-red-100 shadow-sm active:scale-95">
+                                <i class="ph-bold ph-trash text-base"></i> Hapus Project
+                            </button>
                         </form>
 
                     </div>
-
-
                 </div>
             </div>
             {% empty %}
@@ -160,6 +191,12 @@
     </main>
 
     {% include 'petani/partials/footer.html' %}
+    <script>
+        function applyFilter(status) {
+            document.getElementById('status-input').value = status;
+            document.getElementById('filter-form').submit();
+        }
+    </script>
 
 </body>
 
