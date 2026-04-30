@@ -7,10 +7,6 @@ from django.db.models.functions import Coalesce
 from petani.models import Project
 from .forms import *
 
-# ==========================================
-# 1. HALAMAN UTAMA & REDIRECTOR
-# ==========================================
-
 def landing_page(request):
     # Halaman default (halaman awal)
     return render(request, 'landing.html')
