@@ -61,3 +61,7 @@ pip install python-dotenv
 6. pip install psycopg2-binary
 7. Jalanin server
 python manage.py runserver
+
+8. SET UP TAILDWIN
+   a. npm install
+   b. npm run dev
