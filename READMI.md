@@ -73,3 +73,7 @@ pip install python-dotenv
 python manage.py migrate
 7. Jalanin server
 python manage.py runserver
+
+8. SET UP TAILDWIN
+   a. npm install
+   b. npm run dev
