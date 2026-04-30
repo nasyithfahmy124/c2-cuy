@@ -35,23 +35,12 @@ cp .env.example .env
 
 Setelah file .env dibuat, buka file tersebut lalu isi sesuai konfigurasi di komputer masing-masing.
 
-Contoh:
-
-DB_NAME=db_green
-DB_USER=root
-DB_PASSWORD=
-DB_HOST=localhost
-DB_PORT=3306
-
-SECRET_KEY=isi_dengan_secret_key_kamu
-DEBUG=True
-
 Penjelasan tiap bagian:
-DB_NAME → nama database yang kamu buat di MySQL
-DB_USER → username database (biasanya root)
-DB_PASSWORD → password database (kosong jika tidak pakai password)
-DB_HOST → biasanya localhost
-DB_PORT → default MySQL 3306
+isi env
+DB_USER=postgres.ubuopbjsyasayshgttbp
+DB_PASSWORD=JejakaDaya&12
+DB_HOST=aws-1-ap-southeast-1.pooler.supabase.com
+DB_PORT=6543
 SECRET_KEY → kunci rahasia Django (harus diisi sendiri)
 DEBUG → gunakan True untuk development
 
@@ -69,7 +58,6 @@ DAN INSTAL DOTENV
 pip install python-dotenv
 
 
-6. migrasi Migrasi database
-python manage.py migrate
+6. pip install psycopg2-binary
 7. Jalanin server
 python manage.py runserver
