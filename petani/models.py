@@ -25,7 +25,10 @@ class Project(models.Model):
     berapa_bulan = models.CharField(max_length=200) 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     no_hp = models.CharField(max_length=15) 
-    
+    keuntungan_p = models.DecimalField(
+    max_digits=12,
+    decimal_places=0,
+    default=0)
     @property
     def total_donasi(self):
         Donasi = apps.get_model('donatur', 'Donasi')

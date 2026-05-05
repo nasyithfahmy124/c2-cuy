@@ -7,7 +7,7 @@ class Donasi(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     jumlah = models.IntegerField()
     tanggal = models.DateTimeField(auto_now_add=True)
-    
+    keuntungan_d = models.DecimalField(max_digits=12,decimal_places=0,default=0)
     dana_terkumpul = models.DecimalField(
     max_digits=12,
     decimal_places=0,
