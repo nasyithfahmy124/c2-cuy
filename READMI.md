@@ -1,8 +1,12 @@
+ TESS BOSKU
+
+
+ 
 NOTE:
 AKUN INI ADA 3 WEB
 1. PETANI MITRA
 2. DONATUR
-3. ADMIN(login lewan url /admin-login/
+3. ADMIN login lewan url /admin-login/
    untuk akun admin di buat di terminal ketik
    python manage.py createsuperuser
    lalu masukan sesuai intruksinya
@@ -11,12 +15,14 @@ untuk menjalankan web jangan login 3 akun sekaligus dalam 1 device karena projek
 
 CAEA MENJALANKAN PROJEK INI:
 1. clone projek ini
+
 2 aktifkan env
 python -m venv env
+
 3.install dependency
 pip install -r requirements.txt
-4. Copy file environment
 
+4. Copy file environment
 Project ini menggunakan file .env untuk menyimpan konfigurasi seperti database dan secret key.
 
 Karena file .env bersifat rahasia, file tersebut tidak disertakan di repository.
