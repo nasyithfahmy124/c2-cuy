@@ -43,9 +43,9 @@
 
     <div class="absolute inset-0 -z-10">
         <img src="{% static 'assets/img/mobile_bg.png' %}" alt=""
-            class="block md:hidden w-full h-full object-cover object-center">
+            class="block md:hidden w-screen h-screen object-cover object-center"/>
         <img src="{% static 'assets/img/dakstop_bg.png' %}" alt=""
-            class="hidden md:block w-full h-full object-cover object-center">
+            class="hidden md:block w-screen h-screen object-cover object-center"/>
 
         <div class="absolute inset-0 bg-gradient-to-b from-jejak-primary/75 via-jejak-primary/60 to-jejak-primary/85">
         </div>
@@ -54,8 +54,8 @@
         </div>
     </div>
 
-    <div class="absolute top-10 right-[-8rem] w-[28rem] h-[28rem] bg-jejak-secondary/25 rounded-full blur-[110px] animate-float pointer-events-none"></div>
-    <div class="absolute bottom-[-6rem] left-[-6rem] w-[22rem] h-[22rem] bg-jejak-accent/20 rounded-full blur-[100px] animate-float pointer-events-none"></div>
+    <!-- <div class="absolute top-10 right-[-8rem] w-[28rem] h-[28rem] bg-jejak-secondary/25 rounded-full blur-[110px] animate-float pointer-events-none"></div> -->
+    <!-- <div class="absolute bottom-[-6rem] left-[-6rem] w-[22rem] h-[22rem] bg-jejak-accent/20 rounded-full blur-[100px] animate-float pointer-events-none"></div> -->
 
     <header class="px-6 pt-6 md:px-10 md:pt-8 z-10 opacity-0 animate-fade-in-up flex justify-between items-center w-full">
 
@@ -79,9 +79,9 @@
 
     <main class="relative z-10 flex-1 flex items-center px-6 md:px-10 lg:px-16 py-10">
         <div class="w-full max-w-7xl mx-auto">
-            <div class="max-w-3xl space-y-8">
+            <div class="max-w-3xl space-y-8 ">
                 
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jejak-accent/20 border border-jejak-accent/30 text-white text-xs font-bold uppercase tracking-widest fade-in-element delay-100" id="badge">
+                <div class=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jejak-accent/20 border border-jejak-accent/30 text-white text-xs font-bold uppercase tracking-widest fade-in-element delay-100" id="badge">
                     <span class="relative flex h-2 w-2">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-jejak-accent opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-jejak-accent"></span>
@@ -89,7 +89,7 @@
                     Inkubator Petani Milenial
                 </div>
 
-                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight fade-in-element delay-200" id="main-title">
+                <h1 class="text-4xl min-h-60 sm:min-h-52 md:min-h-72 lg:min-h-96  sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight fade-in-element delay-200" id="main-title">
                     Kami tidak berinvestasi pada komoditas, melainkan <br class="hidden md:block">
                     <span class="text-jejak-accent typing-cursor" id="typewriter-text"></span>
                 </h1>
@@ -102,16 +102,16 @@
         </div>
     </main>
 
-    <footer class="relative z-10 px-6 pb-8 md:px-10 md:pb-10 opacity-0 animate-fade-in-up delay-300">
-        <div class="mx-auto w-full max-w-md">
-            <div class="glass-pill bg-black/20 border border-white/10 rounded-full p-2 flex items-center justify-between shadow-2xl transition-all hover:bg-black/30 backdrop-blur-md">
+    <footer class="relative opacity-0 animate-fade-in-up delay-300">
+        <div class="mx-auto max-w-md ">
+            <div class="glass-pill  bg-black/20 border border-white/10 rounded-full p-2 flex items-center  justify-between shadow-2xl transition-all hover:bg-black/30 backdrop-blur-md">
                 <button type="button"
                     class="w-12 h-12 flex items-center justify-center rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors"
                     aria-label="Kembali">
                     <i class="ph ph-arrow-left text-xl"></i>
                 </button>
 
-                <a href="{% url 'mulai_redirect' %}" class="flex-grow flex items-center justify-center gap-3 group pr-2">
+                <a href="{% url 'mulai_redirect' %}" class=" flex flex-grow items-center justify-center gap-3 group pr-2">
                     <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-jejak-primary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)]">
                         <i class="ph-fill ph-play text-xl ml-1 group-hover:text-jejak-accent transition-colors"></i>
                     </div>
