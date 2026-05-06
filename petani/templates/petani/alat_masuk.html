@@ -147,9 +147,9 @@
                             <i class="ph-fill ph-package"></i>
                         </div>
                         <div>
-                            <p class="font-bold text-gray-900 heading text-lg leading-tight">{{ b.nama_barang_custom|default:"Barang Tanpa Nama" }}</p>
+                            <p class="font-bold text-gray-900 heading text-lg leading-tight">{{ b.kebutuhan.nama_barang }}</p>
                             <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mt-1 flex items-center gap-1.5">
-                                <i class="ph-fill ph-user text-gray-400"></i> {{ b.donatur.username }}
+                                <i class="ph-fill ph-user text-gray-400"></i> {{ b.donasi.donatur.username }}
                             </p>
                         </div>
                     </div>

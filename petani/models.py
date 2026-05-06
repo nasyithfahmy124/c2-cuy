@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone   
 from django.apps import apps
-from django.db.models import Sum
+from django.db.models import Sum,F
 
 
 STATUS_CHOICES = [
@@ -41,7 +41,6 @@ class Project(models.Model):
     @property
     def persentase(self):
         total = self.total_donasi
-
         if self.target_dana:
             return round((total / self.target_dana) * 100, 1)
 
@@ -55,7 +54,7 @@ class Project(models.Model):
         total = DonasiBarang.objects.filter(
             project=self,
             status='disetujui'
-        ).aggregate(Sum('jumlah'))['jumlah__sum'] or 0
+        ).aggregate(Sum('items__jumlah'))['items__jumlah__sum'] or 0
 
         target = self.kebutuhan_barang.aggregate(
             Sum('jumlah_dibutuhkan')
@@ -65,10 +64,13 @@ class Project(models.Model):
             return 0
 
         return round((total / target) * 100, 1)
-
+    @property
+    def total_kebutuhan_uang(self):
+        return self.kebutuhan_barang.aggregate(
+                total=Sum(F('harga_satuan') * F('jumlah_dibutuhkan'))
+            )['total'] or 0
     
     
-        
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')
     judul = models.CharField(max_length=100)
@@ -82,10 +84,14 @@ class Laporan(models.Model):
 
 class KebutuhanBarang(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='kebutuhan_barang')
-    
     nama_barang = models.CharField(max_length=100)
     jumlah_dibutuhkan = models.IntegerField()
+    harga_satuan = models.IntegerField(default=0)
+    satuan = models.CharField(max_length=50, default="item")  
 
     def __str__(self):
         return f"{self.nama_barang} ({self.project.nama})"
-
+    @property
+    def total_harga(self):
+        return self.harga_satuan * self.jumlah_dibutuhkan
+    
