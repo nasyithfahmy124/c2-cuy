@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FormDonasi,FormDonasiBarang
 from petani.models import Project,Laporan
-
+from .forms import FormDonasiBarang,FormDonasiBarangItem,DonasiBarangItemFormSet
 from django.db.models import Sum, Value
 from .models import Donasi,DonasiBarang
 from django.contrib import messages
@@ -79,28 +79,30 @@ def danai_project(request, id):
     
 @login_required
 def donasi_barang(request, id):
-    project = get_object_or_404(Project, id=id)
+    project = Project.objects.get(id= id)
 
     if request.method == 'POST':
         form = FormDonasiBarang(request.POST)
+        formset = DonasiBarangItemFormSet(request.POST)
 
-        if form.is_valid():
-            barang = form.save(commit=False)
-            barang.donatur = request.user
-            barang.project = project
-            barang.save()
+        if form.is_valid() and formset.is_valid():
+            donasi = form.save(commit=False)
+            donasi.donatur = request.user
+            donasi.project = project
+            donasi.save()
 
-            messages.success(request, "Bantuan alat berhasil!")
+            formset.instance = donasi
+            formset.save()
+
             return redirect('home_d')
+
     else:
         form = FormDonasiBarang()
+        formset = DonasiBarangItemFormSet()
 
-    kebutuhan = project.kebutuhan_barang.all()
-
-    return render(request, 'donatur/donasi_barang.html', {
+    return render(request, 'donatur/danaibarang.html', {
         'form': form,
-        'project': project,
-        'kebutuhan': kebutuhan
+        'formset': formset,
     })
 
 @login_required

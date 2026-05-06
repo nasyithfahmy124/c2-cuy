@@ -4,7 +4,7 @@ from .models import *
 class FormDonasi(forms.ModelForm):
     class Meta:
         model = Project
-        exclude = ['petani','estimasi_hasil','dana_terkumpul','status',]
+        exclude = ['petani','estimasi_hasil','dana_terkumpul','status','keuntungan_p']
 class FormLaporan(forms.ModelForm):
     class Meta:
         model = Laporan

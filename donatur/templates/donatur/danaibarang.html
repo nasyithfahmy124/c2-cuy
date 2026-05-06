@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Donasi Barang</title>
+</head>
+
+<body>
+
+    <h2>Form Donasi Barang</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- FORM UTAMA -->
+        {{ form.as_p }}
+
+        <h3>Daftar Barang</h3>
+
+        <!-- WAJIB -->
+        {{ formset.management_form }}
+
+        <div id="formset-wrapper">
+            {% for f in formset %}
+            <div class="item-form" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+                {{ f.as_p }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" onclick="tambahForm()">+ Tambah Barang</button>
+        <br><br>
+
+        <button type="submit">Kirim Donasi</button>
+    </form>
+
+    <script>
+        function tambahForm() {
+            let totalForms = document.getElementById("id_form-TOTAL_FORMS");
+            let currentCount = parseInt(totalForms.value);
+
+            let wrapper = document.getElementById("formset-wrapper");
+            let firstForm = wrapper.children[0].cloneNode(true);
+
+            let inputs = firstForm.querySelectorAll("input, select, textarea");
+
+            inputs.forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace(/form-\d+-/, `form-${currentCount}-`);
+                    input.id = input.id.replace(/form-\d+-/, `form-${currentCount}-`);
+
+                    if (input.type !== "hidden") {
+                        input.value = "";
+                    }
+                }
+            });
+
+            wrapper.appendChild(firstForm);
+            totalForms.value = currentCount + 1;
+        }
+    </script>
+
+</body>
+
+</html>
