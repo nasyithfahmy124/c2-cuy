@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C76B4E" />
+      <stop offset="100%" stop-color="#E28769" />
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007934" />
+      <stop offset="100%" stop-color="#10B981" />
+    </linearGradient>
+    
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+      }
+      @keyframes float-delay {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes scan {
+        0%, 100% { opacity: 0.1; }
+        50% { opacity: 0.4; }
+      }
+      .floating { animation: float 5s ease-in-out infinite; }
+      .floating-delay { animation: float-delay 6s ease-in-out infinite; }
+      .scanner { animation: scan 3s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <circle cx="400" cy="300" r="250" fill="url(#greenGrad)" opacity="0.05" />
+  <circle cx="600" cy="150" r="80" fill="url(#accentGrad)" opacity="0.1" />
+
+  <g transform="translate(150, 180)">
+    <rect x="35" y="15" width="430" height="280" rx="16" fill="#000" opacity="0.4" filter="url(#glow)"/>
+    <rect x="25" y="5" width="450" height="300" rx="16" fill="#cbd5e1" />
+    <rect x="40" y="20" width="420" height="270" rx="8" fill="url(#screenGrad)" />
+    
+    <rect x="60" y="40" width="120" height="80" rx="8" fill="#334155" opacity="0.6"/>
+    <rect x="70" y="90" width="15" height="20" rx="4" fill="url(#greenGrad)"/>
+    <rect x="95" y="70" width="15" height="40" rx="4" fill="url(#greenGrad)"/>
+    <rect x="120" y="50" width="15" height="60" rx="4" fill="url(#greenGrad)"/>
+    <rect x="145" y="80" width="15" height="30" rx="4" fill="url(#greenGrad)"/>
+
+    <rect x="195" y="40" width="245" height="160" rx="8" fill="#334155" opacity="0.6"/>
+    <path d="M 215 160 L 265 110 L 315 140 L 375 70 L 415 90" fill="none" stroke="url(#accentGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="215" cy="160" r="5" fill="#fff" stroke="#C76B4E" stroke-width="2"/>
+    <circle cx="265" cy="110" r="5" fill="#fff" stroke="#C76B4E" stroke-width="2"/>
+    <circle cx="315" cy="140" r="5" fill="#fff" stroke="#C76B4E" stroke-width="2"/>
+    <circle cx="375" cy="70" r="5" fill="#fff" stroke="#C76B4E" stroke-width="2"/>
+    <circle cx="415" cy="90" r="5" fill="#fff" stroke="#C76B4E" stroke-width="2"/>
+
+    <rect x="60" y="135" width="120" height="65" rx="8" fill="#334155" opacity="0.6"/>
+    <circle cx="90" cy="167" r="15" fill="url(#accentGrad)" opacity="0.8"/>
+    <rect x="195" y="215" width="245" height="55" rx="8" fill="#334155" opacity="0.6"/>
+
+    <path d="M -10 305 L 510 305 L 535 330 L -35 330 Z" fill="#94a3b8" />
+    <path d="M -35 330 L 535 330 L 535 340 L -35 340 Z" fill="#64748b" />
+    <path d="M 200 330 L 300 330 L 305 335 L 195 335 Z" fill="#475569" opacity="0.5" />
+  </g>
+
+  <g transform="translate(140, 70)">
+    <g class="floating">
+        <ellipse cx="60" cy="30" rx="45" ry="18" fill="#f8fafc" />
+        <ellipse cx="60" cy="30" rx="25" ry="10" fill="#e2e8f0" />
+        
+        <line x1="15" y1="30" x2="15" y2="10" stroke="#94a3b8" stroke-width="4"/>
+        <ellipse cx="15" cy="10" rx="30" ry="4" fill="#cbd5e1" opacity="0.9"/>
+        
+        <line x1="105" y1="30" x2="105" y2="10" stroke="#94a3b8" stroke-width="4"/>
+        <ellipse cx="105" cy="10" rx="30" ry="4" fill="#cbd5e1" opacity="0.9"/>
+        
+        <polygon points="50,45 70,45 100,140 20,140" fill="url(#greenGrad)" class="scanner" />
+        <circle cx="60" cy="42" r="7" fill="#10B981" filter="url(#glow)"/>
+    </g>
+  </g>
+
+  <g transform="translate(560, 260)">
+    <path d="M 30 180 L 130 180 L 110 280 L 50 280 Z" fill="url(#accentGrad)" filter="url(#glow)"/>
+    <path d="M 20 180 L 140 180 L 140 200 L 20 200 Z" fill="#994f38"/>
+    <rect x="25" y="200" width="110" height="5" fill="#000" opacity="0.1"/>
+    
+    <path d="M 80 180 Q 80 90 40 40" fill="none" stroke="#007934" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 80 180 Q 80 110 130 60" fill="none" stroke="#007934" stroke-width="8" stroke-linecap="round"/>
+    
+    <path d="M 40 40 Q 10 20 40 0 Q 70 20 40 40" fill="url(#greenGrad)"/>
+    <path d="M 60 90 Q 20 80 20 50 Q 60 50 60 90" fill="url(#greenGrad)"/>
+    <path d="M 130 60 Q 160 40 140 10 Q 100 30 130 60" fill="url(#greenGrad)"/>
+    <path d="M 110 120 Q 150 120 160 90 Q 120 80 110 120" fill="url(#greenGrad)"/>
+    <path d="M 80 130 Q 50 120 60 100 Q 90 100 80 130" fill="#10B981"/>
+  </g>
+
+  <g transform="translate(80, 280)">
+    <g class="floating-delay">
+        <rect x="0" y="0" width="160" height="56" rx="28" fill="#1e293b" opacity="0.95" filter="url(#glow)"/>
+        <circle cx="28" cy="28" r="20" fill="url(#greenGrad)"/>
+        <path d="M 28 15 C 35 15 38 22 38 28 C 38 35 28 40 28 40 C 28 40 18 35 18 28 C 18 22 21 15 28 15 Z" fill="#fff"/>
+        <text x="60" y="26" font-family="sans-serif" font-weight="800" font-size="14" fill="#fff">+85% Efisiensi</text>
+        <text x="60" y="42" font-family="sans-serif" font-weight="500" font-size="11" fill="#94a3b8">Smart Farming</text>
+    </g>
+  </g>
+
+  <g transform="translate(510, 100)">
+    <g class="floating">
+        <rect x="0" y="0" width="150" height="56" rx="28" fill="#1e293b" opacity="0.95" filter="url(#glow)"/>
+        <circle cx="28" cy="28" r="20" fill="url(#accentGrad)"/>
+        <rect x="20" y="20" width="16" height="16" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+        <line x1="20" y1="26" x2="36" y2="26" stroke="#fff" stroke-width="2"/>
+        <text x="60" y="26" font-family="sans-serif" font-weight="800" font-size="14" fill="#fff">Distribusi</text>
+        <text x="60" y="42" font-family="sans-serif" font-weight="500" font-size="11" fill="#94a3b8">Logistik Digital</text>
+    </g>
+  </g>
+
+</svg>
