@@ -77,13 +77,57 @@ def danai_project(request, id):
         'project': project
     })
     
-@login_required
+# @login_required
+# def donasi_barang(request, id):
+#     project = Project.objects.get(id= id)
+
+#     if request.method == 'POST':
+#         form = FormDonasiBarang(request.POST)
+#         formset = DonasiBarangItemFormSet(request.POST)
+
+#         if form.is_valid() and formset.is_valid():
+#             donasi = form.save(commit=False)
+#             donasi.donatur = request.user
+#             donasi.project = project
+#             donasi.save()
+
+#             formset.instance = donasi
+#             formset.save()
+
+#             return redirect('home_d')
+
+#     else:
+#         form = FormDonasiBarang()
+#         formset = DonasiBarangItemFormSet()
+
+#     return render(request, 'donatur/danaibarang.html', {
+#         'form': form,
+#         'formset': formset,
+#     })
+
+from django.forms import inlineformset_factory
+from .models import DonasiBarangItem
+from petani.models import KebutuhanBarang
 def donasi_barang(request, id):
-    project = Project.objects.get(id= id)
+    project = Project.objects.get(id=id)
+
+    DonasiBarangItemFormSet = inlineformset_factory(
+        DonasiBarang,
+        DonasiBarangItem,
+        form=FormDonasiBarangItem,
+        extra=1,
+        can_delete=True
+    )
 
     if request.method == 'POST':
         form = FormDonasiBarang(request.POST)
-        formset = DonasiBarangItemFormSet(request.POST)
+        formset = DonasiBarangItemFormSet(
+                    request.POST,
+                    form_kwargs={'project': project}
+                )
+        # 🔥 inject project ke setiap form
+        # for f in formset.forms:
+        #     f.fields['kebutuhan'].queryset = KebutuhanBarang.objects.filter(project=project)
 
         if form.is_valid() and formset.is_valid():
             donasi = form.save(commit=False)
@@ -98,7 +142,14 @@ def donasi_barang(request, id):
 
     else:
         form = FormDonasiBarang()
-        formset = DonasiBarangItemFormSet()
+
+        formset = DonasiBarangItemFormSet(
+            form_kwargs={'project': project}
+        )
+
+        # 🔥 inject juga saat GET
+        # for f in formset.forms:
+        #     f.fields['kebutuhan'].queryset = KebutuhanBarang.objects.filter(project=project)
 
     return render(request, 'donatur/danaibarang.html', {
         'form': form,

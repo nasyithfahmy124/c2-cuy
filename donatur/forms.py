@@ -49,6 +49,25 @@ class FormDonasiBarangItem(forms.ModelForm):
                 project=project
             ).order_by('id')
 
+            qs = KebutuhanBarang.objects.filter(project=project)
+
+            self.fields['kebutuhan'].queryset = qs
+
+            self.fields['kebutuhan'].widget.choices = [
+                (k.id, f"{k.nama_barang} - Rp{k.harga_satuan}")
+                for k in qs
+            ]
+    def clean(self):
+        cleaned_data = super().clean()
+        instance = self.instance
+
+        instance.kebutuhan = cleaned_data.get('kebutuhan')
+        instance.jumlah = cleaned_data.get('jumlah')
+
+        instance.clean()  # 🔥 panggil model clean
+
+        return cleaned_data
+
 DonasiBarangItemFormSet = inlineformset_factory(
     DonasiBarang,
     DonasiBarangItem,

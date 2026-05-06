@@ -5,11 +5,13 @@ from datetime import datetime
 from .forms import FormDonasi, FormLaporan
 from django.contrib import messages
 from .models import KebutuhanBarang, Project,Laporan  
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q,F
 from donatur.models import Donasi,DonasiBarang
 import json
 from donatur.models import DonasiBarangItem
 from petani.models import KebutuhanBarang
+from django.db import transaction
+from collections import defaultdict
 
 
 # Create your views here.
@@ -20,17 +22,25 @@ def home_page(request):
     total_alat = DonasiBarang.objects.filter(
     project__petani=request.user
     ).aggregate(total=Sum('items__jumlah'))['total'] or 0
+    total_barang = DonasiBarangItem.objects.filter(
+        donasi__project__petani=request.user
+    ).aggregate(
+        total=Sum(F('jumlah') * F('kebutuhan__harga_satuan'))
+    )['total'] or 0
 
+    # 🔥 TOTAL SEMUA
+    total_bantuan = dana_masuk + total_barang
     waktu = datetime.now()
     projects = Project.objects.filter(petani=request.user).order_by("-id")
+    print("TOTAL BARANG:", total_barang)
     return render(request,'petani/home_p.html',{
         'waktu' : waktu,
         'dana' : dana_masuk,
         'projects': projects,
-        'alat' : total_alat 
+        'alat' : total_alat ,
+        'totalbantuan' : total_bantuan,
+        'nilaibarang' : total_barang
     })
-
-from django.db import transaction
 
 @login_required
 def donasi(request):
@@ -168,24 +178,28 @@ def hapus_project(request,id):
 
 
 
+
+
 @login_required
 def alat_masuk(request):
-    # ambil semua item donasi (bukan DonasiBarang lagi!)
     items = DonasiBarangItem.objects.filter(
-    donasi__project__petani=request.user)
+        donasi__project__petani=request.user
+    )
+
     kebutuhan = KebutuhanBarang.objects.filter(
         project__petani=request.user
     )
+
     data = defaultdict(lambda: {"masuk": 0, "target": 0})
 
-    # target dari kebutuhan petani
+    # 🎯 TARGET (nilai kebutuhan)
     for k in kebutuhan:
-        data[k.nama_barang]["target"] += k.jumlah_dibutuhkan
+        data[k.nama_barang]["target"] += k.jumlah_dibutuhkan * k.harga_satuan
 
-    # barang masuk dari donasi
+    # 🎯 REALISASI (nilai donasi)
     for item in items:
         nama = item.kebutuhan.nama_barang
-        data[nama]["masuk"] += item.jumlah
+        data[nama]["masuk"] += item.jumlah * item.kebutuhan.harga_satuan
 
     tracking = []
     total_masuk = 0
@@ -207,24 +221,14 @@ def alat_masuk(request):
         total_masuk += masuk
         total_target += target
 
-    labels = [item["nama"] for item in tracking]
-    data_masuk = [item["masuk"] for item in tracking]
-    data_target = [item["target"] for item in tracking]
-
     progress_total = round((total_masuk / total_target) * 100, 1) if total_target else 0
-    print("TOTAL ITEMS:", items.count())
-    print("TOTAL JUMLAH:", sum(i.jumlah for i in items))
-    
     
     return render(request, 'petani/alat_masuk.html', {
-        'alat': items.order_by('-id'),  # ⚠️ sekarang items
         'tracking': tracking,
-        'total_barang': total_masuk,
-        'total_kebutuhan': total_target,
+        'total_uang_masuk': total_masuk,
+        'total_kebutuhan_uang': total_target,
+        'sisa_uang': total_target - total_masuk,
         'progress_total': progress_total,
-        'labels': json.dumps(labels),
-        'data_masuk': json.dumps(data_masuk),
-        'data_target': json.dumps(data_target),
     })
 @login_required
 def bagihasil(request):

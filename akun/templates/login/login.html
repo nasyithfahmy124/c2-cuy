@@ -45,78 +45,71 @@
         </div>
     </div>
 
-    <div
-        class="w-full lg:w-1/2 flex flex-grow items-center justify-center p-6 sm:p-12 lg:p-24 bg-jejak-bg relative z-20 -mt-8 lg:mt-0 rounded-t-[2rem] lg:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.3)] lg:shadow-none">
-        <div class="w-full max-w-md space-y-8 lg:space-y-10" data-animate>
+    <div class="w-full lg:w-1/2 flex flex-grow items-center justify-center p-6 sm:p-12 lg:p-24 bg-jejak-bg relative z-20 -mt-8 lg:mt-0 rounded-t-[2rem] lg:rounded-none shadow-xl lg:shadow-none">
+    
+    <div class="w-full max-w-md space-y-8 lg:space-y-10">
 
-            <div class="text-center lg:text-left mt-2 lg:mt-0">
-                <h2 class="text-3xl font-bold text-jejak-primary mb-2">Selamat Datang</h2>
-                <p class="text-gray-500">Silakan masukkan detail akun Anda.</p>
-            </div>
-
-            {% if messages %}
-            <div class="mb-6">
-                {% for message in messages %}
-                <div
-                    class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% else %}bg-green-50 text-jejak-primary border border-jejak-secondary/30{% endif %}">
-                    <i
-                        class="ph-fill {% if message.tags == 'error' %}ph-warning-circle{% else %}ph-check-circle{% endif %} text-lg"></i>
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            <form method="post" action="{% url 'login' %}" class="space-y-6">
-                {% csrf_token %}
-
-                <div class="space-y-2">
-                    <label for="username" class="text-sm font-semibold text-gray-700">Username</label>
-                    <div class="relative">
-                        <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="text" name="username" id="username" required placeholder="Masukkan username"
-                            class="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label for="password" class="text-sm font-semibold text-gray-700">Password</label>
-                    <div class="relative">
-                        <i class="ph ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="password" name="password" id="password" required placeholder="Masukkan password"
-                            class="w-full pl-11 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
-                        <button type="button" onclick="togglePassword('password', this)"
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-jejak-primary">
-                            <i class="ph ph-eye text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox"
-                            class="w-4 h-4 rounded border-gray-300 text-jejak-primary focus:ring-jejak-primary">
-                        <span class="text-sm text-gray-600">Ingat saya</span>
-                    </label>
-                    <a href="{% url 'gantipw' %}"
-                        class="text-sm font-semibold text-jejak-accent hover:text-jejak-accent/80 transition-colors">Lupa
-                        Password?</a>
-                </div>
-
-                <button type="submit"
-                    class="w-full py-4 bg-jejak-primary hover:bg-jejak-primary/90 text-white rounded-xl font-semibold shadow-lg shadow-jejak-primary/30 transition-all active:scale-[0.98]">
-                    Masuk ke Dasbor
-                </button>
-            </form>
-
-            <p class="mt-8 text-center text-sm text-gray-600 pb-6 lg:pb-0">
-                Belum punya akun?
-                <a href="{% url 'register' %}"
-                    class="font-semibold text-jejak-primary hover:underline underline-offset-4">Daftar sekarang</a>
-            </p>
-
+        <div class="text-center lg:text-left mt-2 lg:mt-0">
+            <h2 class="text-3xl font-bold text-jejak-primary mb-2">Selamat Datang</h2>
+            <p class="text-gray-500">Silakan masukkan detail akun Anda.</p>
         </div>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium {% if message.tags == 'error' %}bg-red-50 text-red-600 border border-red-200{% else %}bg-green-50 text-emerald-600 border border-emerald-200{% endif %}">
+                <i class="ph-fill {% if message.tags == 'error' %}ph-warning-circle{% else %}ph-check-circle{% endif %} text-lg"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="space-y-2">
+                <label for="username" class="text-sm font-semibold text-gray-700">Username</label>
+                <div class="relative">
+                    <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="text" name="username" id="username" required placeholder="Masukkan username"
+                        class="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-gray-900">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label for="password" class="text-sm font-semibold text-gray-700">Password</label>
+                <div class="relative">
+                    <i class="ph ph-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="password" name="password" id="password" required placeholder="Masukkan password"
+                        class="w-full pl-11 pr-12 py-3.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-gray-900">
+                    <button type="button" onclick="togglePassword('password', this)"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-emerald-600">
+                        <i class="ph ph-eye text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-4">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500">
+                    <span class="text-sm text-gray-600">Ingat saya</span>
+                </label>
+                <a href="{% url 'gantipw' %}" class="text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors">Lupa Password?</a>
+            </div>
+
+            <button type="submit"
+                class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold shadow-lg shadow-emerald-200 transition-all active:scale-[0.98]">
+                Masuk ke Dasbor
+            </button>
+        </form>
+
+        <p class="mt-8 text-center text-sm text-gray-600 pb-6 lg:pb-0">
+            Belum punya akun?
+            <a href="{% url 'register' %}" class="font-semibold text-emerald-600 hover:underline underline-offset-4">Daftar sekarang</a>
+        </p>
     </div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
