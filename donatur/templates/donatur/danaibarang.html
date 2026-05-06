@@ -23,7 +23,27 @@
         <div id="formset-wrapper">
             {% for f in formset %}
             <div class="item-form" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
-                {{ f.as_p }}
+
+                <p>
+                    {{ f.kebutuhan.label }}<br>
+                    {{ f.kebutuhan }}
+                </p>
+
+                <p>
+                    Harga Satuan:
+                    <span class="harga-satuan">-</span>
+                </p>
+
+                <p>
+                    {{ f.jumlah.label }}<br>
+                    {{ f.jumlah }}
+                </p>
+
+                <p>
+                    Subtotal:
+                    <span class="subtotal">0</span>
+                </p>
+
             </div>
             {% endfor %}
         </div>
@@ -42,22 +62,75 @@
             let wrapper = document.getElementById("formset-wrapper");
             let firstForm = wrapper.children[0].cloneNode(true);
 
-            let inputs = firstForm.querySelectorAll("input, select, textarea");
+            let elements = firstForm.querySelectorAll("input, select, textarea, label, span");
 
-            inputs.forEach(input => {
-                if (input.name) {
-                    input.name = input.name.replace(/form-\d+-/, `form-${currentCount}-`);
-                    input.id = input.id.replace(/form-\d+-/, `form-${currentCount}-`);
+            elements.forEach(el => {
+                if (el.name) {
+                    el.name = el.name.replace(/form-\d+-/, `form-${currentCount}-`);
+                }
+                if (el.id) {
+                    el.id = el.id.replace(/form-\d+-/, `form-${currentCount}-`);
+                }
 
-                    if (input.type !== "hidden") {
-                        input.value = "";
+                // reset input
+                if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+                    if (el.type === "checkbox") {
+                        el.checked = false;
+                    } else {
+                        el.value = "";
                     }
+                }
+
+                // reset select
+                if (el.tagName === "SELECT") {
+                    el.selectedIndex = 0;
+                }
+
+                // reset tampilan harga & subtotal
+                if (el.classList.contains("harga-satuan")) {
+                    el.innerText = "-";
+                }
+
+                if (el.classList.contains("subtotal")) {
+                    el.innerText = "0";
+                }
+
+                // update label
+                if (el.tagName === "LABEL" && el.htmlFor) {
+                    el.htmlFor = el.htmlFor.replace(/form-\d+-/, `form-${currentCount}-`);
                 }
             });
 
             wrapper.appendChild(firstForm);
             totalForms.value = currentCount + 1;
         }
+
+        // tampilkan harga saat pilih barang
+        document.addEventListener("change", function (e) {
+            if (e.target.name.includes("kebutuhan")) {
+                let select = e.target;
+                let selectedText = select.options[select.selectedIndex].text;
+
+                let harga = selectedText.split("Rp")[1] || "0";
+
+                let parent = select.closest(".item-form");
+                parent.querySelector(".harga-satuan").innerText = "Rp" + harga;
+            }
+        });
+
+        // hitung subtotal
+        document.addEventListener("input", function (e) {
+            if (e.target.name.includes("jumlah")) {
+                let parent = e.target.closest(".item-form");
+
+                let hargaText = parent.querySelector(".harga-satuan").innerText.replace("Rp", "") || 0;
+                let jumlah = e.target.value || 0;
+
+                let subtotal = parseInt(hargaText) * parseInt(jumlah);
+
+                parent.querySelector(".subtotal").innerText = subtotal;
+            }
+        });
     </script>
 
 </body>

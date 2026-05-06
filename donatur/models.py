@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from petani.models import Project
+from django.core.exceptions import ValidationError
 
 class Donasi(models.Model):
     donatur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
@@ -43,3 +44,22 @@ class DonasiBarangItem(models.Model):
 
     def __str__(self):
         return f"{self.kebutuhan.nama_barang} x {self.jumlah}"
+    
+    def clean(self):
+    
+
+        total_sudah = DonasiBarangItem.objects.filter(
+            kebutuhan=self.kebutuhan
+        ).exclude(id=self.id).aggregate(
+            total=Sum('jumlah')
+        )['total'] or 0
+
+        total_baru = total_sudah + self.jumlah
+
+        if total_baru > self.kebutuhan.jumlah_dibutuhkan:
+            raise ValidationError(
+                f"Melebihi kebutuhan! Maksimal sisa: {self.kebutuhan.jumlah_dibutuhkan - total_sudah}"
+            )
+    
+# class KeuntunganDonatur(models.Model):
+#     untung_d  = models.DecimalField(max_digits=12,decimal_places=0,default=0)

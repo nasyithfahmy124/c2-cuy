@@ -31,7 +31,9 @@
 
     {% include 'petani/partials/navbar.html' %}
 
-    
+    <p>Donasi Uang: Rp {{ dana }}</p>
+    <p>Donasi Barang: Rp {{ nilaibarang }}</p>
+    <p><b>Total Bantuan: Rp {{ totalbantuan }}</b></p>
    <main class="flex-grow w-full relative">
         
         <div class="relative w-full h-[550px] lg:h-[650px] overflow-hidden">
@@ -100,6 +102,7 @@
                     </div>
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Barang Masuk</p>
                     <h3 class="text-3xl font-black text-jejak-accent relative z-10">{{ alat|default:0 }} <span class="text-sm font-bold opacity-60">Barang</span></h3>
+                    <h3 class="text-3xl font-black text-jejak-accent relative z-10 whitespace-nowrap">Rp {{ nilaibarang|default:0|intcomma }}</h3>
                 </div>
                 <a href="{% url 'alat_in' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-jejak-accent/10 text-jejak-accent font-bold text-xs hover:bg-jejak-accent hover:text-white transition-all relative z-10">
                     <i class="ph-bold ph-box-arrow-down"></i> Lihat Barang Masuk
@@ -117,6 +120,22 @@
                 <a href="{% url 'allp' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white hover:text-jejak-primary transition-all border border-white/20 relative z-10">
                     <i class="ph-bold ph-kanban"></i> Kelola Lahan
                 </a>
+            </div>
+            <div
+                class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-gradient-to-br from-[#0D3020] to-jejak-primary p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-trophy text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2 relative z-10">Total Bantuan Masuk</p>
+                    <p class="text-[10px] text-green-200/70 font-medium mb-3 relative z-10">Uang + Nilai Barang</p>
+                    <h3 class="text-3xl font-black relative z-10 whitespace-nowrap">Rp {{ totalbantuan|default:0|intcomma }}</h3>
+                </div>
+                <div class="mt-6 w-full py-3 rounded-xl bg-white/10 border border-white/20 text-center relative z-10">
+                    <p class="text-xs font-bold text-green-200 flex items-center justify-center gap-2">
+                        <i class="ph-fill ph-seal-check text-base"></i> Total Akumulasi Dukungan
+                    </p>
+                </div>
             </div>
 
             

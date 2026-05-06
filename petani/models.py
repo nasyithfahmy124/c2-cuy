@@ -70,6 +70,51 @@ class Project(models.Model):
                 total=Sum(F('harga_satuan') * F('jumlah_dibutuhkan'))
             )['total'] or 0
     
+
+    from django.db.models import Sum, F
+
+    @property
+    def total_kebutuhan(self):
+        return self.kebutuhan_barang.aggregate(
+            total=Sum(F('harga_satuan') * F('jumlah_dibutuhkan'))
+        )['total'] or 0
+
+
+    from django.db.models import Sum, F
+
+    @property
+    def total_kebutuhan(self):
+        return self.kebutuhan_barang.aggregate(
+            total=Sum(F('harga_satuan') * F('jumlah_dibutuhkan'))
+        )['total'] or 0
+
+
+    @property
+    def total_donasi_barang(self):
+        from donatur.models import DonasiBarangItem
+
+        return DonasiBarangItem.objects.filter(
+            donasi__project=self
+        ).aggregate(
+            total=Sum(F('jumlah') * F('kebutuhan__harga_satuan'))
+        )['total'] or 0
+
+
+    @property
+    def sisa_kebutuhan(self):
+        return self.total_kebutuhan - self.total_donasi_barang
+
+
+    @property
+    def progress_barang(self):
+        total = self.total_donasi_barang
+        target = self.total_kebutuhan
+
+        if target == 0:
+            return 0
+
+        return round((total / target) * 100, 1)
+    
     
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')
