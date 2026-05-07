@@ -2,9 +2,9 @@ from collections import defaultdict
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from .forms import FormDonasi, FormLaporan
+from .forms import FormDonasi, FormLaporan,formhasilpanen
 from django.contrib import messages
-from .models import KebutuhanBarang, Project,Laporan  
+from .models import KebutuhanBarang, Project,Laporan ,HasilPanen
 from django.db.models import Sum, Q,F
 from donatur.models import Donasi,DonasiBarang
 import json
@@ -12,8 +12,7 @@ from donatur.models import DonasiBarangItem
 from petani.models import KebutuhanBarang
 from django.db import transaction
 from collections import defaultdict
-
-
+from decimal import Decimal
 # Create your views here.
 @login_required
 def home_page(request):
@@ -230,6 +229,106 @@ def alat_masuk(request):
         'sisa_uang': total_target - total_masuk,
         'progress_total': progress_total,
     })
+from django.db.models import Sum, F
+from decimal import Decimal
+from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
 @login_required
 def bagihasil(request):
-    return render(request,'petani/bagihasil.html')
+
+    dana_masuk = Donasi.objects.filter(
+        project__petani=request.user
+    ).aggregate(total=Sum('jumlah'))['total'] or 0
+
+    total_alat = DonasiBarang.objects.filter(
+        project__petani=request.user
+    ).aggregate(total=Sum('items__jumlah'))['total'] or 0
+
+    total_barang = DonasiBarangItem.objects.filter(
+        donasi__project__petani=request.user
+    ).aggregate(
+        total=Sum(F('jumlah') * F('kebutuhan__harga_satuan'))
+    )['total'] or 0
+
+    total_bantuan = dana_masuk + total_barang
+
+    # ================= PROFIT =================
+    total_pengeluaran = Laporan.objects.filter(
+        project__petani=request.user
+    ).aggregate(
+        total=Sum('jumlah_pengeluaran')
+    )['total'] or 0
+
+    total_pendapatan = HasilPanen.objects.filter(
+        project__petani=request.user
+    ).aggregate(
+        total=Sum('total_pendapatan')
+    )['total'] or 0
+
+    keuntungan_bersih = total_pendapatan - total_pengeluaran
+
+    keuntungan_petani = keuntungan_bersih * Decimal('0.6')
+    keuntungan_donatur = keuntungan_bersih * Decimal('0.4')
+
+    projects = Project.objects.filter(
+        petani=request.user
+    ).order_by("-id")
+
+    return render(request, 'petani/bagihasil.html', {
+        'waktu': now(),
+        'dana': dana_masuk,
+        'projects': projects,
+        'alat': total_alat,
+        'totalbantuan': total_bantuan,
+        'nilaibarang': total_barang,
+    
+        'total_pengeluaran': total_pengeluaran,
+        'total_pendapatan': total_pendapatan,
+        'keuntungan_bersih': keuntungan_bersih,
+        'keuntungan_petani': keuntungan_petani,
+        'keuntungan_donatur': keuntungan_donatur,
+    })
+    
+@login_required
+def laporan_panen_bagihasil(request,project_id):
+    project = get_object_or_404(
+        Project,
+        id=project_id,
+        petani=request.user
+    )
+
+    if request.method == "POST":
+        form = formhasilpanen(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+            hasil_panen = form.save(commit=False)
+
+            hasil_panen.project = project
+
+            hasil_panen.save()
+
+            messages.success(
+                request,
+                "Hasil panen berhasil ditambahkan!"
+            )
+
+            return redirect('bagihasil_p')
+
+    else:
+        form = formhasilpanen()
+    
+    context = {
+        'project': project,
+        'form': form
+    }
+
+    return render(
+        request,
+        'petani/hasil_panen.html',
+        context
+    )

@@ -1,17 +1,147 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Skema Bagi Hasil</title>
 </head>
+
 <body>
-    <a href="{% url 'home_p' %}">Kembali</a>
+    
+
+    <a href="{% url 'home_p'%}">Kembali</a>
+
     <h1>Skema Bagi Hasil</h1>
+
     <h3>Total Pendapatan</h3>
-    <h3>Total Keuntungan Anda (60%) : </h3>
+    <h3>Total Keuntungan Anda (60%) :</h3>
     <h3>Bagian Donatur 40% :</h3>
-    
-    
+
+    <div>
+
+        <div>
+
+        </div>
+
+        <div>
+
+        </div>
+
+        <div>
+
+            <span>
+                <span></span>
+                Technology into Action
+            </span>
+
+            <h1>
+                Digitalisasi Lahan, <br>
+                <span>
+                    Tingkatkan Kapasitas.
+                </span>
+            </h1>
+
+            <p>
+                Kembangkan <em>Human Capital</em> Anda melalui ekosistem JejakDaya.
+                Ajukan kebutuhan alat atau bibit, dan biarkan teknologi
+                menghubungkan Anda dengan dukungan modal cerdas.
+            </p>
+
+        </div>
+    </div>
+<div class="max-w-7xl mx-auto px-4 md:px-8 relative z-20 -mt-28 md:-mt-36 lg:-mt-44 mb-20">
+
+    <div class="max-w-7xl mx-auto relative z-20 -mt-28 md:-mt-36 lg:-mt-44 mb-16">
+
+        <section
+            class="flex flex-nowrap overflow-x-auto snap-x snap-mandatory gap-6 px-4 md:px-8 pb-8 pt-4 hide-scrollbar animate-fade-in-up delay-300">
+
+            <div
+                class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div
+                        class="absolute -right-4 -bottom-4 text-jejak-primary/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-wallet text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total
+                        Dukungan Dana</p>
+                    <h3 class="text-3xl font-black text-jejak-primary relative z-10 whitespace-nowrap">Rp 
+                        Rp {{ dana|default:0|intcomma }}</h3>
+                </div>
+                <a href="{% url 'riwayat_donasi' %}"
+                    class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-50 text-gray-600 font-bold text-xs hover:bg-gray-100 hover:text-jejak-primary transition-all border border-gray-200 relative z-10">
+                    <i class="ph-bold ph-clock-counter-clockwise"></i> Riwayat Donasi
+                </a>
+            </div>
+
+            <div
+                class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-white/95 backdrop-blur-xl p-8 rounded-[2rem] shadow-xl border border-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div
+                        class="absolute -right-4 -bottom-4 text-jejak-accent/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-package text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Barang
+                        Masuk</p>
+                    <h3 class="text-3xl font-black text-jejak-accent relative z-10">{{ alat|default:0 }} <span
+                            class="text-sm font-bold opacity-60">Barang</span></h3>
+                    <h3 class="text-3xl font-black text-jejak-accent relative z-10 whitespace-nowrap">Rp
+                        Rp {{ nilaibarang|default:0|intcomma }}</h3>
+                    <p>nilai Barang</p>
+                </div>
+                <a href="{% url 'alat_in' %}"
+                    class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-jejak-accent/10 text-jejak-accent font-bold text-xs hover:bg-jejak-accent hover:text-white transition-all relative z-10">
+                    <i class="ph-bold ph-box-arrow-down"></i> Lihat Barang Masuk
+                </a>
+            </div>
+
+            <div
+                class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-gradient-to-br from-jejak-primary to-[#143a29] p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div
+                        class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-plant text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2 relative z-10">Proyek
+                        Aktif</p>
+                    <h3 class="text-3xl font-black relative z-10">{{ projects|length|default:0 }} <span
+                            class="text-lg font-medium opacity-60">Lahan</span></h3>
+                </div>
+                <a href="{% url 'allp' %}"
+                    class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white hover:text-jejak-primary transition-all border border-white/20 relative z-10">
+                    <i class="ph-bold ph-kanban"></i> Kelola Lahan
+                </a>
+            </div>
+            <div
+                class="w-[85vw] md:w-[320px] lg:w-[350px] shrink-0 snap-center bg-gradient-to-br from-[#0D3020] to-jejak-primary p-8 rounded-[2rem] shadow-2xl shadow-jejak-primary/30 text-white relative overflow-hidden group card-hover flex flex-col justify-between">
+                <div>
+                    <div
+                        class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110">
+                        <i class="ph-fill ph-trophy text-9xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-green-300 uppercase tracking-widest mb-2 relative z-10">Total
+                        Bantuan Masuk</p>
+                    <p class="text-[10px] text-green-200/70 font-medium mb-3 relative z-10">Uang + Nilai Barang</p>
+                </div>
+                <div class="mt-6 w-full py-3 rounded-xl bg-white/10 border border-white/20 text-center relative z-10">
+                    <h3>Rp {{ totalbantuan|default:0|intcomma }}</h3>
+                    <p class="text-xs font-bold text-green-200 flex items-center justify-center gap-2">
+                        <i class="ph-fill ph-seal-check text-base"></i> Total Akumulasi Dukungan
+                    </p>
+                </div>
+            </div>
+
+    <a href="{% url 'allp' %}">kirim laporan hasil Panen</a>
+
+
+    <h1>Skema Bagi Hasil</h1>
+    <h3>Total Pendapatan: Rp {{ total_pendapatan }}</h3>
+    <h3>Total Keuntungan Anda (60%): Rp {{ keuntungan_petani }}</h3>
+    <h3>Bagian Donatur (40%): Rp {{ keuntungan_donatur }}</h3>
+
 </body>
+
 </html>
