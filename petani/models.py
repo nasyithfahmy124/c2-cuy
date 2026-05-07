@@ -115,6 +115,32 @@ class Project(models.Model):
 
         return round((total / target) * 100, 1)
     
+
+
+    @property
+    def total_pengeluaran(self):
+        return self.laporan.aggregate(
+            total=Sum('jumlah_pengeluaran')
+        )['total'] or 0
+
+    @property
+    def total_pendapatan(self):
+        return self.hasil_panen.aggregate(
+            total=Sum('total_pendapatan')
+        )['total'] or 0
+
+    @property
+    def keuntungan_bersih(self):
+        return self.total_pendapatan - self.total_pengeluaran
+
+
+    @property
+    def keuntungan_petani(self):
+        return self.keuntungan_bersih * 0.6
+
+    @property
+    def keuntungan_donatur(self):
+        return self.keuntungan_bersih * 0.4
     
 class Laporan(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='laporan')
@@ -139,4 +165,34 @@ class KebutuhanBarang(models.Model):
     @property
     def total_harga(self):
         return self.harga_satuan * self.jumlah_dibutuhkan
+
+class HasilPanen(models.Model):
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='hasil_panen'
+    )
+
+    total_pendapatan = models.DecimalField(
+        max_digits=12,
+        decimal_places=0
+    )
+
+    keterangan = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    bukti_panen = models.ImageField(
+        upload_to='bukti_laporan/',
+        null=True,
+        blank=True
+    )
+
+    tanggal_panen = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Hasil Panen - {self.project.nama}"
+
+
     

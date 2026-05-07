@@ -34,7 +34,7 @@
     <p>Donasi Uang: Rp {{ dana }}</p>
     <p>Donasi Barang: Rp {{ nilaibarang }}</p>
     <p><b>Total Bantuan: Rp {{ totalbantuan }}</b></p>
-   <main class="flex-grow w-full relative">
+    <main class="flex-grow w-full relative">
         
         <div class="relative w-full h-[550px] lg:h-[650px] overflow-hidden">
             <img src="{% static 'assets/img/dakstop_bg.png' %}" class="hero-bg absolute inset-0 w-full h-full object-cover" alt="Background Pertanian">
@@ -103,6 +103,7 @@
                     <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 relative z-10">Total Barang Masuk</p>
                     <h3 class="text-3xl font-black text-jejak-accent relative z-10">{{ alat|default:0 }} <span class="text-sm font-bold opacity-60">Barang</span></h3>
                     <h3 class="text-3xl font-black text-jejak-accent relative z-10 whitespace-nowrap">Rp {{ nilaibarang|default:0|intcomma }}</h3>
+                    <p>nilai Barang</p>
                 </div>
                 <a href="{% url 'alat_in' %}" class="mt-6 inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-jejak-accent/10 text-jejak-accent font-bold text-xs hover:bg-jejak-accent hover:text-white transition-all relative z-10">
                     <i class="ph-bold ph-box-arrow-down"></i> Lihat Barang Masuk
@@ -182,7 +183,7 @@
                     </div>
                 </div>
         
-                <a href="{% url 'bagihasil' %}"
+                <a href="{% url 'bagihasil_p' %}"
                     class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-jejak-secondary/10 text-jejak-secondary text-xs font-bold hover:bg-jejak-secondary hover:text-white transition-all">
                     Lihat Detail
                     <i class="ph-bold ph-arrow-up-right"></i>

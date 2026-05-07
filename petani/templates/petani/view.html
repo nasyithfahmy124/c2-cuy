@@ -157,6 +157,10 @@
                                 class="flex items-center justify-center gap-2 py-3 rounded-xl bg-jejak-secondary text-white font-bold text-xs uppercase tracking-widest hover:brightness-95 transition-all shadow-lg shadow-jejak-secondary/30 active:scale-95">
                                 <i class="ph-bold ph-scroll text-base"></i> Lapor
                             </a>
+                            <a href="{% url 'laporan_panen' project.id %}"
+                                class="flex items-center justify-center gap-2 py-3 rounded-xl bg-green-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-green-700 transition-all shadow-lg shadow-green-600/30 active:scale-95">
+                                <i class="ph-bold ph-plant text-base"></i> Lapor Panen
+                            </a>
                         </div>
 
                         <form action="{% url 'delete' project.id %}" method="POST" class="w-full m-0" onsubmit="return confirm('Apakah Anda yakin ingin menghapus project ini secara permanen?');">

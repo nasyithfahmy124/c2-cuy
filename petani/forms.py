@@ -10,3 +10,8 @@ class FormLaporan(forms.ModelForm):
         model = Laporan
         fields = ['judul', 'deskripsi', 'jumlah_pengeluaran', 'bukti']
         
+class formhasilpanen(forms.ModelForm):
+    class Meta:
+        model = HasilPanen
+        fields = ['total_pendapatan','keterangan','bukti_panen',]
+        
