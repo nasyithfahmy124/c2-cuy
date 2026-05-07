@@ -2,14 +2,15 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FormDonasi,FormDonasiBarang
-from petani.models import Project,Laporan
+from petani.models import Project,Laporan,KebutuhanBarang
 from .forms import FormDonasiBarang,FormDonasiBarangItem,DonasiBarangItemFormSet
-from django.db.models import Sum, Value
-from .models import Donasi,DonasiBarang
+from django.db.models import Sum, Value,F
+from .models import Donasi,DonasiBarang,DonasiBarangItem
 from django.contrib import messages
 from itertools import chain
 from django.db.models.functions import Coalesce
-
+from django.forms import inlineformset_factory
+from django.db.models import Q
 # Create your views here.
 @login_required
 def home_page(request):
@@ -24,12 +25,18 @@ def home_page(request):
     total_dana = Donasi.objects.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
     total_project = projects.count()
     total_petani = Project.objects.values('petani').distinct().count()
+    
+    #donasiuser
+    total = Donasi.objects.filter(donatur=request.user).aggregate(
+    total_jumlah=Sum('jumlah')
+)
 
     return render(request, 'donatur/home_d.html', {
         'projects': projects,
         'total_dana': total_dana,
         'total_project': total_project,
-        'total_petani': total_petani
+        'total_petani': total_petani,
+        'total_uang' : total['total_jumlah'] or 0
     })
 
 @login_required
@@ -77,37 +84,7 @@ def danai_project(request, id):
         'project': project
     })
     
-# @login_required
-# def donasi_barang(request, id):
-#     project = Project.objects.get(id= id)
 
-#     if request.method == 'POST':
-#         form = FormDonasiBarang(request.POST)
-#         formset = DonasiBarangItemFormSet(request.POST)
-
-#         if form.is_valid() and formset.is_valid():
-#             donasi = form.save(commit=False)
-#             donasi.donatur = request.user
-#             donasi.project = project
-#             donasi.save()
-
-#             formset.instance = donasi
-#             formset.save()
-
-#             return redirect('home_d')
-
-#     else:
-#         form = FormDonasiBarang()
-#         formset = DonasiBarangItemFormSet()
-
-#     return render(request, 'donatur/danaibarang.html', {
-#         'form': form,
-#         'formset': formset,
-#     })
-
-from django.forms import inlineformset_factory
-from .models import DonasiBarangItem
-from petani.models import KebutuhanBarang
 def donasi_barang(request, id):
     project = Project.objects.get(id=id)
 
@@ -147,10 +124,6 @@ def donasi_barang(request, id):
             form_kwargs={'project': project}
         )
 
-        # 🔥 inject juga saat GET
-        # for f in formset.forms:
-        #     f.fields['kebutuhan'].queryset = KebutuhanBarang.objects.filter(project=project)
-
     return render(request, 'donatur/danaibarang.html', {
         'form': form,
         'formset': formset,
@@ -181,8 +154,7 @@ def detail(request, id):
 @login_required 
 def detail_donasi(request):
     riwayat = Donasi.objects.filter(donatur=request.user)
-    riwayat_barang = DonasiBarang.objects.filter(donatur=request.user)
-
+    riwayat_barang = DonasiBarang.objects.filter(donatur=request.user).prefetch_related('items')
     for r in riwayat:
         r.tipe = 'uang'
 
@@ -194,9 +166,11 @@ def detail_donasi(request):
         key=lambda x: x.tanggal,
         reverse=True
     )
+    print("RIWAYAT BARANG:", riwayat_barang)
 
     return render(request,'donatur/riwayat.html',{
-        'semua': semua_riwayat
+        'semua': semua_riwayat,
+
     })
 @login_required
 def laporan_donatur(request):
@@ -210,6 +184,85 @@ def laporan_donatur(request):
         'laporan': laporan
     })
     
+from django.db.models import Sum
+
+from django.db.models import Sum, F
 @login_required
 def bagihasil(request):
-    return render(request,'donatur/bagihasil.html')
+
+    # total bantuan uang
+    uang = Donasi.objects.filter(
+        donatur=request.user
+    ).aggregate(
+        total=Sum('jumlah')
+    )['total'] or 0
+
+    # total bantuan barang (nilai rupiah)
+    total_barang = DonasiBarangItem.objects.filter(
+        donasi__donatur=request.user
+    ).aggregate(
+        total=Sum(
+            F('jumlah') * F('kebutuhan__harga_satuan')
+        )
+    )['total'] or 0
+
+    # total saldo bantuan
+    total_saldo = uang + total_barang
+
+    # petani dari donasi uang
+    petani_uang = Donasi.objects.filter(
+        donatur=request.user
+    ).values_list(
+        'project__petani_id',
+        flat=True
+    )
+
+    # petani dari donasi barang
+    petani_barang = DonasiBarang.objects.filter(
+        donatur=request.user
+    ).values_list(
+        'project__petani_id',
+        flat=True
+    )
+
+    jumlah_petani = len(
+        set(list(petani_uang) + list(petani_barang))
+    )
+    return render(request, 'donatur/bagihasil.html', {
+        'total_uang': uang,
+        'bantuan_u': uang,
+        'nilai_barang': total_barang,
+        'uang_barang': total_saldo,
+        'jumlah_petani': jumlah_petani,
+        
+    })
+    
+@login_required
+def yangdibantu(request):
+    projects = Project.objects.filter(
+        Q(donasi__donatur=request.user) |
+        Q(donasibarang__donatur=request.user)
+    ).distinct()
+    
+    return render(request,'donatur/yangdidanai.html',{
+        'projects': projects,
+    })
+@login_required
+def laporan2(request, id):
+
+    project = get_object_or_404(
+        Project.objects.filter(
+            Q(donasi__donatur=request.user) |
+            Q(donasibarang__donatur=request.user)
+        ).distinct(),
+        id=id
+    )
+
+    laporan = project.laporan.all()
+    hasil_panen = project.hasil_panen.all()
+
+    return render(request, 'donatur/laporan_bantuan.html', {
+        'project': project,
+        'laporan': laporan,
+        'hasil_panen': hasil_panen,
+    })

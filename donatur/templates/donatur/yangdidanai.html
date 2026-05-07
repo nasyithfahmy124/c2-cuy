@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="{% url 'bagihasil' %}">kembali</a>
+    {% for project in projects %}
+    
+    <div class="bg-white p-6 rounded-2xl shadow">
+    
+        <img src="{{ project.foto_lahan.url }}" class="w-full h-48 object-cover rounded-xl">
+    
+        <h2 class="text-2xl font-bold mt-4">
+            {{ project.nama }}
+        </h2>
+    
+        <p>{{ project.lokasi }}</p>
+    
+        <p>Petani: {{ project.petani.username }}</p>
+    
+        <!-- progress dana -->
+        <div class="mt-4">
+            <p>Dana Terkumpul {{ project.persentase }}%</p>
+    
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-green-500 h-3 rounded-full" style="width: {{ project.persentase }}%">
+                </div>
+            </div>
+        </div>
+    
+        <!-- progress barang -->
+        <div class="mt-4">
+            <p>Progress Barang {{ project.progress_barang }}%</p>
+    
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-orange-500 h-3 rounded-full" style="width: {{ project.progress_barang }}%">
+                </div>
+            </div>
+        </div>
+    
+    
+        <p>estimasi : {{ project.berapa_bulan }} bulan </p>
+        <p>no hp : {{ project.no_hp }}</p>
+
+        <a href="{% url 'laporan2' project.id %}">lihat laporan</a>
+    
+    </div>
+    
+    {% endfor %}
+</body>
+</html>

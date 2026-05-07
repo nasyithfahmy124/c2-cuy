@@ -190,12 +190,8 @@ def alat_masuk(request):
     )
 
     data = defaultdict(lambda: {"masuk": 0, "target": 0})
-
-    # 🎯 TARGET (nilai kebutuhan)
     for k in kebutuhan:
         data[k.nama_barang]["target"] += k.jumlah_dibutuhkan * k.harga_satuan
-
-    # 🎯 REALISASI (nilai donasi)
     for item in items:
         nama = item.kebutuhan.nama_barang
         data[nama]["masuk"] += item.jumlah * item.kebutuhan.harga_satuan
@@ -253,8 +249,6 @@ def bagihasil(request):
     )['total'] or 0
 
     total_bantuan = dana_masuk + total_barang
-
-    # ================= PROFIT =================
     total_pengeluaran = Laporan.objects.filter(
         project__petani=request.user
     ).aggregate(
