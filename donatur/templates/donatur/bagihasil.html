@@ -1,3 +1,5 @@
+{% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +8,19 @@
     <title>Document</title>
 </head>
 <body>
+    <a href="{% url 'home_d' %}">kembali</a>
     <h1>Bagi hasil DOnatur</h1>
+    
+    <h4>saldo kamu {{ total_uang }}</h4>
+    <a href="{% url 'riwayat_d' %}">riwayat donasi</a>
+    <p>total petani yang kamu bantu : {{ jumlah_petani }}</p>
+    <a href="{% url 'rbantuan' %}">lihat yang kamu bantu</a>
+    <p>nilai barang : {{nilai_barang}}</p>
+    <p>jadi total nilai yang kamu  bantu : {{ uang_barang }}</p>
+
+    
+
+
+
 </body>
 </html>

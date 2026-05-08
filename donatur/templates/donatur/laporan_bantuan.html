@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for laporan in laporan %}
+    
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+    
+        <!-- header -->
+        <div class="flex items-start justify-between gap-4 mb-4">
+    
+            <div>
+                <h2 class="text-xl font-bold text-gray-900">
+                    {{ laporan.judul }}
+                </h2>
+    
+                <p class="text-sm text-gray-500 mt-1">
+                    {{ laporan.tanggal|date:"d M Y • H:i" }}
+                </p>
+            </div>
+    
+            <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-sm font-bold">
+                Rp {{ laporan.jumlah_pengeluaran }}
+            </div>
+    
+        </div>
+    
+        <!-- deskripsi -->
+        <div class="mb-4">
+            <p class="text-gray-700 leading-relaxed">
+                {{ laporan.deskripsi }}
+            </p>
+        </div>
+    
+        <!-- gambar bukti -->
+        {% if laporan.bukti %}
+        <div class="overflow-hidden rounded-2xl border border-gray-100">
+            <img src="{{ laporan.bukti.url }}" alt="{{ laporan.judul }}"
+                class="w-full h-64 object-cover hover:scale-105 transition duration-300">
+        </div>
+        {% endif %}
+    
+    </div>
+    
+    {% empty %}
+    
+    <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-10 text-center">
+    
+        <h3 class="text-lg font-bold text-gray-700 mb-2">
+            Belum Ada Laporan
+        </h3>
+    
+        <p class="text-gray-500">
+            Petani belum mengunggah perkembangan project.
+        </p>
+    
+    </div>
+    
+    {% endfor %}
+</body>
+</html>

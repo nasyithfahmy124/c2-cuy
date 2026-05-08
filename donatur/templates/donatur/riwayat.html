@@ -23,7 +23,6 @@
 <body class="bg-jejak-bg text-gray-800 antialiased min-h-screen flex flex-col selection:bg-jejak-primary selection:text-white">
 
     {% include 'donatur/partials/navbar.html' %}
-
     <main class="flex-grow w-full max-w-4xl mx-auto px-4 md:px-8 py-10">
         <div class="space-y-4">
             {% if semua %}
@@ -55,9 +54,25 @@
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Pendanaan</p>
                             <p class="text-xl font-black text-jejak-primary font-heading whitespace-nowrap">Rp {{ item.jumlah|intcomma }}</p>
                         {% else %}
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Distribusi Barang</p>
-                            <p class="text-lg font-black text-jejak-accent font-heading">{{ item }}</p>
-                            <p class="text-xs font-bold text-gray-500">{{ item.jumlah }} Unit</p>
+                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                            Distribusi Barang
+                        </p>
+                        
+                        {% for it in item.items.all %}
+                        <div class="flex flex-col">
+                            <p class="text-lg font-black text-jejak-accent font-heading">
+                                {{ it.kebutuhan.nama_barang }}
+                            </p>
+                        
+                            <p class="text-xs font-bold text-gray-500">
+                                {{ it.jumlah }} Unit
+                            </p>
+                        
+                            <p class="text-[10px] text-gray-400">
+                                Subtotal: Rp {{ it.subtotal|floatformat:0 }}
+                            </p>
+                        </div>
+                        {% endfor %}
                         {% endif %}
                     </div>
                 </div>
@@ -74,6 +89,17 @@
             {% endif %}
         </div>
     </main>
+
+    {% if item.tipe == 'barang' %}
+    {% for i in item.items.all %}
+    <p class="text-lg font-black text-jejak-accent font-heading">
+        {{ i.kebutuhan.nama_barang }}
+    </p>
+    <p class="text-xs font-bold text-gray-500">
+        {{ i.jumlah }} Unit
+    </p>
+    {% endfor %}
+    {% endif %}
 
 </body>
 </html>
