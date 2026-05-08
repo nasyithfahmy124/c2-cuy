@@ -12,33 +12,38 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
       colors: {
         jejak: {
-          primary: '#1F4D3A',
-          secondary: '#468432',
-          accent: '#C76B4E',
-          bg: '#F7F3EA',
-          text: '#1F2933',
+          primary: "#1D4D3A",
+          secondary: "#4D7C3E",
+          accent: "#D4A017",
+          bg: "#F6F8F4",
+          text: "#0F172A",
         },
       },
+
+      boxShadow: {
+        glass: "0 10px 40px rgba(15,23,42,0.08)",
+        soft: "0 8px 30px rgba(0,0,0,0.06)",
+      },
+
+      borderRadius: {
+        card: "2rem",
+      },
+
       animation: {
-        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'float': 'float 6s ease-in-out infinite',
+        shimmer: "shimmer 2s linear infinite",
       },
+
       keyframes: {
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        shimmer: {
+          "100%": {
+            transform: "translateX(200%)",
+          },
         },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-15px)' },
-        }
-      }
+      },
     },
   },
+
   plugins: [],
 }

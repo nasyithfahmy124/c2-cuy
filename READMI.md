@@ -70,4 +70,5 @@ python manage.py runserver
 
 8. SET UP TAILDWIN
    a. npm install
-   b. npm run dev
+   b. npx tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch
+   c. npm run watch
