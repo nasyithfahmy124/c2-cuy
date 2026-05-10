@@ -2,29 +2,43 @@ from collections import defaultdict
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from .forms import FormDonasi, FormLaporan
+from .forms import FormDonasi, FormLaporan,formhasilpanen
 from django.contrib import messages
-from .models import KebutuhanBarang, Project,Laporan  
-from django.db.models import Sum, Q
+from .models import KebutuhanBarang, Project,Laporan ,HasilPanen
+from django.db.models import Sum, Q,F
 from donatur.models import Donasi,DonasiBarang
 import json
-
+from donatur.models import DonasiBarangItem
+from petani.models import KebutuhanBarang
+from django.db import transaction
+from collections import defaultdict
+from decimal import Decimal
 # Create your views here.
 @login_required
 def home_page(request):
     dana_masuk = Donasi.objects.filter(
     project__petani=request.user).aggregate(total=Sum('jumlah'))['total'] or 0
     total_alat = DonasiBarang.objects.filter(
-        project__petani=request.user
-    ).aggregate(total=Sum('jumlah'))['total'] or 0
+    project__petani=request.user
+    ).aggregate(total=Sum('items__jumlah'))['total'] or 0
+    total_barang = DonasiBarangItem.objects.filter(
+        donasi__project__petani=request.user
+    ).aggregate(
+        total=Sum(F('jumlah') * F('kebutuhan__harga_satuan'))
+    )['total'] or 0
 
+    # 🔥 TOTAL SEMUA
+    total_bantuan = dana_masuk + total_barang
     waktu = datetime.now()
     projects = Project.objects.filter(petani=request.user).order_by("-id")
+    print("TOTAL BARANG:", total_barang)
     return render(request,'petani/home_p.html',{
         'waktu' : waktu,
         'dana' : dana_masuk,
         'projects': projects,
-        'alat' : total_alat 
+        'alat' : total_alat ,
+        'totalbantuan' : total_bantuan,
+        'nilaibarang' : total_barang
     })
 
 @login_required
@@ -33,30 +47,52 @@ def donasi(request):
         form = FormDonasi(request.POST, request.FILES)
 
         if form.is_valid():
-            project = form.save(commit=False)
-            project.petani = request.user
-            project.save()
+            try:
+                with transaction.atomic():
+                    project = form.save(commit=False)
+                    project.petani = request.user
+                    project.save()
+                    
+                    nama_barang_list = request.POST.getlist('nama_barang[]')
+                    jumlah_barang_list = request.POST.getlist('jumlah_barang[]')
+                    harga_list = request.POST.getlist('harga_satuan[]')
+                    satuan_list = request.POST.getlist('satuan[]')
 
-            nama_barang_list = request.POST.getlist('nama_barang[]')
-            jumlah_barang_list = request.POST.getlist('jumlah_barang[]')
+                    for nama, jumlah, harga, satuan in zip(
+                        nama_barang_list,
+                        jumlah_barang_list,
+                        harga_list,
+                        satuan_list
+                    ):
+                        if nama and jumlah:
+                            try:
+                                jumlah = int(jumlah)
+                                harga = int(harga) if harga else 0
+                            except ValueError:
+                                continue
 
-            for nama, jumlah in zip(nama_barang_list, jumlah_barang_list):
-                if nama and jumlah:
-                    KebutuhanBarang.objects.create(
-                        project=project,
-                        nama_barang=nama,
-                        jumlah_dibutuhkan=jumlah
-                    )
+                            total = jumlah * harga
 
-            messages.success(request, 'Project dan kebutuhan berhasil dibuat!')
-            return redirect('home_p')
+                            KebutuhanBarang.objects.create(
+                                project=project,
+                                nama_barang=nama,
+                                jumlah_dibutuhkan=jumlah,
+                                harga_satuan=harga,
+                                satuan=satuan or "item"
+                            )
+
+                messages.success(request, 'Project dan kebutuhan berhasil dibuat!')
+                return redirect('home_p')
+
+            except Exception as e:
+                messages.error(request, f'Terjadi error: {e}')
     else:
         form = FormDonasi()
+        print(form.errors) 
 
     return render(request, 'petani/projek.html', {
         'formd': form,
     })
-    
 
 @login_required
 def riwayat_donasi(request):
@@ -139,10 +175,14 @@ def hapus_project(request,id):
         messages.success(request,"Hapus project berhasil bos")
         return redirect('home_p')
 
+
+
+
+
 @login_required
 def alat_masuk(request):
-    barang_masuk = DonasiBarang.objects.filter(
-        project__petani=request.user
+    items = DonasiBarangItem.objects.filter(
+        donasi__project__petani=request.user
     )
 
     kebutuhan = KebutuhanBarang.objects.filter(
@@ -150,13 +190,11 @@ def alat_masuk(request):
     )
 
     data = defaultdict(lambda: {"masuk": 0, "target": 0})
-
     for k in kebutuhan:
-        data[k.nama_barang]["target"] += k.jumlah_dibutuhkan
-
-    for b in barang_masuk:
-        nama = b.nama_barang_custom or (b.kebutuhan.nama_barang if b.kebutuhan else "Lainnya")
-        data[nama]["masuk"] += b.jumlah
+        data[k.nama_barang]["target"] += k.jumlah_dibutuhkan * k.harga_satuan
+    for item in items:
+        nama = item.kebutuhan.nama_barang
+        data[nama]["masuk"] += item.jumlah * item.kebutuhan.harga_satuan
 
     tracking = []
     total_masuk = 0
@@ -178,23 +216,113 @@ def alat_masuk(request):
         total_masuk += masuk
         total_target += target
 
-    labels = [item["nama"] for item in tracking]
-    data_masuk = [item["masuk"] for item in tracking]
-    data_target = [item["target"] for item in tracking]
-
     progress_total = round((total_masuk / total_target) * 100, 1) if total_target else 0
-
+    
     return render(request, 'petani/alat_masuk.html', {
-        'alat': barang_masuk.order_by('-id'),
         'tracking': tracking,
-        'total_barang': total_masuk,
-        'total_kebutuhan': total_target,
+        'total_uang_masuk': total_masuk,
+        'total_kebutuhan_uang': total_target,
+        'sisa_uang': total_target - total_masuk,
         'progress_total': progress_total,
-        'labels': json.dumps(labels),
-        'data_masuk': json.dumps(data_masuk),
-        'data_target': json.dumps(data_target),
     })
+from django.db.models import Sum, F
+from decimal import Decimal
+from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 @login_required
 def bagihasil(request):
-    return render(request,'petani/bagihasil.html')
+
+    dana_masuk = Donasi.objects.filter(
+        project__petani=request.user
+    ).aggregate(total=Sum('jumlah'))['total'] or 0
+
+    total_alat = DonasiBarang.objects.filter(
+        project__petani=request.user
+    ).aggregate(total=Sum('items__jumlah'))['total'] or 0
+
+    total_barang = DonasiBarangItem.objects.filter(
+        donasi__project__petani=request.user
+    ).aggregate(
+        total=Sum(F('jumlah') * F('kebutuhan__harga_satuan'))
+    )['total'] or 0
+
+    total_bantuan = dana_masuk + total_barang
+    total_pengeluaran = Laporan.objects.filter(
+        project__petani=request.user
+    ).aggregate(
+        total=Sum('jumlah_pengeluaran')
+    )['total'] or 0
+
+    total_pendapatan = HasilPanen.objects.filter(
+        project__petani=request.user
+    ).aggregate(
+        total=Sum('total_pendapatan')
+    )['total'] or 0
+
+    keuntungan_bersih = total_pendapatan - total_pengeluaran
+
+    keuntungan_petani = keuntungan_bersih * Decimal('0.6')
+    keuntungan_donatur = keuntungan_bersih * Decimal('0.4')
+
+    projects = Project.objects.filter(
+        petani=request.user
+    ).order_by("-id")
+
+    return render(request, 'petani/bagihasil.html', {
+        'waktu': now(),
+        'dana': dana_masuk,
+        'projects': projects,
+        'alat': total_alat,
+        'totalbantuan': total_bantuan,
+        'nilaibarang': total_barang,
+    
+        'total_pengeluaran': total_pengeluaran,
+        'total_pendapatan': total_pendapatan,
+        'keuntungan_bersih': keuntungan_bersih,
+        'keuntungan_petani': keuntungan_petani,
+        'keuntungan_donatur': keuntungan_donatur,
+    })
+    
+@login_required
+def laporan_panen_bagihasil(request,project_id):
+    project = get_object_or_404(
+        Project,
+        id=project_id,
+        petani=request.user
+    )
+
+    if request.method == "POST":
+        form = formhasilpanen(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+            hasil_panen = form.save(commit=False)
+
+            hasil_panen.project = project
+
+            hasil_panen.save()
+
+            messages.success(
+                request,
+                "Hasil panen berhasil ditambahkan!"
+            )
+
+            return redirect('bagihasil_p')
+
+    else:
+        form = formhasilpanen()
+    
+    context = {
+        'project': project,
+        'form': form
+    }
+
+    return render(
+        request,
+        'petani/hasil_panen.html',
+        context
+    )

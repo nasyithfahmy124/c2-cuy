@@ -8,5 +8,7 @@ urlpatterns = [
     path('donatur/donasi-barang/<int:id>/', views.donasi_barang, name='donasi_barang'),
     path('riwayat-donatur/',views.detail_donasi,name='riwayat_d'),
     path('laporan-donatur/', views.laporan_donatur, name='laporan_donatur'),
-    path('donatur/bagi-hasil/',views.bagihasil,name='bagihasil')
+    path('donatur/bagi-hasil/',views.bagihasil,name='bagihasil'),
+    path('donatur/riwayat-bantuan/',views.yangdibantu,name='rbantuan'),
+    path('donatur/laporan-bagihasil/<int:id>/',views.laporan2,name='laporan2')
 ]

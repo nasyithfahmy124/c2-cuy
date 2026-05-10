@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
 from petani.models import Project
-# Create your models here.
+from django.core.exceptions import ValidationError
+
 class Donasi(models.Model):
     donatur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -23,23 +24,42 @@ class DonasiBarang(models.Model):
     ]
 
     donatur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-
-    kebutuhan = models.ForeignKey(
-        'petani.KebutuhanBarang',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
-    
-    nama_barang_custom = models.CharField(max_length=100, null=True, blank=True)
-
-    jumlah = models.IntegerField()
-    deskripsi = models.TextField(null=True, blank=True)
-
+    project = models.ForeignKey('petani.Project', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='diajukan')
     tanggal = models.DateTimeField(auto_now_add=True)
 
+    def total_harga(self):
+        return sum(item.subtotal() for item in self.items.all())
+
     def __str__(self):
-        return self.nama_barang_custom or (self.kebutuhan.nama_barang if self.kebutuhan else "Barang")
+        return f"Donasi {self.id} - {self.project.nama}"
+
+class DonasiBarangItem(models.Model):
+    donasi = models.ForeignKey(DonasiBarang, related_name='items', on_delete=models.CASCADE)
+    kebutuhan = models.ForeignKey('petani.KebutuhanBarang', on_delete=models.CASCADE)
+    jumlah = models.IntegerField()
+
+    def subtotal(self):
+        return self.jumlah * self.kebutuhan.harga_satuan
+
+    def __str__(self):
+        return f"{self.kebutuhan.nama_barang} x {self.jumlah}"
+    
+    def clean(self):
+    
+
+        total_sudah = DonasiBarangItem.objects.filter(
+            kebutuhan=self.kebutuhan
+        ).exclude(id=self.id).aggregate(
+            total=Sum('jumlah')
+        )['total'] or 0
+
+        total_baru = total_sudah + self.jumlah
+
+        if total_baru > self.kebutuhan.jumlah_dibutuhkan:
+            raise ValidationError(
+                f"Melebihi kebutuhan! Maksimal sisa: {self.kebutuhan.jumlah_dibutuhkan - total_sudah}"
+            )
+    
+# class KeuntunganDonatur(models.Model):
+#     untung_d  = models.DecimalField(max_digits=12,decimal_places=0,default=0)

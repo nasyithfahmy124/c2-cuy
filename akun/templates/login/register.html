@@ -1,155 +1,314 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - JejakDaya</title>
-    
+
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/logo4.svg' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}">
 
     <style>
-        [data-animate] {
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #eef5f1;
+        }
+
+        .fade-element {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(24px);
+            transition: all .8s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .fade-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-section {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(26px);
+            -webkit-backdrop-filter: blur(26px);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow:
+                10px 0 40px rgba(15, 23, 42, 0.05),
+                inset -1px 0 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(203, 213, 225, 0.8);
+        }
+
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(16, 185, 129, .5);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, .08);
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 100px white inset !important;
+            -webkit-text-fill-color: #0f172a !important;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col lg:flex-row-reverse bg-jejak-bg font-sans text-jejak-text">
 
-    <div class="flex relative bg-jejak-primary overflow-hidden w-full lg:w-1/2 min-h-[30vh] lg:min-h-screen">
-        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="JejakDaya Background" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60">
-        <div class="absolute inset-0 bg-gradient-to-t from-jejak-primary via-jejak-primary/80 to-transparent"></div>
+<body class="min-h-screen overflow-x-hidden lg:overflow-hidden text-slate-800">
 
-        <div class="relative z-10 p-6 lg:p-12 flex flex-col justify-center lg:justify-between h-full w-full">
-            <div class="flex items-center lg:justify-end gap-3 text-white w-full mb-auto lg:mb-0">
-                <div class="w-10 h-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center backdrop-blur-sm lg:order-last">
-                    <i class="ph-fill ph-leaf text-xl"></i>
-                </div>
-                <span class="text-xl font-bold tracking-tight">JejakDaya</span>
+    <div class="flex flex-col lg:flex-row-reverse min-h-screen lg:h-screen">
+        <div
+            class="relative w-full lg:w-[55%] min-h-[42vh] lg:min-h-screen overflow-hidden flex flex-col justify-between p-8 lg:p-14">
+            <img src="{% static 'assets/img/dakstop_bg.png' %}"
+                alt="Background"
+                class="absolute inset-0 w-full h-full object-cover scale-110 opacity-25">
+            <div
+                class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.18),_transparent_30%),linear-gradient(to_bottom_left,#f0fdf4,#d1fae5,#ecfdf5)]">
             </div>
-
-            <div class="text-white mt-6 lg:mt-auto lg:mb-10 lg:text-right">
-                <h1 class="text-3xl lg:text-5xl font-bold leading-tight mb-2 lg:mb-4">Mulai Ciptakan<br>Dampak Positif.</h1>
-                <p class="hidden sm:block text-white/80 text-sm lg:text-lg lg:ml-auto max-w-md">Bergabunglah sebagai donatur untuk mendukung kemandirian pangan, atau sebagai petani milenial.</p>
+            <div
+                class="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-emerald-300/30 rounded-full blur-3xl">
+            </div>
+            <div
+                class="absolute bottom-[-100px] left-[-100px] w-[240px] h-[240px] bg-teal-200/40 rounded-full blur-3xl">
+            </div>
+            <div class="relative z-10 flex items-center justify-start lg:justify-end gap-4 fade-element">
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">
+                    JejakDaya<span class="text-emerald-500">.</span>
+                </h1>
+                <div
+                    class="w-14 h-14 rounded-2xl bg-white/60 backdrop-blur-xl border border-white/50 flex items-center justify-center shadow-lg">
+                    <i class="ph-fill ph-leaf text-3xl text-emerald-500"></i>
+                </div>
+            </div>
+            <div class="relative z-10 max-w-2xl lg:ml-auto lg:text-right fade-element"
+                style="transition-delay: 150ms;">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 border border-white/60 backdrop-blur-xl text-emerald-700 text-xs font-bold uppercase tracking-[0.2em] mb-7 shadow-sm">
+                    <i class="ph-fill ph-seedling"></i>
+                    Mulai Perjalanan
+                </div>
+                <h2
+                    class="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight text-slate-900">
+                    Mulai Ciptakan
+                    <br>
+                    <span
+                        class="bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                        Dampak Positif.
+                    </span>
+                </h2>
+                <p class="mt-7 text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl lg:ml-auto">
+                    Bergabunglah sebagai donatur untuk mendukung ketahanan pangan dan bantu petani milenial berkembang
+                    melalui ekosistem digital JejakDaya.
+                </p>
             </div>
         </div>
-    </div>
-
-    <div class="w-full lg:w-1/2 flex flex-grow items-center justify-center p-6 sm:p-12 lg:p-16 xl:p-24 bg-jejak-bg relative z-20 -mt-8 lg:mt-0 rounded-t-[2rem] lg:rounded-none shadow-[0_-8px_30px_-15px_rgba(0,0,0,0.3)] lg:shadow-none overflow-y-auto">
-        <div class="w-full max-w-md space-y-8" data-animate>
-            
-            <div class="text-center lg:text-left mt-2 lg:mt-0">
-                <h2 class="text-3xl font-bold text-jejak-primary mb-2">Buat Akun Baru</h2>
-                <p class="text-gray-500">Bergabung dengan ekosistem JejakDaya.</p>
+        <div
+            class="relative w-full lg:w-[45%] flex items-center justify-center px-6 py-10 lg:px-14 lg:py-0 glass-section">
+            <div
+                class="absolute top-10 left-10 w-72 h-72 bg-emerald-200/50 rounded-full blur-3xl">
             </div>
-
-            {% if form.errors %}
-            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200">
-                <p class="text-sm font-semibold text-red-700 mb-1 flex items-center gap-2"><i class="ph-fill ph-warning-circle"></i> Terdapat kesalahan:</p>
-                <ul class="text-sm text-red-600 list-disc list-inside">
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
+            <div
+                class="absolute bottom-0 right-0 w-72 h-72 bg-teal-100/60 rounded-full blur-3xl">
             </div>
-            {% endif %}
-
-            <form method="post" action="{% url 'register' %}" class="space-y-5">
-                {% csrf_token %}
-
-                <div class="space-y-1.5">
-                    <label for="username" class="text-sm font-semibold text-gray-700">Username</label>
-                    <div class="relative">
-                        <i class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="text" name="username" id="username" required placeholder="Pilih username" 
-                            class="w-full pl-11 pr-4 py-3 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
-                    </div>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label for="role" class="text-sm font-semibold text-gray-700">Peran Anda</label>
-                    <div class="relative">
-                        <i class="ph ph-briefcase absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
-                        <select name="role" id="role" required class="w-full pl-11 pr-10 py-3 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm appearance-none cursor-pointer">
-                            <option value="" disabled selected>Pilih peran...</option>
-                            <option value="petani">Petani Milenial</option>
-                            <option value="donatur">Donatur / Investor</option>
-                        </select>
-                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label for="password1" class="text-sm font-semibold text-gray-700">Password</label>
-                        <div class="relative">
-                            <i class="ph ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                            <input type="password" name="password1" id="password1" required placeholder="Sandi rahasia" 
-                                class="w-full pl-11 pr-12 py-3 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
-                            <button type="button" onclick="togglePassword('password1', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-jejak-primary">
-                                <i class="ph ph-eye text-xl"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="space-y-1.5">
-                        <label for="password2" class="text-sm font-semibold text-gray-700">Ulangi Password</label>
-                        <div class="relative">
-                            <i class="ph ph-check-circle absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                            <input type="password" name="password2" id="password2" required placeholder="Ketik ulang" 
-                                class="w-full pl-11 pr-12 py-3 bg-white border border-gray-300 rounded-xl focus:border-jejak-primary focus:ring-2 focus:ring-jejak-primary/20 outline-none transition-all text-sm">
-                            <button type="button" onclick="togglePassword('password2', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-jejak-primary">
-                                <i class="ph ph-eye text-xl"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex items-start gap-2 pt-2">
-                    <input type="checkbox" required class="mt-1 w-4 h-4 rounded border-gray-300 text-jejak-primary focus:ring-jejak-primary cursor-pointer">
-                    <p class="text-xs text-gray-500 leading-relaxed">
-                        Dengan mendaftar, saya setuju dengan <a href="#" class="font-semibold text-jejak-primary hover:underline">Syarat & Ketentuan</a> JejakDaya.
+            <div class="relative z-10 w-full max-w-md fade-element"
+                style="transition-delay: 300ms;">
+                <div class="mb-8 text-center lg:text-left">
+                    <h3 class="text-4xl font-extrabold tracking-tight text-slate-900">
+                        Buat Akun
+                        <span class="text-emerald-500">Baru</span>
+                    </h3>
+                    <p class="mt-3 text-slate-500 text-sm sm:text-base leading-relaxed">
+                        Bergabung dengan ekosistem digital JejakDaya.
                     </p>
                 </div>
-
-                <button type="submit" class="w-full py-4 mt-2 bg-jejak-primary hover:bg-jejak-primary/90 text-white rounded-xl font-semibold shadow-lg shadow-jejak-primary/30 transition-all active:scale-[0.98]">
-                    Daftar Sekarang
-                </button>
-            </form>
-
-            <p class="mt-8 text-center text-sm text-gray-600 pb-6 lg:pb-0">
-                Sudah punya akun? 
-                <a href="{% url 'login' %}" class="font-semibold text-jejak-primary hover:underline underline-offset-4">Masuk di sini</a>
-            </p>
-
+                {% if form.errors %}
+                <div class="mb-6 rounded-2xl bg-red-50 border border-red-200 px-5 py-4">
+                    <p class="text-sm font-bold text-red-700 flex items-center gap-2 mb-2">
+                        <i class="ph-fill ph-warning-circle"></i>
+                        Terdapat kesalahan:
+                    </p>
+                    <ul class="space-y-1 text-sm text-red-600">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li>• {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>• {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <form method="post" action="{% url 'register' %}" class="space-y-5">
+                    {% csrf_token %}
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700">
+                            Username
+                        </label>
+                        <div class="relative">
+                            <i
+                                class="ph ph-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                            <input
+                                type="text"
+                                name="username"
+                                id="username"
+                                required
+                                placeholder="Pilih username"
+                                class="glass-input w-full rounded-2xl py-4 pl-12 pr-4 outline-none transition-all duration-300 text-slate-800 placeholder:text-slate-400">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-slate-700">
+                            Peran Anda
+                        </label>
+                        <div class="relative">
+                            <i
+                                class="ph ph-briefcase absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none"></i>
+                            <select
+                                name="role"
+                                id="role"
+                                required
+                                class="glass-input appearance-none w-full rounded-2xl py-4 pl-12 pr-12 outline-none transition-all duration-300 text-slate-800">
+                                <option value="" disabled selected>
+                                    Pilih peran...
+                                </option>
+                                <option value="petani">
+                                    Petani Gen-z
+                                </option>
+                                <option value="donatur">
+                                    Donatur / Investor
+                                </option>
+                            </select>
+                            <i
+                                class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-700">
+                                Password
+                            </label>
+                            <div class="relative">
+                                <i
+                                    class="ph ph-lock-key absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                                <input
+                                    type="password"
+                                    name="password1"
+                                    id="password1"
+                                    required
+                                    placeholder="Password"
+                                    class="glass-input w-full rounded-2xl py-4 pl-12 pr-12 outline-none transition-all duration-300 text-slate-800 placeholder:text-slate-400">
+                                <button
+                                    type="button"
+                                    onclick="togglePassword('password1', this)"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-white/70 transition-all">
+                                    <i class="ph ph-eye text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-700">
+                                Konfirmasi
+                            </label>
+                            <div class="relative">
+                                <i
+                                    class="ph ph-check-circle absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                                <input
+                                    type="password"
+                                    name="password2"
+                                    id="password2"
+                                    required
+                                    placeholder="Ulangi"
+                                    class="glass-input w-full rounded-2xl py-4 pl-12 pr-12 outline-none transition-all duration-300 text-slate-800 placeholder:text-slate-400">
+                                <button
+                                    type="button"
+                                    onclick="togglePassword('password2', this)"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-white/70 transition-all">
+                                    <i class="ph ph-eye text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 pt-1">
+                        <input
+                            type="checkbox"
+                            required
+                            class="mt-1 w-5 h-5 rounded border border-slate-300 text-emerald-500">
+                        <p class="text-sm text-slate-500 leading-relaxed">
+                            Dengan mendaftar, saya setuju dengan
+                            <a href="#"
+                                class="font-semibold text-emerald-600 hover:text-emerald-700">
+                                Syarat & Ketentuan
+                            </a>
+                            JejakDaya.
+                        </p>
+                    </div>
+                    <button
+                        type="submit"
+                        class="group relative overflow-hidden w-full rounded-2xl py-4 font-bold text-lg text-white bg-gradient-to-r from-emerald-500 to-teal-500 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 shadow-[0_15px_40px_rgba(16,185,129,0.25)]">
+                        <div
+                            class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <span class="relative flex items-center justify-center gap-2">
+                            Daftar Sekarang
+                            <i
+                                class="ph-bold ph-arrow-right transition-transform group-hover:translate-x-1"></i>
+                        </span>
+                    </button>
+                </form>
+                <p class="mt-8 text-center text-sm text-slate-500 pb-4 lg:pb-0">
+                    Sudah punya akun?
+                    <a href="{% url 'login' %}"
+                        class="font-bold text-emerald-600 hover:text-emerald-700 ml-1 transition-all">
+                        Masuk di sini
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const animateElement = document.querySelector('[data-animate]');
-            if (animateElement) animateElement.classList.add('animate-fade-in-up');
+
+            const elements = document.querySelectorAll('.fade-element');
+
+            setTimeout(() => {
+                elements.forEach(el => {
+                    el.classList.add('visible');
+                });
+            }, 100);
+
         });
 
-        function togglePassword(inputId, iconButton) {
+        function togglePassword(inputId, buttonElement) {
+
             const passwordInput = document.getElementById(inputId);
-            const icon = iconButton.querySelector('i');
+            const icon = buttonElement.querySelector('i');
+
             if (passwordInput.type === 'password') {
+
                 passwordInput.type = 'text';
-                icon.classList.replace('ph-eye', 'ph-eye-slash');
+
+                icon.classList.remove('ph-eye');
+                icon.classList.add('ph-eye-slash');
+
             } else {
+
                 passwordInput.type = 'password';
-                icon.classList.replace('ph-eye-slash', 'ph-eye');
+
+                icon.classList.remove('ph-eye-slash');
+                icon.classList.add('ph-eye');
+
             }
         }
     </script>
+
 </body>
+
 </html>

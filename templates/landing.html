@@ -6,129 +6,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Datang - JejakDaya</title>
+
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/logo4.svg' %}">
-
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}">
+    
     <style>
-        /* Animasi dasar untuk elemen yang baru muncul */
-        .fade-in-element {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .fade-in-element.visible {
-            opacity: 1;
-            transform: translateY(0);
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Cursor untuk efek mengetik */
         .typing-cursor::after {
-            content: "|";
-            animation: blink 1s infinite;
-            margin-left: 4px;
-            /* DIUBAH: Menggunakan hex jejak-accent agar cerah dan kontras */
-            color: #C76B4E; 
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 1em;
+            background-color: var(--color-jejak-accent, #C76B4E);
+            vertical-align: text-bottom;
+            margin-left: 6px;
+            animation: blink 1s step-end infinite;
+            border-radius: 2px;
         }
+
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
         }
     </style>
 </head>
 
-<body class="min-h-screen relative overflow-hidden bg-jejak-bg font-sans text-white selection:bg-jejak-accent selection:text-white">
+<body
+    class="min-h-screen flex flex-col relative overflow-x-hidden bg-[#f8fafc] text-gray-900 selection:bg-jejak-accent selection:text-white">
 
-    <div class="absolute inset-0 -z-10">
-        <img src="{% static 'assets/img/mobile_bg.png' %}" alt=""
-            class="block md:hidden w-screen h-screen object-cover object-center"/>
-        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt=""
-            class="hidden md:block w-screen h-screen object-cover object-center"/>
-
-        <div class="absolute inset-0 bg-gradient-to-b from-jejak-primary/75 via-jejak-primary/60 to-jejak-primary/85">
-        </div>
-        <div
-            class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(107,143,113,0.25),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(199,107,78,0.18),transparent_28%)]">
+    <div id="preloader"
+        class="fixed inset-0 z-[100] bg-[#f8fafc] flex flex-col items-center justify-center transition-all duration-1000 ease-in-out">
+        <div class="relative flex flex-col items-center">
+            <div
+                class="w-16 h-16 mb-8 flex items-center justify-center bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgba(199,107,78,0.15)] rotate-3">
+                <i class="ph-fill ph-leaf text-4xl text-jejak-accent animate-pulse"></i>
+            </div>
+            <div class="w-64 h-[4px] bg-gray-200 rounded-full overflow-hidden">
+                <div id="loading-progress"
+                    class="h-full bg-gradient-to-r from-jejak-accent/60 to-jejak-accent w-0 transition-all duration-[1200ms] ease-out">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- <div class="absolute top-10 right-[-8rem] w-[28rem] h-[28rem] bg-jejak-secondary/25 rounded-full blur-[110px] animate-float pointer-events-none"></div> -->
-    <!-- <div class="absolute bottom-[-6rem] left-[-6rem] w-[22rem] h-[22rem] bg-jejak-accent/20 rounded-full blur-[100px] animate-float pointer-events-none"></div> -->
+    <div class="fixed inset-0 -z-10 bg-green-100 overflow-hidden">]">
+        <img src="{% static 'assets/img/mobile_bg.png' %}" alt="Background Mobile"
+            class="block md:hidden w-full h-full object-cover object-center opacity-15 mix-blend-multiply transform scale-105 transition-transform duration-[15s] ease-out hover:scale-110" />
+        <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="Background Desktop"
+            class="hidden md:block w-full h-full object-cover object-center opacity-15 mix-blend-multiply transform scale-105 transition-transform duration-[15s] ease-out hover:scale-110" />
 
-    <header class="px-6 pt-6 md:px-10 md:pt-8 z-10 opacity-0 animate-fade-in-up flex justify-between items-center w-full">
-
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-sm">
-                <i class="ph-fill ph-leaf text-xl text-white"></i>
-            </div>
-            <span class="text-xl font-bold tracking-tight text-white">JejakDaya</span>
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/50 via-[#f8fafc]/80 to-[#f8fafc] backdrop-blur-[2px]">
         </div>
 
-        <div class="flex items-center gap-3 sm:gap-5">
-            <a href="{% url 'login' %}" class="text-sm font-medium text-white/80 hover:text-white transition-colors">
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(107,143,113,0.1),transparent_40%),radial-gradient(circle_at_bottom_left,rgba(199,107,78,0.08),transparent_40%)]">
+        </div>
+    </div>
+
+    <header
+        class="px-6 pt-6 md:px-12 md:pt-10 z-10 flex justify-between items-center w-full max-w-screen-2xl mx-auto opacity-0 -translate-y-4 transition-all duration-[1000ms] ease-out fade-element">
+        <div class="flex items-center gap-3 cursor-pointer group">
+            <div
+                class="w-11 h-11 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm group-hover:border-jejak-accent/30 group-hover:shadow-[0_4px_20px_rgba(199,107,78,0.15)] transition-all duration-500">
+                <i class="ph-fill ph-leaf text-2xl text-jejak-accent"></i>
+            </div>
+            <span class="text-2xl font-extrabold tracking-tight text-gray-900">JejakDaya<span
+                    class="text-jejak-accent">.</span></span>
+        </div>
+
+        <div class="flex items-center gap-5 sm:gap-8">
+            <a href="{% url 'login' %}"
+                class="text-sm font-bold text-gray-500 hover:text-jejak-accent transition-all hidden sm:block">
                 Masuk
             </a>
-            <a href="{% url 'register' %}" class="px-4 py-2 sm:px-6 sm:py-2.5 rounded-full bg-jejak-accent hover:bg-jejak-accent/90 text-white text-sm font-semibold transition-all border border-white/10 shadow-lg shadow-jejak-accent/20 backdrop-blur-sm">
-                Daftar
+            <a href="{% url 'register' %}"
+                class="px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-gray-900 text-white text-sm font-bold transition-all duration-300 transform hover:scale-105 hover:bg-jejak-accent shadow-lg shadow-gray-900/20">
+                Buat Akun
             </a>
         </div>
-
     </header>
 
-    <main class="relative z-10 flex-1 flex items-center px-6 md:px-10 lg:px-16 py-10">
-        <div class="w-full max-w-7xl mx-auto">
-            <div class="max-w-3xl space-y-8 ">
-                
-                <div class=" inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-jejak-accent/20 border border-jejak-accent/30 text-white text-xs font-bold uppercase tracking-widest fade-in-element delay-100" id="badge">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-jejak-accent opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-jejak-accent"></span>
-                    </span>
-                    Inkubator Petani Milenial
+    <main class="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-12 lg:px-20 py-12 md:py-16 w-full">
+        <div class="w-full max-w-screen-2xl mx-auto">
+
+            <div
+                class="grid md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 xl:gap-32 items-center">
+
+                <div class="space-y-8 fade-in-element">
+                    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/80 border border-white backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.04)]"
+                        id="badge">
+                        <div
+                            class="w-6 h-6 rounded-full bg-jejak-accent/10 flex items-center justify-center border border-jejak-accent/20">
+                            <div
+                                class="w-2 h-2 rounded-full bg-jejak-accent animate-pulse shadow-[0_0_8px_rgba(199,107,78,0.6)]">
+                            </div>
+                        </div>
+                        <span class="text-gray-800 text-xs sm:text-sm font-bold uppercase tracking-[0.2em]">Inkubator
+                            Petani Gen-Z</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl md:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-extrabold leading-[1.15] tracking-tight flex flex-col"
+                        id="main-title">
+                        <span class="text-gray-900">
+                            <span
+                                class="underline decoration-jejak-accent decoration-wavy decoration-2 underline-offset-4">Kami
+                                tidak</span> berinvestasi pada komoditas, melainkan
+                        </span>
+
+                        <span class="block h-[3rem] sm:h-[4rem] lg:h-[5rem] xl:h-[6rem] mt-2">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-jejak-accent to-[#d95a32]"
+                                id="typewriter-text"></span>
+                        </span>
+                    </h1>
+
+                    <p class="text-gray-600 pt-10 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl font-medium"
+                        id="main-desc">
+                        Melalui Jejak Daya, generasi muda mendapatkan fasilitas untuk mempelajari
+                        <span
+                            class="text-gray-900 bg-white px-2.5 py-0.5 rounded-lg border border-gray-200 shadow-sm font-bold">Future
+                            Skills</span>
+                            di bidang agribisnis modern (seperti logistik digital & smart farming). Kami memastikan
+                            teknologi pertanian dapat diakses tanpa butuh privilege modal.
+                    </p>
                 </div>
 
-                <h1 class="text-4xl min-h-60 sm:min-h-52 md:min-h-72 lg:min-h-96  sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight fade-in-element delay-200" id="main-title">
-                    Kami tidak berinvestasi pada komoditas, melainkan <br class="hidden md:block">
-                    <span class="text-jejak-accent typing-cursor" id="typewriter-text"></span>
-                </h1>
+                <div class="relative w-full max-w-3xl mx-auto md:ml-auto fade-in-element mt-10 md:mt-0"
+                    id="image-container">
+                    <div class="absolute inset-0 bg-[#007934]/15 rounded-full blur-[100px] transform scale-110 -z-10">
+                    </div>
+                    <div
+                        class="absolute -top-10 -right-10 w-40 h-40 bg-jejak-accent/15 rounded-full blur-[60px] transform rotate-12 -z-10">
+                    </div>
 
-                <p class="text-white/80 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl fade-in-element delay-300" id="main-desc">
-                    Melalui Jejak Daya, generasi muda mendapatkan fasilitas untuk mempelajari 
-                    <span class="text-white font-semibold italic">Future Skills</span> di bidang agribisnis modern (seperti manajemen logistik digital dan smart farming), memastikan bahwa kemajuan teknologi pertanian inklusif dan dapat diakses oleh mereka yang tidak memiliki privilege lahan atau modal dari orang tua.
-                </p>
+                    <img src="{% static 'assets/img/hero-illustration.svg' %}"
+                        alt="Smart Farming Online Education Illustration"
+                        class="w-full h-auto object-contain relative z-10 drop-shadow-[0_20px_40px_rgba(0,0,0,0.08)]">
+                </div>
+
             </div>
         </div>
     </main>
 
-    <footer class="relative opacity-0 animate-fade-in-up delay-300">
-        <div class="mx-auto max-w-md ">
-            <div class="glass-pill  bg-black/20 border border-white/10 rounded-full p-2 flex items-center  justify-between shadow-2xl transition-all hover:bg-black/30 backdrop-blur-md">
-                <button type="button"
-                    class="w-12 h-12 flex items-center justify-center rounded-full text-white/55 hover:text-white hover:bg-white/10 transition-colors"
-                    aria-label="Kembali">
-                    <i class="ph ph-arrow-left text-xl"></i>
-                </button>
+    <div
+        class="relative z-20 w-full px-6 md:px-12 pb-10 mt-auto opacity-0 translate-y-8 transition-all duration-[1000ms] ease-out fade-element flex justify-center md:justify-start max-w-screen-2xl mx-auto">
+        <div
+            class="bg-white/70 border border-white rounded-full p-2.5 flex items-center justify-between shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-500 hover:bg-white hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl w-full max-w-md sm:max-w-sm">
 
-                <a href="{% url 'mulai_redirect' %}" class=" flex flex-grow items-center justify-center gap-3 group pr-2">
-                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-jejak-primary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.25)]">
-                        <i class="ph-fill ph-play text-xl ml-1 group-hover:text-jejak-accent transition-colors"></i>
-                    </div>
+            <button type="button"
+                class="w-14 h-14 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-all duration-300"
+                aria-label="Kembali">
+                <i class="ph ph-arrow-left text-2xl"></i>
+            </button>
 
-                    <span class="font-semibold text-lg tracking-wide text-white/90 group-hover:text-white transition-colors">
-                        Mulai
-                    </span>
+            <a href="{% url 'mulai_redirect' %}" class="flex flex-grow items-center justify-center gap-4 group pr-3">
+                <div
+                    class="w-14 h-14 bg-gradient-to-br from-jejak-accent to-[#007934] rounded-full flex items-center justify-center text-white group-hover:scale-110 transition-all duration-500 shadow-[0_8px_20px_rgba(199,107,78,0.3)]">
+                    <i class="ph-fill ph-play text-2xl ml-1"></i>
+                </div>
 
-                    <span class="flex items-center text-white/40 group-hover:text-jejak-accent transition-colors transform group-hover:translate-x-2 duration-300">
-                        <i class="ph-bold ph-caret-right text-xs"></i>
-                        <i class="ph-bold ph-caret-right text-xs -ml-1"></i>
-                        <i class="ph-bold ph-caret-right text-xs -ml-1"></i>
-                    </span>
-                </a>
-            </div>
+                <span
+                    class="font-extrabold text-lg tracking-wide text-gray-800 group-hover:text-jejak-accent transition-colors">
+                    Mulai Eksplorasi
+                </span>
+            </a>
         </div>
-    </footer>
+    </div>
 
     <script>
         const textElement = document.getElementById('typewriter-text');
@@ -140,40 +217,51 @@
 
         function type() {
             const currentPhrase = phrases[phraseIndex];
-            
             if (isDeleting) {
                 textElement.textContent = currentPhrase.substring(0, charIndex - 1);
                 charIndex--;
-                typeSpeed = 50;
+                typeSpeed = 30;
             } else {
                 textElement.textContent = currentPhrase.substring(0, charIndex + 1);
                 charIndex++;
-                typeSpeed = 100;
+                typeSpeed = 70;
             }
 
             if (!isDeleting && charIndex === currentPhrase.length) {
-                isDeleting = true;
-                typeSpeed = 2000; 
+                isDeleting = true; typeSpeed = 3000;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 phraseIndex = (phraseIndex + 1) % phrases.length;
-                typeSpeed = 500;
+                typeSpeed = 400;
             }
-
             setTimeout(type, typeSpeed);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            type();
+            const preloader = document.getElementById('preloader');
+            const progressBar = document.getElementById('loading-progress');
 
-            const elements = document.querySelectorAll('.fade-in-element');
-            elements.forEach((el, index) => {
+            setTimeout(() => { progressBar.style.width = '100%'; }, 50);
+
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.transform = 'scale(1.05)';
+
                 setTimeout(() => {
-                    el.classList.add('visible');
-                }, index * 150);
-            });
+                    preloader.style.display = 'none';
+                    type();
+                }, 1000);
+
+                const elements = document.querySelectorAll('.fade-element');
+                elements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.remove('opacity-0', 'translate-y-4', 'translate-y-6', 'translate-y-8', '-translate-y-4');
+                        el.classList.add('opacity-100', 'translate-y-0');
+                    }, 300 + (index * 150));
+                });
+            }, 1400);
         });
     </script>
-
 </body>
+
 </html>
