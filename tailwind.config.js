@@ -14,18 +14,29 @@ module.exports = {
     extend: {
       colors: {
         jejak: {
-          primary: "#1D4D3A",
-          secondary: "#4D7C3E",
-          accent: "#D4A017",
-          bg: "#F6F8F4",
-          text: "#0F172A",
+          primary: "#1D4D3A",   
+          secondary: "#4D7C3E", 
+          accent: "#D4A017",    
+          bg: "#F7F9F2",        
+          text: "#0F172A",      
         },
       },
 
-      boxShadow: {
-        glass: "0 10px 40px rgba(15,23,42,0.08)",
-        soft: "0 8px 30px rgba(0,0,0,0.06)",
+      fontFamily: {
+        heading: ["Plus Jakarta Sans", "sans-serif"],
+        body: ["Inter", "sans-serif"],
       },
+
+      boxShadow: {
+        glow: "0 10px 40px rgba(29,77,58,0.18)",
+        glass: "0 8px 32px rgba(15,23,42,0.08)",
+        premium: "0 20px 80px rgba(29,77,58,0.15)",
+      },
+
+      backdropBlur: {
+        xs: "2px",
+      },
+
 
       borderRadius: {
         card: "2rem",

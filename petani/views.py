@@ -43,16 +43,20 @@ def home_page(request):
 
 @login_required
 def donasi(request):
+
     if request.method == 'POST':
+
         form = FormDonasi(request.POST, request.FILES)
 
         if form.is_valid():
+
             try:
                 with transaction.atomic():
+
                     project = form.save(commit=False)
                     project.petani = request.user
                     project.save()
-                    
+
                     nama_barang_list = request.POST.getlist('nama_barang[]')
                     jumlah_barang_list = request.POST.getlist('jumlah_barang[]')
                     harga_list = request.POST.getlist('harga_satuan[]')
@@ -64,14 +68,15 @@ def donasi(request):
                         harga_list,
                         satuan_list
                     ):
+
                         if nama and jumlah:
+
                             try:
                                 jumlah = int(jumlah)
                                 harga = int(harga) if harga else 0
+
                             except ValueError:
                                 continue
-
-                            total = jumlah * harga
 
                             KebutuhanBarang.objects.create(
                                 project=project,
@@ -81,14 +86,32 @@ def donasi(request):
                                 satuan=satuan or "item"
                             )
 
-                messages.success(request, 'Project dan kebutuhan berhasil dibuat!')
+                messages.success(
+                    request,
+                    'Project dan kebutuhan berhasil dibuat!'
+                )
+
                 return redirect('home_p')
 
             except Exception as e:
-                messages.error(request, f'Terjadi error: {e}')
+
+                messages.error(
+                    request,
+                    f'Terjadi error: {e}'
+                )
+
+        else:
+
+            print(form.errors)
+
+            messages.error(
+                request,
+                'Form gagal dikirim. Periksa kembali input Anda.'
+            )
+
     else:
+
         form = FormDonasi()
-        print(form.errors) 
 
     return render(request, 'petani/projek.html', {
         'formd': form,

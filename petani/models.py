@@ -20,7 +20,7 @@ class Project(models.Model):
     luas_lahan = models.IntegerField(null=True)
     foto_lahan = models.ImageField(upload_to='lahan/', null=True)
     target_dana = models.DecimalField(max_digits=12, decimal_places=0, default=0)    
-    kebutuhan = models.TextField(null=True)
+    kebutuhan = models.TextField(null=True, blank=True)
     estimasi_hasil = models.IntegerField(null=True)
     berapa_bulan = models.CharField(max_length=200) 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
