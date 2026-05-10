@@ -1,119 +1,547 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Bagi Hasil - JejakDaya</title>
+
+    <title>
+        Skema Bagi Hasil Petani Digital - JejakDaya
+    </title>
+
+    <meta name="description"
+        content="Pantau pembagian hasil panen, total pendapatan, dan transparansi keuntungan petani bersama JejakDaya.">
+
+    <meta name="keywords"
+        content="JejakDaya, petani digital, agritech indonesia, bagi hasil panen, investasi pertanian">
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}">
 
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        :root {
+            --primary: #163B2D;
+            --secondary: #3F7D58;
+            --accent: #85A947;
+            --bg: #F7F8F4;
+            --text: #0F172A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .card-hover {
+            transition: all .4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, .12);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hero-gradient {
+            background:
+                radial-gradient(circle at top left, rgba(133, 169, 71, .18), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(63, 125, 88, .18), transparent 35%);
+        }
+
+        .glow {
+            box-shadow: 0 20px 50px rgba(22, 59, 45, 0.18);
+        }
+    </style>
 </head>
 
-<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen flex flex-col">
+<body class="min-h-screen antialiased overflow-x-hidden">
 
     {% include 'petani/partials/navbar.html' %}
 
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 md:px-8 py-12">
+    <!-- HERO -->
+    <section class="relative overflow-hidden pt-6 md:pt-10">
 
+        <!-- BACKGROUND -->
+        <img src="{% static 'assets/img/bg-final.jpg' %}" class="absolute inset-0 w-full h-full object-cover scale-110"
+            alt="bg">
+        <div class="absolute inset-0 bg-lime-900/50"></div>
 
-        <a href="{% url 'home_p' %}"
-            class="inline-flex items-center gap-2 px-5 py-2.5 mb-8 rounded-2xl bg-white border border-gray-200 text-gray-600 font-bold text-xs uppercase tracking-[0.1em] hover:bg-gray-50 hover:text-jejak-primary hover:border-jejak-primary/30 hover:shadow-md transition-all active:scale-95 group">
-            <i class="ph-bold ph-arrow-left text-lg group-hover:-translate-x-1 transition-transform"></i>
-            Kembali ke Dashboard
-        </a>
+        <!-- GRADIENT BLUR -->
+        <div class="absolute -top-32 -left-20 w-[420px] h-[420px] bg-emerald-300/30 rounded-full blur-3xl">
+        </div>
 
-        <div class="mb-10 animate-fade-in-up">
+        <div class="absolute top-20 right-0 w-[380px] h-[380px] bg-lime-200/30 rounded-full blur-3xl">
+        </div>
+
+        <div class="absolute bottom-0 left-1/3 w-[300px] h-[300px] bg-blue-100/20 rounded-full blur-3xl">
+        </div>
+
+        <!-- GRID -->
+        <div class="absolute inset-0 opacity-[0.03]">
+            <div class="h-full w-full" style="background-image: linear-gradient(to right, #0f172a 1px, transparent 1px),
+                   linear-gradient(to bottom, #0f172a 1px, transparent 1px);
+                   background-size: 80px 80px;">
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 md:px-8 pt-20 md:pt-24 pb-32 md:pb-40 relative z-10">
+
+            <!-- BACK BUTTON -->
+            <a href="{% url 'home_p' %}"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/70 backdrop-blur-2xl border border-white/60 text-sm font-bold text-slate-600 hover:text-jejak-primary hover:-translate-y-1 transition-all shadow-[0_8px_30px_rgba(15,23,42,0.06)]">
+
+                <i class="ph-bold ph-arrow-left"></i>
+
+                Kembali ke Dasbor
+
+            </a>
+
+            <div class="mt-10 grid lg:grid-cols-2 gap-10 xl:gap-16 items-center">
+
+                <!-- LEFT -->
+                <div class="relative z-10">
+
+                    <!-- BADGE -->
+                    <div
+                        class="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/60 backdrop-blur-xl border border-white/70 shadow-lg shadow-emerald-100/40 text-[11px] font-black uppercase tracking-[0.25em] text-emerald-700 mb-8">
+
+                        <span class="relative flex w-3 h-3">
+
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-600 opacity-75">
+                            </span>
+
+                            <span class="relative inline-flex rounded-full w-3 h-3 bg-emerald-500"></span>
+
+                        </span>
+
+                        Smart Profit Distribution
+
+                    </div>
+
+                    <!-- TITLE -->
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-6xl xl:text-7xl leading-[0.95] font-black tracking-tight text-slate-50 font-heading max-w-3xl">
+
+                        Transparansi
+
+                        <span class="bg-gradient-to-r from-emerald-600 to-lime-500 bg-clip-text text-transparent">
+
+                            Bagi Hasil
+
+                        </span>
+
+                        Untuk Petani Modern.
+
+                    </h1>
+
+                    <!-- DESC -->
+                    <p class="mt-7 text-emerald-50 text-base md:text-lg leading-relaxed max-w-2xl">
+
+                        Pantau total pendapatan, distribusi keuntungan, dan seluruh
+                        akumulasi dukungan secara real-time dalam ekosistem agritech
+                        JejakDaya yang transparan dan modern.
+
+                    </p>
+
+                    <!-- BUTTON -->
+                    <div class="mt-10 flex flex-wrap gap-4">
+
+                        <a href="{% url 'allp' %}"
+                            class="group inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#4D7C3E] text-white font-black text-sm shadow-[0_20px_40px_rgba(77,124,62,0.25)] hover:-translate-y-1 transition-all">
+
+                            <i class="ph-bold ph-chart-line-up text-xl group-hover:rotate-6 transition-transform"></i>
+
+                            Kelola Proyek
+
+                        </a>
+
+                        <a href="{% url 'riwayat_donasi' %}"
+                            class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/70 text-slate-700 font-black text-sm hover:border-emerald-200 hover:text-jejak-primary hover:-translate-y-1 transition-all shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
+
+                            <i class="ph-bold ph-clock-counter-clockwise text-xl"></i>
+
+                            Riwayat Dukungan
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT CARD -->
+                <div class="relative">
+
+                    <!-- FLOATING BLUR -->
+                    <div class="absolute -top-10 -right-8 w-40 h-40 bg-emerald-300/30 rounded-full blur-3xl">
+                    </div>
+
+                    <div class="absolute -bottom-10 left-0 w-40 h-40 bg-lime-200/30 rounded-full blur-3xl">
+                    </div>
+
+                    <!-- GLASS CARD -->
+                    <div
+                        class="relative overflow-hidden rounded-[2.5rem] bg-white/55 backdrop-blur-2xl border border-white/70 shadow-[0_30px_80px_rgba(15,23,42,0.10)] p-7 md:p-10">
+
+                        <!-- LIGHT EFFECT -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/10">
+                        </div>
+
+                        <!-- ICON BG -->
+                        <div class="absolute -right-10 -top-10 opacity-[0.04]">
+                            <i class="ph-fill ph-chart-pie-slice text-[260px]"></i>
+                        </div>
+
+                        <div class="relative z-10">
+
+                            <!-- HEADER -->
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-10">
+
+                                <div>
+
+                                    <p class="text-[11px] font-black uppercase tracking-[0.25em] text-slate-400 mb-3">
+
+                                        Total Pendapatan
+
+                                    </p>
+
+                                    <h2
+                                        class="text-4xl md:text-5xl font-black text-slate-900 font-heading leading-none">
+
+                                        Rp {{ total_pendapatan|default:0|intcomma }}
+
+                                    </h2>
+
+                                </div>
+
+                                <div
+                                    class="w-16 h-16 rounded-2xl bg-emerald-100/80 backdrop-blur-xl text-emerald-700 flex items-center justify-center text-3xl shadow-lg shadow-emerald-100">
+
+                                    <i class="ph-fill ph-coins"></i>
+
+                                </div>
+
+                            </div>
+
+                            <!-- DISTRIBUTION -->
+                            <div class="space-y-7">
+
+                                <!-- PETANI -->
+                                <div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-5">
+
+                                    <div class="flex items-center justify-between gap-4 mb-4">
+
+                                        <div>
+
+                                            <p class="text-sm font-bold text-slate-900">
+                                                Keuntungan Petani
+                                            </p>
+
+                                            <p class="text-xs text-slate-400">
+                                                60% distribusi keuntungan
+                                            </p>
+
+                                        </div>
+
+                                        <h3 class="text-lg md:text-xl font-black text-emerald-600 whitespace-nowrap">
+
+                                            Rp {{ keuntungan_petani|default:0|intcomma }}
+
+                                        </h3>
+
+                                    </div>
+
+                                    <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+
+                                        <div
+                                            class="h-full w-[60%] rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 relative">
+
+                                            <div class="absolute inset-0 bg-white/20 animate-pulse">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- DONATUR -->
+                                <div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-5">
+
+                                    <div class="flex items-center justify-between gap-4 mb-4">
+
+                                        <div>
+
+                                            <p class="text-sm font-bold text-slate-900">
+                                                Bagian Donatur
+                                            </p>
+
+                                            <p class="text-xs text-slate-400">
+                                                40% pembagian keuntungan
+                                            </p>
+
+                                        </div>
+
+                                        <h3 class="text-lg md:text-xl font-black text-blue-600 whitespace-nowrap">
+
+                                            Rp {{ keuntungan_donatur|default:0|intcomma }}
+
+                                        </h3>
+
+                                    </div>
+
+                                    <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+
+                                        <div
+                                            class="h-full w-[40%] rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 relative">
+
+                                            <div class="absolute inset-0 bg-white/20 animate-pulse">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATS -->
+    <section class="max-w-7xl mx-auto px-4 md:px-8 -mt-24 relative z-20">
+
+        <div class="flex lg:grid lg:grid-cols-4 gap-5 overflow-x-auto snap-x snap-mandatory pb-4 hide-scrollbar">
+
+            <!-- CARD -->
+            <div class="w-[85vw] sm:w-[340px] lg:w-auto shrink-0 snap-center glass-card rounded-[2rem] p-7 card-hover">
+
+                <div class="flex items-start justify-between mb-8">
+
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl">
+
+                        <i class="ph-fill ph-wallet"></i>
+
+                    </div>
+
+                    <span class="text-sm font-black text-emerald-600">
+                        Aktif
+                    </span>
+
+                </div>
+
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-400 mb-2">
+                    Dukungan Dana
+                </p>
+
+                <h3 class="text-3xl font-black text-slate-900 mb-6">
+                    Rp {{ dana|default:0|intcomma }}
+                </h3>
+
+                <a href="{% url 'riwayat_donasi' %}"
+                    class="inline-flex items-center gap-2 text-sm font-bold text-jejak-primary hover:gap-3 transition-all">
+
+                    Lihat Riwayat
+
+                    <i class="ph-bold ph-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="w-[85vw] sm:w-[340px] lg:w-auto shrink-0 snap-center glass-card rounded-[2rem] p-7 card-hover">
+
+                <div
+                    class="w-14 h-14 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center text-2xl mb-8">
+
+                    <i class="ph-fill ph-package"></i>
+
+                </div>
+
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-slate-400 mb-2">
+                    Nilai Barang
+                </p>
+
+                <h3 class="text-3xl font-black text-slate-900">
+                    Rp {{ nilaibarang|default:0|intcomma }}
+                </h3>
+
+                <p class="mt-2 text-sm text-slate-500">
+                    {{ alat|default:0 }} barang terdistribusi
+                </p>
+
+            </div>
+
+            <!-- CARD -->
             <div
-                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-jejak-secondary/10 text-jejak-secondary text-xs font-bold uppercase tracking-wider mb-4">
-                <i class="ph-fill ph-chart-line-up"></i>
-                Fitur Utama
-            </div>
+                class="w-[85vw] sm:w-[340px] lg:w-auto shrink-0 snap-center rounded-[2rem] p-7 bg-gradient-to-br from-lime-700 to-[#143a29] text-white card-hover">
 
-            <h1 class="text-3xl md:text-4xl font-black text-jejak-primary mb-2">
-                Sistem Bagi Hasil
-            </h1>
+                <div
+                    class="w-14 h-14 rounded-2xl bg-white/10 text-white flex items-center justify-center text-2xl mb-8">
 
-            <p class="text-gray-500 font-medium max-w-2xl">
-                Fitur ini memungkinkan investor mendapatkan keuntungan dari hasil panen yang dikelola oleh petani secara
-                transparan dan terukur.
-            </p>
-        </div>
+                    <i class="ph-fill ph-plant"></i>
 
-        <div class="glass-card p-8 rounded-[2rem] border border-white shadow-sm animate-fade-in-up">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-yellow-100 flex items-center justify-center">
-                    <i class="ph-fill ph-hammer text-2xl text-yellow-600"></i>
                 </div>
-                <div>
-                    <h3 class="text-lg font-black text-jejak-primary">Dalam Pengembangan</h3>
-                    <p class="text-sm text-gray-500">Fitur ini sedang dalam tahap penyempurnaan</p>
-                </div>
-            </div>
-            <div class="space-y-4 text-sm text-gray-600 leading-relaxed">
-                <p>
-                    Sistem bagi hasil dirancang untuk memberikan keuntungan kepada investor berdasarkan hasil panen yang
-                    diperoleh dari proyek pertanian.
+
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-green-200 mb-2">
+                    Proyek Aktif
                 </p>
 
-                <p>
-                    Setiap investasi akan dicatat dan dikonversi menjadi persentase kepemilikan terhadap hasil produksi.
+                <h3 class="text-3xl font-black">
+                    {{ projects|length|default:0 }}
+                    <span class="text-lg opacity-60">
+                        Lahan
+                    </span>
+                </h3>
+
+                <p class="mt-2 text-sm text-green-100/70">
+                    Sedang berjalan dalam sistem inkubasi
                 </p>
-            </div>
-
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                <div class="bg-jejak-secondary/10 p-4 rounded-xl">
-                    <p class="text-xs text-gray-500">Estimasi ROI</p>
-                    <h4 class="text-xl font-black text-jejak-secondary">10% - 18%</h4>
-                </div>
-
-                <div class="bg-jejak-secondary/10 p-4 rounded-xl">
-                    <p class="text-xs text-gray-500">Skema Bagi Hasil</p>
-                    <h4 class="text-xl font-black text-jejak-secondary">70% : 30%</h4>
-                </div>
-
-                <div class="bg-jejak-secondary/10 p-4 rounded-xl">
-                    <p class="text-xs text-gray-500">Periode</p>
-                    <h4 class="text-xl font-black text-jejak-secondary">3 - 6 Bulan</h4>
-                </div>
 
             </div>
 
-            <div class="mt-8">
-                <h4 class="text-sm font-bold text-gray-900 mb-4">Rencana Implementasi</h4>
+            <!-- CARD -->
+            <div
+                class="w-[85vw] sm:w-[340px] lg:w-auto shrink-0 snap-center rounded-[2rem] p-7 bg-gradient-to-br from-[#0B1F17] to-[#163B2D] text-white card-hover">
 
-                <ul class="space-y-3 text-sm text-gray-600">
-                    <li class="flex items-center gap-2">
-                        <i class="ph-bold ph-check-circle text-green-500"></i>
-                        Perhitungan otomatis hasil panen
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="ph-bold ph-check-circle text-green-500"></i>
-                        Distribusi keuntungan ke investor
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="ph-bold ph-check-circle text-green-500"></i>
-                        Tracking ROI & histori keuntungan
-                    </li>
-                    <li class="flex items-center gap-2">
-                        <i class="ph-bold ph-check-circle text-green-500"></i>
-                        Transparansi laporan hasil panen
-                    </li>
-                </ul>
-            </div>
+                <div
+                    class="w-14 h-14 rounded-2xl bg-white/10 text-white flex items-center justify-center text-2xl mb-8">
 
-            <div class="mt-8 pt-6 border-t border-dashed border-gray-200 text-center">
-                <p class="text-xs text-gray-400 font-medium">
-                    Versi saat ini berfokus pada sistem donasi dan transparansi proyek terlebih dahulu.
+                    <i class="ph-fill ph-trophy"></i>
+
+                </div>
+
+                <p class="text-[11px] uppercase tracking-[0.2em] font-black text-green-200 mb-2">
+                    Total Bantuan
                 </p>
+
+                <h3 class="text-3xl font-black">
+                    Rp {{ totalbantuan|default:0|intcomma }}
+                </h3>
+
+                <p class="mt-2 text-sm text-green-100/70">
+                    Akumulasi dana & logistik
+                </p>
+
             </div>
 
         </div>
 
-    </main>
+    </section>
+
+    <!-- STORY -->
+    <section class="max-w-7xl mx-auto px-4 md:px-8 py-20">
+
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+
+            <div class="space-y-6">
+
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-600 text-xs font-black uppercase tracking-[0.2em]">
+
+                    <i class="ph-fill ph-lightbulb"></i>
+
+                    Technology Into Action
+
+                </div>
+
+                <h2 class="text-4xl md:text-5xl font-black leading-tight tracking-tight font-heading">
+
+                    Digitalisasi Lahan,
+                    <span class="text-jejak-primary">
+                        Tingkatkan Kapasitas.
+                    </span>
+
+                </h2>
+
+                <p class="text-slate-500 leading-relaxed text-lg">
+
+                    JejakDaya membantu petani mengakses dukungan modal, alat pertanian, dan distribusi hasil secara
+                    transparan melalui sistem agritech modern.
+
+                </p>
+
+            </div>
+
+            <!-- CTA CARD -->
+            <div
+                class="rounded-[2.5rem] bg-gradient-to-br from-emerald-600 to-green-800 p-8 md:p-10 text-white shadow-2xl shadow-emerald-900/20 relative overflow-hidden">
+
+                <div class="absolute -right-10 -bottom-10 opacity-10">
+                    <i class="ph-fill ph-chart-line-up text-[240px]"></i>
+                </div>
+
+                <div class="relative z-10">
+
+                    <p class="text-sm uppercase tracking-[0.2em] font-black text-green-200 mb-4">
+                        Produktivitas Lahan
+                    </p>
+
+                    <h3 class="text-4xl font-black mb-4 leading-tight font-heading">
+                        Kelola hasil panen lebih transparan dan profesional.
+                    </h3>
+
+                    <p class="text-green-100 leading-relaxed mb-8">
+                        Setiap dukungan yang masuk akan tercatat dan dikonversi menjadi pertumbuhan nyata di lahan.
+                    </p>
+
+                    <a href="{% url 'allp' %}"
+                        class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-white text-lime-800 font-black text-sm hover:gap-4 transition-all">
+
+                        <i class="ph-bold ph-arrow-up-right"></i>
+
+                        Kirim Laporan Hasil Panen
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    {% include 'petani/partials/footer.html' %}
 
 </body>
 

@@ -63,8 +63,8 @@ def dashboard_admin(request):
         total_donasi_db=Coalesce(Sum('donasi__jumlah'), 0)
     ).order_by('-id')
     total_barang_dikirim = DonasiBarang.objects.aggregate(
-    total=Coalesce(Sum('jumlah'), 0)
-    )['total']
+    total=Coalesce(Sum('items__jumlah'), 0)
+)['total']
     total_dana = Donasi.objects.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
     total_project = projects.count()
     total_petani = Project.objects.values('petani').distinct().count()

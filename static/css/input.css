@@ -1,27 +1,104 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.form-input {
-    @apply px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500;
-}
-.glass-pill {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+
+@theme {
+
+    --color-jejak-primary: #1D4D3A;
+    --color-jejak-secondary: #4D7C3E;
+    --color-jejak-accent: #D4A017;
+
+    --color-jejak-bg: #F6F8F4;
+    --color-jejak-text: #0F172A;
+
 }
 
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
+@layer components {
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    .form-input {
+        @apply px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500;
+    }
+
+    .glass-pill {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .jd-card {
+        @apply bg-white/80 backdrop-blur-xl border border-white/40 rounded-3xl;
+
+        box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .jd-label {
+        @apply flex items-center gap-2 mb-2 text-sm font-bold text-slate-700;
+    }
+
+    .jd-input {
+        @apply w-full rounded-2xl border border-slate-200 bg-white/70
+        px-5 py-4 text-sm text-slate-700 outline-none
+        transition-all duration-300
+        focus:border-emerald-500
+        focus:ring-4
+        focus:ring-emerald-500/10
+        focus:bg-white;
+    }
+
+    .jd-textarea {
+        @apply min-h-[140px] resize-none;
+    }
+
+    .jd-select {
+        @apply appearance-none;
+    }
+
+    .jd-button {
+        @apply inline-flex items-center justify-center gap-3
+        rounded-2xl px-6 py-4
+        bg-gradient-to-r from-jejak-secondary to-emerald-600
+        text-white font-black
+        shadow-xl shadow-emerald-900/20
+        transition-all duration-300
+        hover:-translate-y-1
+        hover:shadow-2xl
+        active:scale-[0.98];
+    }
+
+    .jd-error {
+        @apply mt-2 rounded-xl border border-red-200
+        bg-red-50 px-4 py-3
+        text-xs font-semibold text-red-600;
+    }
+
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(107, 143, 113, 0.3); /* Warna secondary transparan */
-    border-radius: 20px;
+
+@layer utilities {
+
+    .delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .delay-300 {
+        animation-delay: 300ms;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(107, 143, 113, 0.3);
+        border-radius: 20px;
+    }
+
 }

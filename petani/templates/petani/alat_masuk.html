@@ -1,209 +1,566 @@
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Barang - JejakDaya</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/logo4.svg' %}">
+    <title>Inventory Barang • JejakDaya</title>
+
+    <link rel="icon" type="image/png" href="{% static 'assets/logo/Asset5.png' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <style>
-        /* Tipografi & Hover Konsisten dengan Dasbor */
-        body { font-family: 'Inter', sans-serif; }
-        .heading, h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(77, 124, 62, 0.12), transparent 25%),
+                radial-gradient(circle at bottom right, rgba(29, 77, 58, 0.12), transparent 25%),
+                linear-gradient(135deg, #F7F9F2 0%, #f5f8ef 100%);
+            overflow-x: hidden;
+        }
 
-        .card-hover { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .card-hover:hover { 
-            transform: translateY(-6px); 
-            box-shadow: 0 25px 50px -12px rgba(199, 107, 78, 0.15); 
+        .heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 10px 40px rgba(15, 23, 42, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .card-hover {
+            transition: all .35s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 60px rgba(29, 77, 58, 0.12);
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 9999px;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: rgba(77, 124, 62, 0.14);
+            top: -80px;
+            left: -80px;
+        }
+
+        .orb-2 {
+            width: 280px;
+            height: 280px;
+            background: rgba(29, 77, 58, 0.12);
+            bottom: -80px;
+            right: -80px;
+        }
+
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -2;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 
-<body class="bg-jejak-bg text-gray-800 min-h-screen py-8 md:py-12 px-4 md:px-8 selection:bg-jejak-accent selection:text-white">
+<body class="text-jejak-text min-h-screen">
 
-    <div class="max-w-5xl mx-auto space-y-10">
+    {% include 'petani/partials/navbar.html' %}
 
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <!-- ORNAMEN -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-pattern"></div>
+
+    <main class="max-w-[1700px] mx-auto px-4 md:px-8 py-10 mt-24 space-y-10">
+
+        <!-- HERO -->
+        <section class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+
             <div>
-                <a href="{% url 'home_p' %}" class="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-2xl bg-white border border-gray-200 text-gray-600 font-bold text-xs uppercase tracking-[0.1em] hover:bg-gray-50 hover:text-jejak-accent hover:border-jejak-accent/30 hover:shadow-md transition-all w-fit active:scale-95 group">
-                    <i class="ph-bold ph-arrow-left text-lg group-hover:-translate-x-1 transition-transform duration-300"></i> Kembali ke Dasbor
+
+                <a href="{% url 'home_p' %}"
+                    class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border border-black/5 shadow-sm text-sm font-bold text-gray-600 hover:text-jejak-primary hover:border-jejak-primary/20 transition-all mb-6">
+                    <i class="ph-bold ph-arrow-left"></i>
+                    Kembali ke Dasbor
                 </a>
-                
-                <h1 class="text-3xl md:text-4xl font-black heading text-gray-900 tracking-tight">
-                    Inventory <span class="text-transparent bg-clip-text bg-gradient-to-r from-jejak-accent to-orange-400">Barang</span>
+
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-white/60 shadow-sm mb-5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+
+                    <p class="text-[11px] font-black uppercase tracking-[0.2em] text-jejak-primary">
+                        Smart Inventory System
+                    </p>
+                </div>
+
+                <h1 class="heading text-4xl md:text-5xl font-black leading-tight text-gray-900">
+                    Inventory
+                    <span class="bg-gradient-to-r from-jejak-primary to-jejak-secondary bg-clip-text text-transparent">
+                        Barang Masuk
+                    </span>
                 </h1>
-                <p class="text-gray-500 text-sm md:text-base font-medium mt-2">Pantau dan lacak pemenuhan kebutuhan sarana pertanian Anda.</p>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <p class="text-gray-500 mt-4 max-w-2xl leading-relaxed">
+                    Pantau distribusi bantuan alat pertanian, kebutuhan barang, serta progres pemenuhan proyek secara
+                    real-time.
+                </p>
 
-            <div class="bg-gradient-to-br from-jejak-accent to-[#A85532] rounded-[2rem] p-6 shadow-xl shadow-jejak-accent/20 relative overflow-hidden group card-hover">
-                <div class="absolute -right-4 -bottom-4 text-white/10 rotate-12 transition-transform group-hover:scale-110 duration-500">
-                    <i class="ph-fill ph-package text-[120px]"></i>
-                </div>
-                <div class="relative z-10 flex flex-col h-full justify-between gap-3">
-                    <p class="text-[10px] md:text-[11px] font-bold text-orange-200 uppercase tracking-[0.2em]">Total Barang Masuk</p>
-                    <h2 class="text-4xl md:text-5xl font-black text-white heading tracking-tight">{{ total_barang }}</h2>
-                </div>
             </div>
 
-            <div class="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm relative overflow-hidden group card-hover">
-                <div class="absolute -right-4 -bottom-4 text-gray-100 rotate-12 transition-transform group-hover:scale-110 duration-500">
-                    <i class="ph-fill ph-clipboard-text text-[120px]"></i>
-                </div>
-                <div class="relative z-10 flex flex-col h-full justify-between gap-3">
-                    <p class="text-[10px] md:text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em]">Total Kebutuhan</p>
-                    <h2 class="text-4xl md:text-5xl font-black text-gray-900 heading tracking-tight">{{ total_kebutuhan }}</h2>
-                </div>
-            </div>
+        </section>
 
-            <div class="bg-gradient-to-br from-[#0D3020] to-jejak-primary rounded-[2rem] p-6 shadow-xl shadow-jejak-primary/20 relative overflow-hidden group card-hover">
-                <div class="absolute -right-4 -bottom-4 text-white/5 rotate-12 transition-transform group-hover:scale-110 duration-500">
-                    <i class="ph-fill ph-chart-donut text-[120px]"></i>
-                </div>
-                <div class="relative z-10 flex flex-col h-full justify-between gap-3">
-                    <p class="text-[10px] md:text-[11px] font-bold text-green-300 uppercase tracking-[0.2em]">Progress Terpenuhi</p>
-                    <h2 class="text-4xl md:text-5xl font-black text-white heading tracking-tight">{{ progress_total }}<span class="text-2xl opacity-60">%</span></h2>
-                </div>
-            </div>
+        <!-- STATS -->
+        <section class="relative">
 
-        </div>
+            <!-- card -->
+            <div class="md:hidden overflow-x-auto scrollbar-hide -mx-4 px-4">
 
-        <div class="bg-white p-6 md:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm shadow-gray-200/50">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 rounded-xl bg-jejak-primary/10 flex items-center justify-center">
-                    <i class="ph-fill ph-chart-bar text-xl text-jejak-primary"></i>
-                </div>
-                <h3 class="text-xl font-bold heading text-gray-900">Distribusi Kebutuhan</h3>
-            </div>
-            
-            <div class="w-full overflow-hidden relative h-[300px] md:h-[400px]">
-                <canvas id="barangChart"></canvas>
-            </div>
-        </div>
+                <div class="flex gap-4 w-max pb-2">
 
-        <div>
-            <h3 class="text-2xl font-black heading text-gray-900 mb-6">Status Pemenuhan Item</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <!-- card -->
+                    <div class="min-w-[280px] glass-card rounded-[2rem] p-6 relative overflow-hidden card-hover">
 
-                {% for item in tracking %}
-                <div class="card-hover bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col gap-4 group relative overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-jejak-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Item Lahan</p>
-                            <h3 class="font-bold text-lg text-gray-900 heading leading-tight">{{ item.nama }}</h3>
+                        <div class="absolute -right-8 -bottom-8 text-black/[0.03]">
+                            <i class="ph-fill ph-package text-[130px]"></i>
                         </div>
-                        <span class="px-3 py-1 bg-jejak-accent/10 text-jejak-accent font-bold text-xs rounded-lg border border-jejak-accent/20">
-                            {{ item.persen }}%
-                        </span>
+
+                        <div class="relative z-10">
+
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-jejak-primary/10 flex items-center justify-center text-jejak-primary mb-5">
+                                <i class="ph-fill ph-currency-circle-dollar text-2xl"></i>
+                            </div>
+
+                            <p class="text-[11px] uppercase tracking-[0.18em] font-black text-gray-400 mb-2">
+                                Total Kebutuhan
+                            </p>
+
+                            <h2 class="heading text-3xl font-black text-gray-900">
+                                Rp {{ total_kebutuhan_uang|intcomma }}
+                            </h2>
+
+                        </div>
+
                     </div>
 
-                    <div class="mt-2">
-                        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden shadow-inner mb-2">
-                            <div class="h-full bg-gradient-to-r from-jejak-accent to-orange-400 relative" style="width: {{ item.persen }}%">
-                                <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                    <!-- card -->
+                    <div
+                        class="min-w-[280px] rounded-[2rem] p-6 bg-gradient-to-br from-jejak-primary to-jejak-secondary text-white relative overflow-hidden shadow-2xl shadow-green-900/10 card-hover">
+
+                        <div class="absolute -right-10 -bottom-10 text-white/10">
+                            <i class="ph-fill ph-chart-line-up text-[140px]"></i>
+                        </div>
+
+                        <div class="relative z-10">
+
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center mb-5">
+                                <i class="ph-fill ph-wallet text-2xl"></i>
+                            </div>
+
+                            <p class="text-[11px] uppercase tracking-[0.18em] font-black text-green-100 mb-2">
+                                Dana Terkumpul
+                            </p>
+
+                            <h2 class="heading text-3xl font-black">
+                                Rp {{ total_uang_masuk|intcomma }}
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <!-- card -->
+                    <div class="min-w-[280px] glass-card rounded-[2rem] p-6 relative overflow-hidden card-hover">
+
+                        <div class="absolute -right-8 -bottom-8 text-black/[0.03]">
+                            <i class="ph-fill ph-bank text-[120px]"></i>
+                        </div>
+
+                        <div class="relative z-10">
+
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 mb-5">
+                                <i class="ph-fill ph-coins text-2xl"></i>
+                            </div>
+
+                            <p class="text-[11px] uppercase tracking-[0.18em] font-black text-gray-400 mb-2">
+                                Sisa Dana
+                            </p>
+
+                            <h2 class="heading text-3xl font-black text-gray-900">
+                                Rp {{ sisa_uang|intcomma }}
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <!-- card -->
+                    <div
+                        class="min-w-[280px] rounded-[2rem] p-6 bg-[#0F1F18] text-white relative overflow-hidden shadow-2xl shadow-black/10 card-hover">
+
+                        <div class="absolute -right-10 -bottom-10 text-white/5">
+                            <i class="ph-fill ph-chart-donut text-[140px]"></i>
+                        </div>
+
+                        <div class="relative z-10">
+
+                            <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
+                                <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
+                            </div>
+
+                            <p class="text-[11px] uppercase tracking-[0.18em] font-black text-green-200 mb-2">
+                                Progress Total
+                            </p>
+
+                            <h2 class="heading text-4xl font-black">
+                                {{ progress_total }}%
+                            </h2>
+
+                            <div class="w-full h-2 rounded-full bg-white/10 mt-5 overflow-hidden">
+                                <div class="h-full rounded-full bg-gradient-to-r from-green-300 to-green-500"
+                                    style="width: {{ progress_total }}%">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="hidden md:grid grid-cols-4 gap-6 mb-10">
+                <div class="glass-card rounded-[2rem] p-6 relative overflow-hidden card-hover">
+
+                    <div class="absolute -right-8 -bottom-8 text-black/[0.03]">
+                        <i class="ph-fill ph-package text-[130px]"></i>
+                    </div>
+
+                    <div class="relative z-10">
+
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-jejak-primary/10 flex items-center justify-center text-jejak-primary mb-5">
+                            <i class="ph-fill ph-currency-circle-dollar text-2xl"></i>
+                        </div>
+
+                        <p class="text-[11px] uppercase tracking-[0.18em] font-black text-gray-400 mb-2">
+                            Total Kebutuhan
+                        </p>
+
+                        <h2 class="heading text-3xl font-black text-gray-900">
+                            Rp {{ total_kebutuhan_uang|intcomma }}
+                        </h2>
+
+                    </div>
+
+                </div>
+                <div
+                    class="rounded-[2rem] p-6 bg-gradient-to-br from-jejak-primary to-jejak-secondary text-white relative overflow-hidden shadow-2xl shadow-green-900/10 card-hover">
+    
+                    <div class="absolute -right-10 -bottom-10 text-white/10">
+                        <i class="ph-fill ph-chart-line-up text-[140px]"></i>
+                    </div>
+    
+                    <div class="relative z-10">
+    
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center mb-5">
+                            <i class="ph-fill ph-wallet text-2xl"></i>
+                        </div>
+    
+                        <p class="text-[11px] uppercase tracking-[0.18em] font-black text-green-100 mb-2">
+                            Dana Terkumpul
+                        </p>
+    
+                        <h2 class="heading text-3xl font-black">
+                            Rp {{ total_uang_masuk|intcomma }}
+                        </h2>
+    
+                    </div>
+    
+                </div>
+    
+                <div class="glass-card rounded-[2rem] p-6 relative overflow-hidden card-hover">
+    
+                    <div class="absolute -right-8 -bottom-8 text-black/[0.03]">
+                        <i class="ph-fill ph-bank text-[120px]"></i>
+                    </div>
+    
+                    <div class="relative z-10">
+    
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-600 mb-5">
+                            <i class="ph-fill ph-coins text-2xl"></i>
+                        </div>
+    
+                        <p class="text-[11px] uppercase tracking-[0.18em] font-black text-gray-400 mb-2">
+                            Sisa Dana
+                        </p>
+    
+                        <h2 class="heading text-3xl font-black text-gray-900">
+                            Rp {{ sisa_uang|intcomma }}
+                        </h2>
+    
+                    </div>
+    
+                </div>
+    
+                <div
+                    class="rounded-[2rem] p-6 bg-[#0F1F18] text-white relative overflow-hidden shadow-2xl shadow-black/10 card-hover">
+    
+                    <div class="absolute -right-10 -bottom-10 text-white/5">
+                        <i class="ph-fill ph-chart-donut text-[140px]"></i>
+                    </div>
+    
+                    <div class="relative z-10">
+    
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
+                            <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
+                        </div>
+    
+                        <p class="text-[11px] uppercase tracking-[0.18em] font-black text-green-200 mb-2">
+                            Progress Total
+                        </p>
+    
+                        <h2 class="heading text-4xl font-black">
+                            {{ progress_total }}%
+                        </h2>
+    
+                        <div class="w-full h-2 rounded-full bg-white/10 mt-5 overflow-hidden">
+                            <div class="h-full rounded-full bg-gradient-to-r from-green-300 to-green-500"
+                                style="width: {{ progress_total }}%">
                             </div>
                         </div>
-                        <div class="flex justify-between text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                            <span>Masuk: <strong class="text-jejak-accent">{{ item.masuk }}</strong></span>
-                            <span>Target: <strong class="text-gray-900">{{ item.target }}</strong></span>
-                        </div>
+    
                     </div>
+    
+                </div>
+            </div>
+
+
+        </section>
+
+        <!-- CHART -->
+        <section class="glass-card rounded-[2.5rem] p-6 md:p-8">
+
+            <div class="flex items-center gap-3 mb-8">
+
+                <div
+                    class="w-12 h-12 rounded-2xl bg-jejak-primary/10 flex items-center justify-center text-jejak-primary">
+                    <i class="ph-fill ph-chart-bar text-2xl"></i>
                 </div>
 
-                {% empty %}
-                <div class="col-span-full text-center py-16 border-2 border-dashed border-gray-200 rounded-[2.5rem] bg-white/60">
-                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
-                        <i class="ph-fill ph-clipboard-text text-3xl text-gray-300"></i>
-                    </div>
-                    <p class="text-lg font-bold text-gray-900 heading">Belum ada data barang</p>
-                    <p class="text-sm text-gray-500 mt-1">Sistem akan melacak otomatis saat ada kebutuhan baru.</p>
+                <div>
+                    <h2 class="heading text-2xl font-black text-gray-900">
+                        Distribusi Kebutuhan
+                    </h2>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Visualisasi barang masuk dan target kebutuhan.
+                    </p>
                 </div>
-                {% endfor %}
 
             </div>
-        </div>
 
-        <div class="pt-6">
-            <h2 class="text-2xl font-black heading text-gray-900 mb-6">Riwayat Barang Masuk</h2>
+            <div class="h-[380px]">
+                <canvas id="barangChart"></canvas>
+            </div>
 
-            <div class="space-y-4">
-                {% for b in alat %}
-                <div class="card-hover bg-white p-5 md:p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group">
-                    
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-[1rem] bg-gray-50 border border-gray-100 text-gray-400 flex items-center justify-center text-2xl shrink-0 group-hover:bg-jejak-accent/10 group-hover:text-jejak-accent transition-colors">
-                            <i class="ph-fill ph-package"></i>
-                        </div>
+        </section>
+
+        <!-- DETAIL -->
+        <section>
+
+            <div class="flex items-center gap-3 mb-6">
+
+                <div
+                    class="w-12 h-12 rounded-2xl bg-jejak-secondary/10 flex items-center justify-center text-jejak-secondary">
+                    <i class="ph-fill ph-list-checks text-2xl"></i>
+                </div>
+
+                <div>
+                    <h2 class="heading text-2xl font-black text-gray-900">
+                        Status Pemenuhan
+                    </h2>
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Detail progres setiap kebutuhan barang proyek.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                {% for item in tracking %}
+
+                <div class="glass-card rounded-[2rem] p-6 card-hover relative overflow-hidden group">
+
+                    <div
+                        class="absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-jejak-primary to-jejak-secondary opacity-0 group-hover:opacity-100 transition-all">
+                    </div>
+
+                    <div class="flex justify-between items-start mb-5">
+
                         <div>
-                            <p class="font-bold text-gray-900 heading text-lg leading-tight">{{ b.nama_barang_custom|default:"Barang Tanpa Nama" }}</p>
-                            <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mt-1 flex items-center gap-1.5">
-                                <i class="ph-fill ph-user text-gray-400"></i> {{ b.donatur.username }}
+                            <p class="text-[11px] font-black uppercase tracking-[0.18em] text-gray-400 mb-2">
+                                Nama Barang
                             </p>
+
+                            <h3 class="heading text-xl font-black text-gray-900">
+                                {{ item.nama }}
+                            </h3>
                         </div>
+
+                        <div
+                            class="px-4 py-2 rounded-xl bg-jejak-primary/10 border border-jejak-primary/10 text-jejak-primary text-sm font-black">
+                            {{ item.persen }}%
+                        </div>
+
                     </div>
 
-                    <div class="text-left md:text-right border-t md:border-t-0 border-gray-50 pt-4 md:pt-0">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">Jumlah Diterima</p>
-                        <p class="text-xl font-black text-jejak-accent heading">{{ b.jumlah }} <span class="text-sm font-bold opacity-60 text-gray-500">Item</span></p>
-                        <p class="text-[10px] font-bold text-gray-400 flex items-center md:justify-end gap-1.5 mt-1">
-                            <i class="ph-bold ph-calendar-blank"></i> {{ b.tanggal|date:"d M Y" }}
+                    <div class="grid grid-cols-2 gap-4 mb-5">
+
+                        <div class="bg-white/70 rounded-2xl p-4 border border-black/[0.04]">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                                Masuk
+                            </p>
+
+                            <h4 class="heading text-xl font-black text-jejak-primary">
+                                Rp {{ item.masuk|intcomma }}
+                            </h4>
+                        </div>
+
+                        <div class="bg-white/70 rounded-2xl p-4 border border-black/[0.04]">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                                Target
+                            </p>
+
+                            <h4 class="heading text-xl font-black text-gray-900">
+                                Rp {{ item.target|intcomma }}
+                            </h4>
+                        </div>
+
+                    </div>
+
+                    <div>
+
+                        <div class="w-full h-3 rounded-full bg-gray-100 overflow-hidden mb-2">
+
+                            <div class="h-full rounded-full bg-gradient-to-r from-jejak-primary to-jejak-secondary relative"
+                                style="width: {{ item.persen }}%">
+
+                                <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-[11px] font-bold text-gray-400 text-right uppercase tracking-wider">
+                            {{ item.persen }}% terpenuhi
                         </p>
+
                     </div>
 
                 </div>
 
                 {% empty %}
-                <div class="text-center py-16 border-2 border-dashed border-gray-200 rounded-[2.5rem] bg-white/60">
-                    <p class="text-gray-500 font-medium">Belum ada transaksi barang masuk</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
 
-    </div>
+                <div
+                    class="col-span-full text-center py-20 rounded-[2.5rem] border-2 border-dashed border-black/10 bg-white/50">
+
+                    <div
+                        class="w-20 h-20 rounded-[2rem] bg-white shadow-sm border border-black/5 flex items-center justify-center mx-auto mb-5">
+
+                        <i class="ph-fill ph-package text-4xl text-gray-300"></i>
+
+                    </div>
+
+                    <h3 class="heading text-2xl font-black text-gray-900">
+                        Belum Ada Data
+                    </h3>
+
+                    <p class="text-gray-500 mt-2">
+                        Data kebutuhan akan tampil otomatis setelah proyek dibuat.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+    {% include 'petani/partials/footer.html' %}
 
     <script>
-    const ctx = document.getElementById('barangChart');
+        const ctx = document.getElementById('barangChart');
 
-    Chart.defaults.font.family = "'Inter', sans-serif";
-    Chart.defaults.color = '#9CA3AF';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = '#94A3B8';
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ labels|default:"[]"|safe }},
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ labels|default:"[]"|safe }},
             datasets: [
-                {
-                    label: 'Barang Masuk',
-                    data: {{ data_masuk|default:"[]"|safe }},
-                    backgroundColor: 'rgba(199, 107, 78, 0.85)', 
-                    hoverBackgroundColor: 'rgba(199, 107, 78, 1)',
-                    borderRadius: 6,
-                    borderWidth: 0
+            {
+                label: 'Barang Masuk',
+                data: {{ data_masuk|default:"[]"|safe }},
+            backgroundColor: 'rgba(29,77,58,0.85)',
+            borderRadius: 14,
+            borderSkipped: false,
                 },
-                {
-                    label: 'Target Kebutuhan',
-                    data: {{ data_target|default:"[]"|safe }},
-                    backgroundColor: 'rgba(31, 77, 58, 0.15)',
-                    hoverBackgroundColor: 'rgba(31, 77, 58, 0.3)',
-                    borderRadius: 6,
-                    borderWidth: 0
+            {
+                label: 'Target Kebutuhan',
+                data: {{ data_target|default:"[]"| safe }},
+            backgroundColor: 'rgba(77,124,62,0.18)',
+            borderRadius: 14,
+            borderSkipped: false,
                 }
-            ]
-        },
-        options: {
+        ]
+            },
+            options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
@@ -211,32 +568,45 @@
                     position: 'top',
                     labels: {
                         usePointStyle: true,
-                        padding: 20,
-                        font: { weight: 'bold' }
+                        padding: 24,
+                        font: {
+                            weight: 'bold'
+                        }
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(31, 77, 58, 0.9)',
-                    titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 14 },
-                    bodyFont: { size: 13 },
-                    padding: 12,
-                    cornerRadius: 12
+                    backgroundColor: 'rgba(15,23,42,0.92)',
+                    padding: 14,
+                    cornerRadius: 14,
+                    titleFont: {
+                        family: "'Plus Jakarta Sans', sans-serif",
+                        weight: 'bold'
+                    }
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: 'rgba(0, 0, 0, 0.04)', drawBorder: false },
-                    border: { display: false }
+                    grid: {
+                        color: 'rgba(0,0,0,0.04)'
+                    },
+                    border: {
+                        display: false
+                    }
                 },
                 x: {
-                    grid: { display: false },
-                    border: { display: false }
+                    grid: {
+                        display: false
+                    },
+                    border: {
+                        display: false
+                    }
                 }
             }
         }
-    });
-</script>
+        });
+    </script>
+
 </body>
 
 </html>
