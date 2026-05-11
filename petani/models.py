@@ -71,16 +71,11 @@ class Project(models.Model):
             )['total'] or 0
     
 
-    from django.db.models import Sum, F
-
     @property
     def total_kebutuhan(self):
         return self.kebutuhan_barang.aggregate(
             total=Sum(F('harga_satuan') * F('jumlah_dibutuhkan'))
         )['total'] or 0
-
-
-    from django.db.models import Sum, F
 
     @property
     def total_kebutuhan(self):
@@ -165,6 +160,37 @@ class KebutuhanBarang(models.Model):
     @property
     def total_harga(self):
         return self.harga_satuan * self.jumlah_dibutuhkan
+    @property
+    def total_terpenuhi(self):
+
+        from donatur.models import DonasiBarangItem
+
+        total = DonasiBarangItem.objects.filter(
+            kebutuhan=self
+        ).aggregate(
+            total=Sum('jumlah')
+        )['total'] or 0
+
+        return total
+    @property
+    def sisa_kebutuhan(self):
+
+        sisa = self.jumlah_dibutuhkan - self.total_terpenuhi
+
+        return max(sisa, 0)
+
+    @property
+    def progress_persen(self):
+
+        if self.jumlah_dibutuhkan <= 0:
+            return 0
+
+        persen = (
+            self.total_terpenuhi /
+            self.jumlah_dibutuhkan
+        ) * 100
+
+        return min(round(persen), 100)
 
 class HasilPanen(models.Model):
     project = models.ForeignKey(

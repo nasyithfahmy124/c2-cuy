@@ -32,39 +32,44 @@ class FormDonasiBarang(forms.ModelForm):
         fields = []  # kosong (atau tambah catatan kalau mau)
 
 class FormDonasiBarangItem(forms.ModelForm):
+
     class Meta:
         model = DonasiBarangItem
         fields = ['kebutuhan', 'jumlah']
 
         widgets = {
-            'kebutuhan': forms.Select(attrs={'class': 'form-control'}),
-            'jumlah': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
+            'kebutuhan': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+
+            'jumlah': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1
+            }),
         }
+
     def __init__(self, *args, **kwargs):
+
         project = kwargs.pop('project', None)
+
         super().__init__(*args, **kwargs)
 
         if project:
-            self.fields['kebutuhan'].queryset = KebutuhanBarang.objects.filter(
-                project=project
-            ).order_by('id')
 
-            qs = KebutuhanBarang.objects.filter(project=project)
+            self.fields['kebutuhan'].queryset = (
+                KebutuhanBarang.objects.filter(project=project)
+            )
 
-            self.fields['kebutuhan'].queryset = qs
-
-            self.fields['kebutuhan'].widget.choices = [
-                (k.id, f"{k.nama_barang} - Rp{k.harga_satuan}")
-                for k in qs
-            ]
     def clean(self):
+
         cleaned_data = super().clean()
+
         instance = self.instance
 
         instance.kebutuhan = cleaned_data.get('kebutuhan')
         instance.jumlah = cleaned_data.get('jumlah')
 
-        instance.clean()  # 🔥 panggil model clean
+        instance.clean()
 
         return cleaned_data
 

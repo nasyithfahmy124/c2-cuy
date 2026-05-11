@@ -1,625 +1,1274 @@
-{% load static %} {% load humanize %} <!doctype html>
+{% load static %} {% load humanize %}
+<!doctype html>
 <html lang="id" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JejakDaya - Platform Circular Economy</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <style>
-      .animate-fade-in-up {
-        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JejakDaya - Platform Circular Economy</title>
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+  <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}" />
+  <style>
+    body {
+      font-family: "Plus Jakarta Sans", "Inter", sans-serif;
+      background-color: #ffffff;
+    }
+
+    #dynamic-text::after {
+      content: "|";
+      animation: blink 0.7s infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      50% {
         opacity: 0;
-        transform: translateY(20px);
       }
-      .delay-100 {
-        animation-delay: 100ms;
-      }
-      .delay-200 {
-        animation-delay: 200ms;
-      }
-      .delay-300 {
-        animation-delay: 300ms;
-      }
+    }
 
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-    </style>
-  </head>
+    /* Entrance Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-  <body
-    class="bg-[#F8FAFC] font-sans text-gray-800 antialiased selection:bg-jejak-secondary selection:text-white"
-  >
-    <nav
-      class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300"
-    >
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-[72px]">
-          <a href="#home" class="flex items-center gap-2.5 group">
-            <div
-              class="w-9 h-9 rounded-xl bg-jejak-primary text-white flex items-center justify-center shadow-md"
-            >
-              <i class="ph-fill ph-leaf text-xl"></i>
-            </div>
-            <span class="text-xl font-bold tracking-tight text-gray-900"
-              >JejakDaya</span
-            >
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.active,
+    .reveal-left.active,
+    .reveal-right.active {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased selection:bg-[#82c341] selection:text-white">
+  <!-- Navbar -->
+  <nav
+    class="fixed top-4 md:top-6 left-1/2 transform -translate-x-1/2 w-[95%] max-w-7xl bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full px-5 py-3 md:px-8 z-50 shadow-md flex flex-col md:flex-row md:items-center md:justify-between transition-all">
+    <div class="flex justify-between items-center w-full md:w-auto">
+      <!-- LOGO -->
+      <a href="#home" class="flex items-center gap-3">
+
+        <img src="{% static 'assets/logo/Asset3.png' %}" alt="logo"
+          class="h-10 w-auto object-contain transition-transform duration-300 hover:scale-105">
+
+      </a>
+      <button id="mobile-menu-btn"
+        class="md:hidden text-gray-600 focus:outline-none hover:text-[#82c341] transition-colors">
+        <i class="ph ph-list text-2xl"></i>
+      </button>
+    </div>
+
+    <ul class="hidden lg:flex items-center space-x-8 text-sm font-bold text-[#4a6b2c]">
+      <li>
+        <a href="#home" class="hover:text-[#82c341] transition-colors">Home</a>
+      </li>
+      <li>
+        <a href="#tentang" class="hover:text-[#82c341] transition-colors">About</a>
+      </li>
+      <li>
+        <a href="#dampak" class="hover:text-[#82c341] transition-colors">Impact</a>
+      </li>
+      <li>
+        <a href="#proyek" class="hover:text-[#82c341] transition-colors">List of Requirements</a>
+      </li>
+    </ul>
+
+    <a href="{% url 'register' %}"
+      class="hidden md:flex items-center gap-2 px-6 py-3 bg-[#82c341] text-white rounded-full text-sm font-extrabold shadow-md hover:bg-[#6a9e33] transition-all hover:-translate-y-0.5">
+      <i class="ph-fill ph-bookmark-simple text-lg"></i> Get Started
+    </a>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden flex flex-col mt-5 pt-5 border-t border-gray-100 w-full text-center">
+      <ul class="flex flex-col space-y-5 text-base font-bold text-[#4a6b2c]">
+        <li>
+          <a href="#home" class="block hover:text-[#82c341] transition-colors">Home</a>
+        </li>
+        <li>
+          <a href="#tentang" class="block hover:text-[#82c341] transition-colors">About</a>
+        </li>
+        <li>
+          <a href="#dampak" class="block hover:text-[#82c341] transition-colors">Impact</a>
+        </li>
+        <li>
+          <a href="#proyek" class="block hover:text-[#82c341] transition-colors">List of Requirements</a>
+        </li>
+        <li class="pt-3">
+          <a href="{% url 'register' %}"
+            class="flex justify-center items-center gap-2 w-full py-3.5 bg-[#82c341] text-white rounded-xl font-extrabold shadow-md">
+            <i class="ph-fill ph-bookmark-simple text-lg"></i> Get Started
           </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-          <ul
-            class="hidden md:flex items-center space-x-8 text-sm font-semibold text-gray-500"
-          >
-            <li>
-              <a href="#home" class="hover:text-gray-900 transition-colors"
-                >Beranda</a
-              >
-            </li>
-            <li>
-              <a href="#tentang" class="hover:text-gray-900 transition-colors"
-                >Tentang Kami</a
-              >
-            </li>
-            <li>
-              <a href="#dampak" class="hover:text-gray-900 transition-colors"
-                >Dampak</a
-              >
-            </li>
-            <li>
-              <a href="#proyek" class="hover:text-gray-900 transition-colors"
-                >Daftar Kebutuhan</a
-              >
-            </li>
-          </ul>
+  <!-- Hero Section -->
+  <section id="home"
+    class="relative w-full min-h-[85vh] md:min-h-[800px] rounded-b-[2rem] md:rounded-b-[4rem] overflow-hidden flex flex-col justify-center pt-32 pb-20">
+    <div class="absolute inset-0 z-0">
+      <img src="{% static 'assets/img/bg-final.jpg' %}" alt="Background" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70"></div>
+    </div>
 
-          <div class="hidden md:flex items-center gap-4">
-            <a
-              href="{% url 'login' %}"
-              class="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors"
-              >Masuk</a
-            >
-            <a
-              href="{% url 'register' %}"
-              class="px-5 py-2.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold shadow-md transition-all"
-            >
-              Daftar Gratis
-            </a>
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 w-full relative z-10 text-center md:text-left reveal">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-[10px] md:text-xs font-bold uppercase tracking-widest mb-6 border border-white/30">
+        <div class="bg-white text-[#2a3f29] rounded-full w-6 h-6 flex items-center justify-center">
+          <i class="ph-fill ph-house text-sm"></i>
+        </div>
+        INKUBASI PETANI GEN Z
+      </div>
+
+      <h1
+        class="min-h-[160px] md:min-h-0 text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight md:leading-[1.1] mb-6 max-w-4xl tracking-tight">
+        Kami Tidak Berinvestasi <br class="hidden md:block" />
+        pada Komoditas, melainkan <br class="hidden md:block" />
+        <span id="dynamic-text"
+          class="text-[#82c341] tracking-normal text-2xl md:text-4xl lg:text-5xl block mt-4 drop-shadow-md">Menghubungkan
+          Kebutuhan Petani & Kontribusi Masyarakat</span>
+      </h1>
+
+      <p class="text-white/90 text-sm md:text-lg max-w-2xl mb-10 leading-relaxed font-medium mx-auto md:mx-0">
+        Melalui Jejak Daya, generasi muda mendapatkan fasilitas untuk
+        mempelajari Future Skills di bidang agribisnis modern (seperti
+        logistik digital & smart farming). Kami memastikan teknologi pertanian
+        dapat diakses tanpa butuh privilege modal.
+      </p>
+
+      <a href="{% url 'register' %}"
+        class="inline-flex items-center justify-center px-10 py-4 bg-[#82c341] hover:bg-[#6a9e33] text-white rounded-full font-bold text-base shadow-xl transition-transform hover:-translate-y-1">
+        Jelajahi Sekarang
+      </a>
+    </div>
+  </section>
+
+  <!-- Floating Search Bar -->
+  <div class="relative z-30 max-w-5xl mx-auto -mt-10 px-4 md:px-6 reveal">
+    <div
+      class="bg-white rounded-[2rem] md:rounded-full shadow-2xl p-2 md:p-3 flex flex-col md:flex-row items-center justify-between border border-gray-100 gap-4 md:gap-0 transition-all">
+      <div class="flex items-center divide-x divide-gray-200 flex-grow w-full md:w-auto pt-2 md:pt-0">
+        <div class="w-1/2 text-gray-500 text-xs md:text-sm font-semibold py-2 px-4 md:px-8 text-center md:text-left">
+          Option line of sale
+        </div>
+        <div class="w-1/2 text-gray-500 text-xs md:text-sm font-semibold py-2 px-4 md:px-8 text-center md:text-left">
+          Connectesse Oliogus
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 px-4 md:pr-2 pb-3 md:pb-0 w-full md:w-auto justify-center md:justify-end">
+        <div
+          class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#dcf0c3] flex items-center justify-center text-[#82c341] transition-transform hover:scale-105">
+          <i class="ph-fill ph-user text-lg md:text-xl"></i>
+        </div>
+        <div
+          class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#dcf0c3] flex items-center justify-center text-[#82c341] transition-transform hover:scale-105">
+          <i class="ph-bold ph-magnifying-glass text-lg md:text-xl"></i>
+        </div>
+        <button
+          class="w-full md:w-auto px-8 py-3 md:py-3.5 rounded-full bg-[#2c3e24] hover:bg-[#1a2515] text-white font-bold text-sm shadow-lg transition-colors ml-0 md:ml-2">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Dampak Stats (Preserved for logic but visually out of the way) -->
+  <section id="dampak" class="py-12 bg-white">
+    <div class="max-w-6xl mx-auto px-6 opacity-60 hover:opacity-100 transition-opacity">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+        <div class="py-2 md:py-0 px-4 flex flex-col items-center reveal">
+          <div class="text-[#2a3f29] font-extrabold text-3xl">∞</div>
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+            Proyek Aktif
           </div>
+        </div>
+        <div class="py-2 md:py-0 px-4 flex flex-col items-center reveal">
+          <div class="text-[#2a3f29] font-extrabold text-3xl">
+            85<span class="text-[#82c341] text-lg">%</span>
+          </div>
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+            Terpenuhi
+          </div>
+        </div>
+        <div class="py-2 md:py-0 px-4 flex flex-col items-center reveal">
+          <div class="text-[#2a3f29] font-extrabold text-3xl">
+            50<span class="text-[#82c341] text-lg">+</span>
+          </div>
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+            Kelompok Tani
+          </div>
+        </div>
+        <div class="py-2 md:py-0 px-4 flex flex-col items-center reveal">
+          <div class="text-[#2a3f29] font-extrabold text-3xl">
+            1.2<span class="text-[#82c341] text-lg">k</span>
+          </div>
+          <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+            Kontributor
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <button
-            id="mobile-menu-btn"
-            class="md:hidden text-gray-600 focus:outline-none hover:text-jejak-primary transition-colors"
-          >
-            <i class="ph ph-list text-2xl"></i>
-          </button>
+  <!-- Selamat Datang Section -->
+  <section class="py-20 md:py-32 bg-[#fafbfa] overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+      <!-- Left Image -->
+      <div class="w-full lg:w-1/2 relative reveal-left">
+        <div class="rounded-[2.5rem] overflow-hidden shadow-2xl relative z-10">
+          <img src="{% static 'assets/img/dakstop_bg.png' %}" alt="Selamat Datang"
+            class="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover transition-transform duration-700 hover:scale-105" />
+        </div>
+
+        <div
+          class="absolute top-6 left-0 sm:left-[-20px] lg:left-[-30px] bg-[#82c341] text-white w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full flex flex-col items-center justify-center font-bold text-[9px] sm:text-[11px] lg:text-xs shadow-xl border-[6px] border-[#fafbfa] z-20">
+          <i class="ph-fill ph-house text-xl sm:text-2xl lg:text-3xl mb-1"></i>
+          NEW HOME
         </div>
       </div>
 
-      <div
-        id="mobile-menu"
-        class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl"
-      >
-        <ul
-          class="flex flex-col px-4 py-4 space-y-4 text-sm font-semibold text-gray-600"
-        >
-          <li>
-            <a href="#home" class="block hover:text-jejak-primary">Beranda</a>
-          </li>
-          <li>
-            <a href="#tentang" class="block hover:text-jejak-primary"
-              >Tentang Kami</a
-            >
-          </li>
-          <li>
-            <a href="#dampak" class="block hover:text-jejak-primary">Dampak</a>
-          </li>
-          <li>
-            <a href="#proyek" class="block hover:text-jejak-primary"
-              >Daftar Kebutuhan</a
-            >
-          </li>
-          <li class="pt-4 border-t border-gray-100 flex flex-col gap-3">
-            <a
-              href="{% url 'login' %}"
-              class="block w-full text-center py-2.5 rounded-lg bg-gray-50 border border-gray-200"
-              >Masuk</a
-            >
-            <a
-              href="{% url 'register' %}"
-              class="block w-full text-center py-2.5 rounded-lg bg-jejak-primary text-white"
-              >Daftar Gratis</a
-            >
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <section
-      id="home"
-      class="relative pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden min-h-[80vh] flex items-center justify-center"
-    >
-      <div class="absolute inset-0 z-0">
-        <img
-          src="{% static 'assets/img/dakstop_bg.png' %}"
-          alt="Background JejakDaya"
-          class="w-full h-full object-cover"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-b from-jejak-primary/75 via-jejak-primary/60 to-jejak-primary/85"
-        ></div>
-      </div>
-
-      <div
-        class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full"
-      >
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-sm font-medium mb-8 animate-fade-in-up backdrop-blur-sm"
-        >
-          <span class="flex h-2 w-2 relative">
-            <span
-              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-jejak-secondary opacity-75"
-            ></span>
-            <span
-              class="relative inline-flex rounded-full h-2 w-2 bg-jejak-secondary"
-            ></span>
-          </span>
-          Platform Circular Economy Agribisnis
-        </div>
-
-        <h1
-          class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.1] mb-6 animate-fade-in-up delay-100"
-        >
-          Menghubungkan <span class="text-jejak-accent">Kebutuhan Petani</span>
-          <br class="hidden md:block" />
-          & Kontribusi Masyarakat
-        </h1>
-
-        <p
-          class="text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-10 leading-relaxed animate-fade-in-up delay-200"
-        >
-          Platform inovatif yang transparan dan terukur. Bantu kelola sumber
-          daya secara berkelanjutan dan lacak dampak positifmu melalui
-          <em class="text-white font-semibold">Impact Receipt</em>.
+      <!-- Right Text -->
+      <div class="w-full lg:w-1/2 mt-12 lg:mt-0 px-4 sm:px-0 text-center lg:text-left reveal-right">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#2a3f29] mb-6 leading-tight">
+          Selamat Datang di Jejak Daya
+        </h2>
+        <p class="text-gray-500 text-sm sm:text-base lg:text-lg leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
+          Beautifully designed homes of the highest standard, for families in
+          search of sustainable lifestyles that are accessible, functional and
+          future ready. Thinking about individual preferences and unique
+          tastes.
         </p>
-
-        <div
-          class="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fade-in-up delay-300"
-        >
-          <a
-            href="{% url 'register' %}"
-            class="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-jejak-primary hover:bg-jejak-primary/90 text-white font-semibold shadow-lg shadow-jejak-primary/20 transition-all flex items-center justify-center gap-2"
-          >
-            Mulai Berkontribusi <i class="ph-bold ph-arrow-right"></i>
-          </a>
-          <a
-            href="#tentang"
-            class="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-white/10 border border-white/20 text-white hover:bg-white/20 font-semibold backdrop-blur-sm transition-all flex items-center justify-center gap-2"
-          >
-            <i class="ph-bold ph-play-circle text-lg"></i> Cara Kerja
+        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 lg:gap-8">
+          <button
+            class="w-full sm:w-auto px-8 py-4 bg-[#82c341] text-white rounded-full font-bold flex items-center justify-center gap-2.5 shadow-lg hover:bg-[#6a9e33] transition-colors text-base">
+            <i class="ph-fill ph-map-pin text-xl"></i> Explore Locations
+          </button>
+          <a href="#"
+            class="text-[#82c341] font-bold text-base lg:text-lg border-b-2 border-[#82c341] pb-1 hover:text-[#6a9e33] hover:border-[#6a9e33] transition-colors">
+            View All
           </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="dampak" class="relative z-30 px-6">
-      <div class="max-w-7xl mx-auto">
+  <!-- Keunggulan Kami Section -->
+  <section id="tentang" class="py-20 md:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#2a3f29] mb-5 tracking-tight">
+        Keunggulan Kami
+      </h2>
+      <p class="text-gray-500 text-sm md:text-lg max-w-3xl mx-auto mb-16 md:mb-20 leading-relaxed">
+        Jejak Daya Menghadirkan inovasi teknologi untuk memaksimalkan potensi
+        lahan dan hasil tani secara berkelanjutan
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
         <div
-          class="relative -mt-10 md:-mt-17 bg-jejak-bg rounded-2xl md:rounded-full py-4 px-8 md:px-12 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] border border-gray-100 animate-fade-in-up"
-        >
+          class="bg-[#fcfdfa] border border-gray-100/80 rounded-[2rem] p-8 text-left hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-300 group reveal">
           <div
-            class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100"
-          >
-            <div
-              class="py-2 md:py-0 flex flex-row md:flex-col lg:flex-row items-center justify-center gap-3"
-            >
-              <div
-                class="w-10 h-10 rounded-full bg-gray-50 flex-shrink-0 flex items-center justify-center"
-              >
-                <i class="ph-fill ph-target text-lg text-gray-400"></i>
-              </div>
-              <div class="text-left md:text-center lg:text-left">
-                <p
-                  class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-none"
-                >
-                  ∞
-                </p>
-                <p
-                  class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter"
-                >
-                  Proyek Aktif
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="py-2 md:py-0 flex flex-row md:flex-col lg:flex-row items-center justify-center gap-3 pt-4 md:pt-0"
-            >
-              <div
-                class="w-10 h-10 rounded-full bg-jejak-primary/10 flex-shrink-0 flex items-center justify-center"
-              >
-                <i
-                  class="ph-fill ph-check-circle text-lg text-jejak-primary"
-                ></i>
-              </div>
-              <div class="text-left md:text-center lg:text-left">
-                <p
-                  class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-none"
-                >
-                  85<span class="text-jejak-primary text-lg">%</span>
-                </p>
-                <p
-                  class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter"
-                >
-                  Terpenuhi
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="py-2 md:py-0 flex flex-row md:flex-col lg:flex-row items-center justify-center gap-3 pt-4 md:pt-0"
-            >
-              <div
-                class="w-10 h-10 rounded-full bg-jejak-secondary/10 flex-shrink-0 flex items-center justify-center"
-              >
-                <i
-                  class="ph-fill ph-users-three text-lg text-jejak-secondary"
-                ></i>
-              </div>
-              <div class="text-left md:text-center lg:text-left">
-                <p
-                  class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-none"
-                >
-                  50<span class="text-jejak-secondary text-lg">+</span>
-                </p>
-                <p
-                  class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter"
-                >
-                  Kelompok Tani
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="py-2 md:py-0 flex flex-row md:flex-col lg:flex-row items-center justify-center gap-3 pt-4 md:pt-0"
-            >
-              <div
-                class="w-10 h-10 rounded-full bg-jejak-accent/10 flex-shrink-0 flex items-center justify-center"
-              >
-                <i class="ph-fill ph-heart text-lg text-jejak-accent"></i>
-              </div>
-              <div class="text-left md:text-center lg:text-left">
-                <p
-                  class="text-2xl md:text-3xl font-extrabold text-gray-900 leading-none"
-                >
-                  1.2<span class="text-jejak-accent text-lg">k</span>
-                </p>
-                <p
-                  class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter"
-                >
-                  Kontributor
-                </p>
-              </div>
-            </div>
+            class="w-16 h-16 bg-[#dcf0c3] text-[#4a6b2c] rounded-2xl flex items-center justify-center text-3xl mb-8 transition-transform group-hover:scale-110 group-hover:rotate-3">
+            <i class="ph-bold ph-user"></i>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tentang" class="py-24 bg-[#F8FAFC]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2
-            class="text-jejak-primary font-bold tracking-wide text-sm uppercase mb-3"
-          >
-            Tentang JejakDaya
-          </h2>
-          <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Solusi Mengelola Sumber Daya
+          <h3 class="text-xl font-extrabold text-[#2a3f29] mb-3">
+            Pengelolaan Ahli
           </h3>
-          <p class="text-gray-500 text-lg">
-            Banyak petani kecil menghadapi kendala akses modal dan bibit. Kami
-            hadir memberikan solusi berkelanjutan melalui empat langkah mudah.
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Lahan dikelola secara profesional oleh tenaga ahli agrikultur
+            untuk hasil panen yang maksimal dan berkualitas tinggi.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          class="bg-[#fcfdfa] border border-gray-100/80 rounded-[2rem] p-8 text-left hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-300 group reveal">
           <div
-            class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-          >
-            <div
-              class="w-12 h-12 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-6"
-            >
-              1
-            </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">Pengajuan</h4>
-            <p class="text-gray-500 text-sm leading-relaxed">
-              Mitra (Petani) mengajukan kebutuhan spesifik alat atau bibit.
-            </p>
+            class="w-16 h-16 bg-[#dcf0c3] text-[#4a6b2c] rounded-2xl flex items-center justify-center text-3xl mb-8 transition-transform group-hover:scale-110 group-hover:-rotate-3">
+            <i class="ph-bold ph-file-text"></i>
           </div>
-          <div
-            class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-          >
-            <div
-              class="w-12 h-12 rounded-lg bg-jejak-secondary/10 text-jejak-secondary flex items-center justify-center text-xl mb-6"
-            >
-              2
-            </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">Kontribusi</h4>
-            <p class="text-gray-500 text-sm leading-relaxed">
-              Masyarakat menyalurkan bantuan berupa dana atau barang langsung.
-            </p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-          >
-            <div
-              class="w-12 h-12 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-6"
-            >
-              3
-            </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">Pelacakan</h4>
-            <p class="text-gray-500 text-sm leading-relaxed">
-              Kontribusi dicatat transparan dalam sistem
-              <em>Impact Receipt</em>.
-            </p>
-          </div>
-          <div
-            class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100"
-          >
-            <div
-              class="w-12 h-12 rounded-lg bg-jejak-accent/10 text-jejak-accent flex items-center justify-center text-xl mb-6"
-            >
-              4
-            </div>
-            <h4 class="text-lg font-bold text-gray-900 mb-2">Dampak</h4>
-            <p class="text-gray-500 text-sm leading-relaxed">
-              Perkembangan proyek dilaporkan secara terbuka dan real-time.
-            </p>
-          </div>
+          <h3 class="text-xl font-extrabold text-[#2a3f29] mb-3">
+            Transparansi Real-Time
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Pantau perkembangan aset dan laporan keuangan Anda kapan saja
+            melalui sistem monitoring yang transparan dan akurat.
+          </p>
         </div>
-      </div>
-    </section>
 
-    <section id="proyek" class="bg-gray-50 pb-24">
-      <div
-        class="bg-jejak-primary pt-24 pb-48 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
-      >
         <div
-          class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"
-        ></div>
-        <div
-          class="absolute bottom-0 left-10 w-40 h-40 bg-jejak-secondary/20 rounded-full blur-2xl pointer-events-none"
-        ></div>
+          class="bg-[#fcfdfa] border border-gray-100/80 rounded-[2rem] p-8 text-left hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-300 group reveal">
+          <div
+            class="w-16 h-16 bg-[#dcf0c3] text-[#4a6b2c] rounded-2xl flex items-center justify-center text-3xl mb-8 transition-transform group-hover:scale-110 group-hover:rotate-3">
+            <i class="ph-bold ph-newspaper-clipping"></i>
+          </div>
+          <h3 class="text-xl font-extrabold text-[#2a3f29] mb-3">
+            Pemberdayaan Lokal
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Setiap investasi Anda berkontribusi langsung pada kesejahteraan
+            petani lokal dan pelestarian lingkungan yang berkelanjutan.
+          </p>
+        </div>
 
-        <div class="max-w-7xl mx-auto text-center relative z-10">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-            Daftar Kebutuhan Petani
-          </h2>
-          <p class="text-white/80 max-w-2xl mx-auto text-lg leading-relaxed">
-            Pilih proyek yang ingin Anda dukung hari ini. Semua daftar kebutuhan
-            di bawah ini telah diverifikasi oleh tim JejakDaya.
+        <div
+          class="bg-[#fcfdfa] border border-gray-100/80 rounded-[2rem] p-8 text-left hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-300 group reveal">
+          <div
+            class="w-16 h-16 bg-[#dcf0c3] text-[#4a6b2c] rounded-2xl flex items-center justify-center text-3xl mb-8 transition-transform group-hover:scale-110 group-hover:-rotate-3">
+            <i class="ph-bold ph-flower-lotus"></i>
+          </div>
+          <h3 class="text-xl font-extrabold text-[#2a3f29] mb-3">
+            Investasi Terjangkau
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Membuka akses kepemilikan lahan dan proyek pertanian bagi siapa
+            saja dengan ambang batas modal yang lebih inklusif.
           </p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div class="max-w-7xl mx-auto relative z-20 -mt-32 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-          {% for project in projects %}
-          <div
-            class="group bg-white rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] transition-all duration-500 overflow-hidden flex flex-col"
-          >
-            <div class="relative h-56 overflow-hidden bg-gray-100">
-              {% if project.foto_lahan %}
-              <img
-                src="{{ project.foto_lahan.url }}"
-                alt="{{ project.nama }}"
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-              />
-              {% else %}
-              <div
-                class="w-full h-full flex items-center justify-center bg-gray-200"
-              >
-                <i class="ph-fill ph-plant text-5xl text-gray-400"></i>
-              </div>
-              {% endif %}
+  <!-- 10 Whilalagy For Sales? Section (Projects) -->
+  <section id="proyek" class="py-20 md:py-32 bg-[#eef2e6]">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#4a6b2c] mb-12 md:mb-20 tracking-tight">
+        10 Whilalagy For Sales?
+      </h2>
 
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"
-              ></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-7 text-left">
+        {% for project in projects %}
 
-              <div class="absolute top-4 left-4">
-                <span
-                  class="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-xs font-bold text-gray-800 flex items-center gap-1.5 shadow-sm"
-                >
-                  <i class="ph-fill ph-map-pin text-jejak-accent"></i> {{
-                  project.lokasi|default:"Lokasi belum diatur" }}
-                </span>
-              </div>
+        <!-- CARD -->
+        <div
+          class="group bg-white border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 reveal">
 
-              <div class="absolute top-4 right-4">
-                <span
-                  class="px-3 py-1.5 rounded-full text-xs font-bold text-white flex items-center gap-1.5 shadow-sm backdrop-blur-md bg-green-500/90"
-                >
-                  {{ project.get_status_display }}
-                </span>
-              </div>
+          <!-- IMAGE -->
+          <div class="relative overflow-hidden aspect-video bg-[#eef5e8]">
+
+            {% if project.foto_lahan %}
+            <img src="{{ project.foto_lahan.url }}" alt="{{ project.nama }}"
+              class="w-full h-full object-cover transition duration-700 group-hover:scale-105" />
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-[#dcf0c3]">
+              <i class="ph-fill ph-plant text-6xl text-[#4a6b2c]"></i>
             </div>
+            {% endif %}
 
-            <div class="p-6 md:p-8 flex-grow flex flex-col">
-              <h3
-                class="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-jejak-primary transition-colors"
-              >
-                {{ project.nama }}
-              </h3>
-              <p
-                class="text-gray-500 text-sm mb-6 line-clamp-2 leading-relaxed"
-              >
-                {{ project.kebutuhan|default:project.deskripsi|truncatechars:100
-                }}
-              </p>
+            <!-- OVERLAY -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent"></div>
 
-              <div class="mt-auto">
-                {% widthratio project.total_donasi project.target_dana 100 as
-                persen %}
-                <div class="mb-6">
-                  <div class="flex justify-between items-end mb-2">
-                    <div>
-                      <p
-                        class="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wider"
-                      >
-                        Sumber Daya Terkumpul
-                      </p>
-                      <p class="text-lg font-bold text-jejak-primary">
-                        Rp {{ project.total_donasi|default:0|intcomma }}
-                        <span class="text-sm text-gray-500 font-medium"
-                          >/ Rp {{ project.target_dana|intcomma }}</span
-                        >
-                      </p>
-                    </div>
-                    <span class="text-xl font-extrabold text-gray-900"
-                      >{{ persen }}%</span
-                    >
-                  </div>
-                  <div
-                    class="w-full bg-gray-100 rounded-full h-3 overflow-hidden"
-                  >
-                    <div
-                      class="bg-jejak-primary h-full rounded-full relative transition-all duration-1000"
-                      style="width: {{ persen }}%"
-                    >
-                      <div
-                        class="absolute top-0 left-0 bottom-0 right-0 bg-white/20 animate-pulse"
-                      ></div>
-                    </div>
-                  </div>
+            <!-- MAP BUTTON -->
+            <div class="absolute top-4 left-4 z-20">
+
+              <button
+                class="relative group/map w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-white/50 shadow-lg flex items-center justify-center text-[#2a3f29]">
+                <i class="ph-fill ph-map-pin text-lg"></i>
+
+                <!-- TOOLTIP -->
+                <div
+                  class="absolute left-1/2 -translate-x-1/2 top-14 whitespace-nowrap opacity-0 invisible group-hover/map:opacity-100 group-hover/map:visible transition-all duration-300 bg-[#2a3f29] text-white text-xs font-bold px-4 py-2 rounded-xl shadow-xl">
+                  {{ project.lokasi|default:"Indonesia" }}
                 </div>
 
-                <a
-                  href="{% url 'login' %}"
-                  class="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-jejak-primary/5 text-jejak-primary font-bold border border-jejak-primary/20 hover:bg-jejak-primary hover:text-white transition-all duration-300"
-                >
-                  Mulai Berdonasi <i class="ph-bold ph-arrow-right"></i>
+              </button>
+
+            </div>
+
+            <!-- STATUS -->
+            <div
+              class="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-[#82c341] text-white text-[10px] font-black uppercase tracking-wider shadow-lg">
+              Aktif
+            </div>
+
+            <!-- BOTTOM INFO -->
+            <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+
+              <!-- DURASI -->
+              <div class="bg-white/90 backdrop-blur-md rounded-2xl px-4 py-2 border border-white/50 shadow-lg">
+                <p class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-black mb-1">
+                  Durasi
+                </p>
+
+                <h4 class="text-sm font-extrabold text-[#2a3f29]">
+                  {{ project.berapa_bulan }}
+                </h4>
+              </div>
+
+              <!-- TARGET -->
+              <div
+                class="bg-white/90 backdrop-blur-md rounded-2xl px-4 py-2 border border-white/50 shadow-lg text-right">
+                <p class="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-black mb-1">
+                  Target
+                </p>
+
+                <h4 class="text-sm font-extrabold text-[#2a3f29]">
+                  Rp {{ project.target_dana|intcomma }}
+                </h4>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- CONTENT -->
+          <div class="p-5">
+
+            <!-- TITLE -->
+            <h3
+              class="text-xl leading-snug font-extrabold text-[#233320] mb-3 line-clamp-2 group-hover:text-[#4a6b2c] transition-colors">
+              {{ project.nama }}
+            </h3>
+
+            <!-- DESC -->
+            <p class="text-gray-500 text-sm leading-relaxed mb-5 line-clamp-2">
+              {{ project.kebutuhan|default:project.deskripsi }}
+            </p>
+
+            <!-- FOOTER -->
+            <div class="flex items-center justify-between gap-4">
+
+              <!-- LAHAN -->
+              <div class="flex items-center gap-2 text-gray-400">
+
+                <div class="w-9 h-9 rounded-xl bg-[#f3f7ef] flex items-center justify-center text-[#82c341]">
+                  <i class="ph-fill ph-leaf text-lg"></i>
+                </div>
+
+                <div>
+                  <p class="text-[10px] uppercase tracking-wide font-bold">
+                    Lahan
+                  </p>
+
+                  <span class="text-xs font-semibold text-[#2a3f29]">
+                    {{ project.luas_lahan }} m²
+                  </span>
+                </div>
+
+              </div>
+
+              <!-- BUTTON -->
+              <a href="{% url 'login' %}"
+                class="h-11 px-5 rounded-xl bg-[#2a3f29] hover:bg-[#1d2b1a] text-white text-sm font-bold flex items-center gap-2 transition-all">
+                Detail
+                <i class="ph-bold ph-arrow-up-right"></i>
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {% empty %}
+
+        <!-- EMPTY -->
+        <div class="col-span-full">
+          <div
+            class="flex flex-col items-center justify-center py-24 px-6 bg-white border border-gray-100 rounded-[2.5rem] text-center shadow-sm">
+
+            <div class="w-24 h-24 bg-[#dcf0c3] rounded-full flex items-center justify-center mb-7">
+              <i class="ph-fill ph-plant text-5xl text-[#4a6b2c]"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold text-[#2a3f29] mb-4">
+              Semua Kebutuhan Terpenuhi 🎉
+            </h3>
+
+            <p class="text-gray-500 text-base max-w-xl mx-auto leading-relaxed">
+              Saat ini belum ada proyek baru yang membutuhkan bantuan.
+            </p>
+
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUKASI HIGHLIGHT -->
+<section id="edukasi"
+  class="relative py-20 md:py-28 bg-[#f8faf7] overflow-hidden">
+
+  <!-- BACKGROUND -->
+  <div
+    class="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-[#82c341]/10 blur-3xl rounded-full">
+  </div>
+
+  <div
+    class="absolute bottom-[-120px] right-[-120px] w-[350px] h-[350px] bg-emerald-400/10 blur-3xl rounded-full">
+  </div>
+
+  <!-- GRID PATTERN -->
+  <div
+    class="absolute inset-0 opacity-[0.03]"
+    style="background-image: radial-gradient(#1f2e1e 1px, transparent 1px); background-size: 22px 22px;">
+  </div>
+
+  <div class="relative max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- HEADER -->
+    <div class="max-w-3xl mb-16 reveal">
+
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#edf2ea] shadow-sm text-[#4a6b2c] text-xs font-extrabold tracking-wider uppercase mb-6">
+
+        <div
+          class="w-7 h-7 rounded-full bg-[#82c341]/10 flex items-center justify-center">
+          <i class="ph-fill ph-graduation-cap"></i>
+        </div>
+
+        Edukasi Future Skills
+
+      </div>
+
+      <h2
+        class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1f2e1e] leading-tight tracking-tight mb-6">
+
+        Platform Belajar
+        <span class="relative inline-block text-[#82c341]">
+
+          Interaktif
+
+          <svg class="absolute -bottom-2 left-0 w-full"
+            viewBox="0 0 300 18"
+            fill="none">
+            <path d="M3 15C80 5 180 5 297 15"
+              stroke="currentColor"
+              stroke-width="5"
+              stroke-linecap="round" />
+          </svg>
+
+        </span>
+
+        untuk Generasi Agribisnis Modern
+
+      </h2>
+
+      <p class="text-gray-500 text-base md:text-lg leading-relaxed">
+        Belajar seperti menggunakan platform modern seperti RuangGuru,
+        Brainly, dan W3School — namun fokus pada smart farming,
+        teknologi pertanian, dan bisnis agrikultur masa depan.
+      </p>
+
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-7">
+
+      <!-- LEFT CONTENT -->
+      <div class="xl:col-span-2 space-y-6">
+
+        <!-- HERO COURSE -->
+        <div
+          class="group relative overflow-hidden rounded-[2.5rem] bg-[#1f2e1e] p-8 md:p-10 text-white hover:-translate-y-1 transition-all duration-500 shadow-xl reveal">
+
+          <!-- GLOW -->
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-[#82c341]/20 blur-3xl rounded-full">
+          </div>
+
+          <!-- FLOATING -->
+          <div
+            class="absolute top-10 right-10 hidden lg:flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-xs font-bold animate-pulse">
+            <span class="w-2 h-2 rounded-full bg-green-400"></span>
+            Live Learning
+          </div>
+
+          <div class="relative z-10">
+
+            <!-- TOP -->
+            <div
+              class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mb-7 group-hover:rotate-6 transition-all duration-500">
+              <i class="ph-fill ph-video-camera"></i>
+            </div>
+
+            <h3
+              class="text-3xl md:text-4xl font-extrabold leading-tight mb-5 max-w-2xl">
+              Smart Farming Academy
+            </h3>
+
+            <p
+              class="text-slate-300 leading-relaxed max-w-2xl mb-10 text-sm md:text-base">
+              Pelajari AI farming, monitoring tanaman, branding produk tani,
+              distribusi digital, hingga strategi bisnis agrikultur modern
+              dalam pengalaman belajar yang interaktif.
+            </p>
+
+            <!-- STATS -->
+            <div class="flex flex-wrap gap-4 mb-10">
+
+              <div
+                class="px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="text-2xl font-extrabold">50+</p>
+                <span class="text-xs text-slate-300">
+                  Modul Interaktif
+                </span>
+              </div>
+
+              <div
+                class="px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="text-2xl font-extrabold">1.2k</p>
+                <span class="text-xs text-slate-300">
+                  Pelajar Aktif
+                </span>
+              </div>
+
+              <div
+                class="px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
+                <p class="text-2xl font-extrabold">24/7</p>
+                <span class="text-xs text-slate-300">
+                  Online Access
+                </span>
+              </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="flex flex-wrap gap-4">
+
+              <a href="{% url 'pusat_edukasi' %}"
+                class="group/btn inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#82c341] hover:bg-[#74ac36] font-bold transition-all">
+
+                Mulai Belajar
+
+                <i
+                  class="ph-bold ph-arrow-right transition-transform group-hover/btn:translate-x-1">
+                </i>
+
+              </a>
+
+              <a href="{% url 'pusat_edukasi' %}"
+                class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 backdrop-blur-md font-bold transition-all">
+                <i class="ph-fill ph-play-circle text-xl"></i>
+                Preview Kelas
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- COURSE CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <!-- CARD -->
+          <div
+            class="group bg-white border border-[#edf2ea] rounded-[2rem] p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 reveal">
+
+            <div class="flex items-center justify-between mb-6">
+
+              <div
+                class="w-14 h-14 rounded-2xl bg-[#82c341]/10 text-[#4a6b2c] flex items-center justify-center text-2xl group-hover:scale-110 transition-all">
+                <i class="ph-fill ph-plant"></i>
+              </div>
+
+              <span
+                class="px-3 py-1 rounded-full bg-[#f3f7ef] text-[#4a6b2c] text-[11px] font-bold">
+                Beginner
+              </span>
+
+            </div>
+
+            <h4
+              class="text-xl font-extrabold text-[#1f2e1e] mb-3 group-hover:text-[#4a6b2c] transition-colors">
+              Dasar Smart Farming
+            </h4>
+
+            <p class="text-gray-500 text-sm leading-relaxed mb-6">
+              Belajar sistem pertanian modern berbasis data & teknologi.
+            </p>
+
+            <div class="flex items-center justify-between">
+
+              <div class="flex items-center gap-2 text-sm text-gray-400">
+                <i class="ph-fill ph-clock"></i>
+                4 Jam Belajar
+              </div>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-[#f3f7ef] text-[#4a6b2c] flex items-center justify-center group-hover:bg-[#82c341] group-hover:text-white transition-all">
+                <a href="{% url 'pusat_edukasi' %}">
+                  <i class="ph-bold ph-arrow-up-right"></i>
                 </a>
               </div>
+
             </div>
+
           </div>
 
-          {% empty %}
-          <div class="col-span-1 md:col-span-2 lg:col-span-3">
-            <div
-              class="flex flex-col items-center justify-center py-20 px-6 bg-gray-50/50 border-2 border-dashed border-gray-300 rounded-[2rem] text-center transition-all hover:bg-gray-50"
-            >
+          <!-- CARD -->
+          <div
+            class="group bg-white border border-[#edf2ea] rounded-[2rem] p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 reveal">
+
+            <div class="flex items-center justify-between mb-6">
+
               <div
-                class="w-24 h-24 bg-white shadow-sm border border-gray-100 rounded-full flex items-center justify-center mb-6"
-              >
-                <i class="ph-fill ph-plant text-5xl text-gray-300"></i>
+                class="w-14 h-14 rounded-2xl bg-[#82c341]/10 text-[#4a6b2c] flex items-center justify-center text-2xl group-hover:scale-110 transition-all">
+                <i class="ph-fill ph-chart-line-up"></i>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">
-                Semua Kebutuhan Terpenuhi 🎉
+
+              <span
+                class="px-3 py-1 rounded-full bg-[#f3f7ef] text-[#4a6b2c] text-[11px] font-bold">
+                Popular
+              </span>
+
+            </div>
+
+            <h4
+              class="text-xl font-extrabold text-[#1f2e1e] mb-3 group-hover:text-[#4a6b2c] transition-colors">
+              Bisnis Agribisnis
+            </h4>
+
+            <p class="text-gray-500 text-sm leading-relaxed mb-6">
+              Strategi branding, distribusi, dan pemasaran hasil tani digital.
+            </p>
+
+            <div class="flex items-center justify-between">
+
+              <div class="flex items-center gap-2 text-sm text-gray-400">
+                <i class="ph-fill ph-users-three"></i>
+                900+ Siswa
+              </div>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-[#f3f7ef] text-[#4a6b2c] flex items-center justify-center group-hover:bg-[#82c341] group-hover:text-white transition-all">
+                <i class="ph-bold ph-arrow-up-right"></i>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="space-y-6 reveal">
+
+        <!-- LEADERBOARD -->
+        <div
+          class="bg-white border border-[#edf2ea] rounded-[2rem] p-6 shadow-sm">
+
+          <div class="flex items-center justify-between mb-7">
+
+            <div>
+              <h3 class="text-xl font-extrabold text-[#1f2e1e]">
+                Top Learners
               </h3>
-              <p
-                class="text-gray-500 text-sm max-w-sm mx-auto mb-8 leading-relaxed"
-              >
-                Saat ini belum ada proyek lahan baru yang membutuhkan pendanaan.
-                Daftarkan akun Anda agar kami bisa memberi notifikasi saat
-                proyek baru tersedia.
+
+              <p class="text-sm text-gray-400">
+                Minggu ini
               </p>
-              <a
-                href="{% url 'register' %}"
-                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-jejak-primary text-white text-sm font-bold hover:bg-jejak-primary/90 shadow-lg shadow-jejak-primary/20 transition-all active:scale-95"
-              >
-                <i class="ph-bold ph-user-circle text-lg"></i> Daftar Akun
-                Gratis
-              </a>
             </div>
-          </div>
-          {% endfor %}
-        </div>
 
-        <div class="text-center mt-12">
-          <a
-            href="#proyek"
-            class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white border border-gray-200 font-semibold text-gray-700 shadow-sm hover:border-jejak-primary hover:text-jejak-primary transition-all"
-          >
-            Jelajahi Semua Kebutuhan <i class="ph-bold ph-arrow-up"></i>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <footer class="bg-gray-900 pt-16 pb-8 text-white border-t border-gray-800">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12"
-        >
-          <div class="flex items-center gap-3">
             <div
-              class="w-8 h-8 rounded-lg bg-jejak-primary text-white flex items-center justify-center"
-            >
-              <i class="ph-fill ph-leaf text-lg"></i>
+              class="w-11 h-11 rounded-xl bg-[#f3f7ef] text-[#82c341] flex items-center justify-center">
+              <i class="ph-fill ph-trophy"></i>
             </div>
-            <span class="text-xl font-bold tracking-tight">JejakDaya</span>
+
           </div>
 
-          <ul
-            class="flex flex-wrap justify-center gap-6 text-sm text-gray-400 font-medium"
-          >
-            <li>
-              <a href="#home" class="hover:text-white transition-colors"
-                >Home</a
-              >
-            </li>
-            <li>
-              <a href="#tentang" class="hover:text-white transition-colors"
-                >Tentang Kami</a
-              >
-            </li>
-            <li>
-              <a href="#proyek" class="hover:text-white transition-colors"
-                >Kebutuhan</a
-              >
-            </li>
-          </ul>
+          <div class="space-y-4">
+
+            <div
+              class="flex items-center justify-between p-4 rounded-2xl bg-[#f8faf7] hover:bg-[#f3f7ef] transition-all">
+
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="w-11 h-11 rounded-full bg-[#82c341] text-white flex items-center justify-center font-bold">
+                  A
+                </div>
+
+                <div>
+                  <h4 class="font-bold text-[#1f2e1e]">
+                    Andi Saputra
+                  </h4>
+
+                  <p class="text-xs text-gray-400">
+                    Smart Farming
+                  </p>
+                </div>
+
+              </div>
+
+              <span class="text-sm font-extrabold text-[#4a6b2c]">
+                98 XP
+              </span>
+
+            </div>
+
+            <div
+              class="flex items-center justify-between p-4 rounded-2xl bg-[#f8faf7] hover:bg-[#f3f7ef] transition-all">
+
+              <div class="flex items-center gap-3">
+
+                <div
+                  class="w-11 h-11 rounded-full bg-[#dff0c9] text-[#4a6b2c] flex items-center justify-center font-bold">
+                  N
+                </div>
+
+                <div>
+                  <h4 class="font-bold text-[#1f2e1e]">
+                    Nabila Putri
+                  </h4>
+
+                  <p class="text-xs text-gray-400">
+                    AI Agriculture
+                  </p>
+                </div>
+
+              </div>
+
+              <span class="text-sm font-extrabold text-[#4a6b2c]">
+                87 XP
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
+
+        <!-- MINI CTA -->
+        <div
+          class="relative overflow-hidden rounded-[2rem] bg-[#82c341] p-7 text-white shadow-xl">
+
+          <div
+            class="absolute top-0 right-0 w-40 h-40 bg-white/10 blur-3xl rounded-full">
+          </div>
+
+          <div class="relative">
+
+            <div
+              class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center text-2xl mb-6">
+              <i class="ph-fill ph-book-open-text"></i>
+            </div>
+
+            <h3 class="text-2xl font-extrabold leading-snug mb-4">
+              Mulai Skill Baru Hari Ini
+            </h3>
+
+            <p class="text-white/80 text-sm leading-relaxed mb-7">
+              Tingkatkan kemampuan agribisnis dan teknologi pertanian modern.
+            </p>
+
+            <a href="{% url 'pusat_edukasi' %}">
+              <button
+                class="w-full h-12 rounded-2xl bg-white text-[#4a6b2c] font-bold hover:scale-[1.02] transition-all">
+                Explore Classes
+              </button>
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- FOOTER -->
+  <footer class="relative bg-[#182416] text-white overflow-hidden">
+
+    <!-- BACKGROUND GLOW -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 left-1/4 w-80 h-80 bg-emerald-500/10 blur-3xl rounded-full"></div>
+      <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-lime-500/10 blur-3xl rounded-full"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-12">
+
+      <!-- TOP CTA -->
+      <div class="pt-20">
 
         <div
-          class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500"
-        >
-          <p>&copy; 2026 JejakDaya. Menuju Pertanian Berkelanjutan.</p>
-          <div class="flex gap-6">
-            <span class="flex items-center gap-2"
-              ><i class="ph-fill ph-envelope-simple text-gray-400"></i>
-              jejakdaya@gmail.com</span
-            >
-            <span class="flex items-center gap-2"
-              ><i class="ph-fill ph-whatsapp-logo text-gray-400"></i>
-              0859-1661-40169</span
-            >
+          class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl p-6 lg:p-10 shadow-2xl">
+
+          <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-lime-400/5 to-transparent">
           </div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+
+            <!-- LEFT -->
+            <div class="flex items-start gap-5">
+
+              <div
+                class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center shrink-0 shadow-xl">
+                <img src="{% static 'assets/logo/Asset5.png' %}" alt="JejakDaya Logo" class="w-10 h-10 object-contain">
+              </div>
+
+              <div>
+
+                <h3 class="text-2xl lg:text-3xl font-black tracking-tight mb-3">
+                  Bergabung Dengan JejakDaya
+                </h3>
+
+                <p class="text-sm text-slate-300 leading-relaxed max-w-2xl">
+                  Dapatkan insight pertanian modern, dokumentasi proyek,
+                  edukasi agribisnis, dan perkembangan investasi petani
+                  langsung dari platform JejakDaya.
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- FORM -->
+            <form class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+
+              <input type="email" placeholder="Masukkan email Anda"
+                class="h-14 px-5 rounded-2xl bg-white/10 border border-white/10 text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 focus:border-emerald-400 transition-all min-w-[280px]">
+
+              <button type="submit"
+                class="h-14 px-8 rounded-2xl bg-[#7BBE21] hover:bg-[#6fa91f] transition-all font-bold shadow-lg shadow-emerald-500/20">
+                Subscribe
+              </button>
+
+            </form>
+
+          </div>
+
         </div>
+
       </div>
-    </footer>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("mobile-menu-btn");
-        const menu = document.getElementById("mobile-menu");
+      <!-- MAIN FOOTER -->
+      <div class="py-20">
 
-        btn.addEventListener("click", function () {
-          menu.classList.toggle("hidden");
-        });
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
 
-        const links = menu.querySelectorAll("a");
-        links.forEach((link) => {
-          link.addEventListener("click", () => {
-            menu.classList.add("hidden");
-          });
+          <!-- BRAND -->
+          <div class="lg:col-span-2">
+
+            <div class="flex items-center gap-4 mb-6">
+
+              <div
+                class="w-14 h-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center backdrop-blur-md">
+                <img src="{% static 'assets/logo/Asset5.png' %}" alt="JejakDaya Logo" class="w-7 h-7 object-contain">
+              </div>
+
+              <div>
+
+                <h2 class="text-2xl font-black tracking-tight">
+                  JejakDaya<span class="text-emerald-400">.</span>
+                </h2>
+
+                <p class="text-xs text-slate-400 font-medium">
+                  Digital Agribusiness Ecosystem
+                </p>
+
+              </div>
+
+            </div>
+
+            <p class="text-sm text-slate-400 leading-relaxed max-w-md mb-7">
+              Platform agribisnis modern yang menghubungkan petani,
+              donatur, investor, dokumentasi lapangan, dan edukasi
+              teknologi pertanian dalam satu ekosistem digital.
+            </p>
+
+            <!-- CONTACT -->
+            <div class="space-y-4 text-sm text-slate-300">
+
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <i class="ph-fill ph-map-pin text-emerald-400"></i>
+                </div>
+
+                <span>Indonesia • Pertanian Digital Modern</span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <i class="ph-fill ph-envelope-simple text-emerald-400"></i>
+                </div>
+
+                <span>support@jejakdaya.id</span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                  <i class="ph-fill ph-phone text-emerald-400"></i>
+                </div>
+
+                <span>+62 812-3456-7890</span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- NAVIGATION -->
+          <div>
+
+            <h4 class="text-lg font-bold mb-6">
+              Navigasi
+            </h4>
+
+            <ul class="space-y-4 text-sm text-slate-400">
+
+              <li>
+                <a href="#home" class="hover:text-emerald-400 transition-colors">
+                  Beranda
+                </a>
+              </li>
+
+              <li>
+                <a href="#tentang" class="hover:text-emerald-400 transition-colors">
+                  Tentang Kami
+                </a>
+              </li>
+
+              <li>
+                <a href="#proyek" class="hover:text-emerald-400 transition-colors">
+                  Proyek
+                </a>
+              </li>
+
+              <li>
+                <a href="#dokumentasi" class="hover:text-emerald-400 transition-colors">
+                  Dokumentasi
+                </a>
+              </li>
+
+              <li>
+                <a href="#dampak" class="hover:text-emerald-400 transition-colors">
+                  Dampak Sosial
+                </a>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <!-- FEATURES -->
+          <div>
+
+            <h4 class="text-lg font-bold mb-6">
+              Fitur Platform
+            </h4>
+
+            <ul class="space-y-4 text-sm text-slate-400">
+
+              <li class="flex items-center gap-2">
+                <i class="ph-fill ph-chart-line-up text-emerald-400"></i>
+                Investasi Lahan
+              </li>
+
+              <li class="flex items-center gap-2">
+                <i class="ph-fill ph-video-camera text-emerald-400"></i>
+                Dokumentasi Proyek
+              </li>
+
+              <li class="flex items-center gap-2">
+                <i class="ph-fill ph-hand-heart text-emerald-400"></i>
+                Donasi Kebutuhan
+              </li>
+
+              <li class="flex items-center gap-2">
+                <i class="ph-fill ph-coins text-emerald-400"></i>
+                Sistem Bagi Hasil
+              </li>
+
+              <li class="flex items-center gap-2">
+                <i class="ph-fill ph-brain text-emerald-400"></i>
+                Edukasi Smart Farming
+              </li>
+
+            </ul>
+
+          </div>
+
+          <!-- SOCIAL -->
+          <div>
+
+            <h4 class="text-lg font-bold mb-6">
+              Ikuti Kami
+            </h4>
+
+            <div class="flex flex-wrap gap-3 mb-7">
+
+              <a href="#"
+                class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500 hover:border-emerald-500 flex items-center justify-center transition-all duration-300 group">
+                <i class="ph-fill ph-instagram-logo text-lg text-slate-300 group-hover:text-white"></i>
+              </a>
+
+              <a href="#"
+                class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500 hover:border-emerald-500 flex items-center justify-center transition-all duration-300 group">
+                <i class="ph-fill ph-youtube-logo text-lg text-slate-300 group-hover:text-white"></i>
+              </a>
+
+              <a href="#"
+                class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500 hover:border-emerald-500 flex items-center justify-center transition-all duration-300 group">
+                <i class="ph-fill ph-facebook-logo text-lg text-slate-300 group-hover:text-white"></i>
+              </a>
+
+              <a href="#"
+                class="w-11 h-11 rounded-xl bg-white/5 border border-white/10 hover:bg-emerald-500 hover:border-emerald-500 flex items-center justify-center transition-all duration-300 group">
+                <i class="ph-fill ph-x-logo text-lg text-slate-300 group-hover:text-white"></i>
+              </a>
+
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Transparansi, dokumentasi, dan dampak sosial menjadi
+                fokus utama JejakDaya dalam membangun pertanian masa depan.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="border-t border-white/10 py-7 flex flex-col md:flex-row items-center justify-between gap-5">
+
+        <p class="text-sm text-slate-500 text-center md:text-left">
+          © 2026 JejakDaya. Menuju Pertanian Berkelanjutan Indonesia.
+        </p>
+
+        <div class="flex items-center gap-5 text-sm text-slate-500">
+
+          <a href="#" class="hover:text-emerald-400 transition-colors">
+            Privacy
+          </a>
+
+          <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+
+          <a href="#" class="hover:text-emerald-400 transition-colors">
+            Terms
+          </a>
+
+          <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+
+          <a href="#" class="hover:text-emerald-400 transition-colors">
+            Sitemap
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Mobile Menu Logic
+      const btn = document.getElementById("mobile-menu-btn");
+      const menu = document.getElementById("mobile-menu");
+
+      btn.addEventListener("click", function () {
+        menu.classList.toggle("hidden");
+      });
+
+      const links = menu.querySelectorAll("a");
+      links.forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.add("hidden");
         });
       });
-    </script>
-  </body>
+
+      // Typewriter Dynamic Text Logic
+      const dynamicTextElement = document.getElementById("dynamic-text");
+      const texts = [
+        "Menghubungkan Kebutuhan Petani & Kontribusi Masyarakat",
+        "Membangun Ketahanan Pangan Berkelanjutan",
+        "Memberdayakan Generasi Muda di Sektor Agrikultur",
+        "Menghadirkan Inovasi Teknologi Pertanian Modern",
+      ];
+
+      let textIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+
+      function typeEffect() {
+        const currentText = texts[textIndex];
+
+        if (!isDeleting) {
+          dynamicTextElement.textContent = currentText.substring(
+            0,
+            charIndex + 1,
+          );
+          charIndex++;
+
+          if (charIndex === currentText.length) {
+            isDeleting = true;
+            setTimeout(typeEffect, 1800); // Wait after typing finishes
+            return;
+          }
+        } else {
+          dynamicTextElement.textContent = currentText.substring(
+            0,
+            charIndex - 1,
+          );
+          charIndex--;
+
+          if (charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length;
+          }
+        }
+
+        setTimeout(typeEffect, isDeleting ? 35 : 70);
+      }
+
+      if (dynamicTextElement) {
+        typeEffect();
+      }
+
+      // Intersection Observer for Entrance Animations
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          } else {
+            entry.target.classList.remove("active");
+          }
+        });
+      }, observerOptions);
+
+      document
+        .querySelectorAll(".reveal, .reveal-left, .reveal-right")
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    });
+  </script>
+</body>
+
 </html>

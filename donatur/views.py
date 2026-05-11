@@ -85,28 +85,31 @@ def danai_project(request, id):
     })
     
 
+@login_required
 def donasi_barang(request, id):
-    project = Project.objects.get(id=id)
+
+    project = get_object_or_404(Project, id=id)
 
     DonasiBarangItemFormSet = inlineformset_factory(
         DonasiBarang,
         DonasiBarangItem,
         form=FormDonasiBarangItem,
         extra=1,
-        can_delete=True
+        can_delete=False
     )
 
     if request.method == 'POST':
+
         form = FormDonasiBarang(request.POST)
+
         formset = DonasiBarangItemFormSet(
-                    request.POST,
-                    form_kwargs={'project': project}
-                )
-        # 🔥 inject project ke setiap form
-        # for f in formset.forms:
-        #     f.fields['kebutuhan'].queryset = KebutuhanBarang.objects.filter(project=project)
+            request.POST,
+            prefix='items',
+            form_kwargs={'project': project}
+        )
 
         if form.is_valid() and formset.is_valid():
+
             donasi = form.save(commit=False)
             donasi.donatur = request.user
             donasi.project = project
@@ -115,20 +118,22 @@ def donasi_barang(request, id):
             formset.instance = donasi
             formset.save()
 
-            return redirect('home_d')
+            messages.success(
+                request,
+                'Donasi barang berhasil dikirim!'
+            )
 
-    else:
-        form = FormDonasiBarang()
+        else:
 
-        formset = DonasiBarangItemFormSet(
-            form_kwargs={'project': project}
-        )
+            print(form.errors)
+            print(formset.errors)
 
-    return render(request, 'donatur/danaibarang.html', {
-        'form': form,
-        'formset': formset,
-    })
+            messages.error(
+                request,
+                'Donasi gagal dikirim. Periksa kembali input.'
+            )
 
+    return redirect('det', id=project.id)
 @login_required
 def lihat_laporan(request, id):
     project = get_object_or_404(Project, id=id)
@@ -141,15 +146,23 @@ def lihat_laporan(request, id):
     
 @login_required
 def detail(request, id):
+
     det = get_object_or_404(Project, id=id)
 
-    total = Donasi.objects.filter(project=det).aggregate(
+    total = Donasi.objects.filter(
+        project=det
+    ).aggregate(
         Sum('jumlah')
     )['jumlah__sum'] or 0
 
+    kebutuhan = KebutuhanBarang.objects.filter(
+        project=det
+    )
+
     return render(request, 'donatur/detail.html', {
         'detail': det,
-        'total_donasi_db': total
+        'total_donasi': total,
+        'kebutuhan': kebutuhan,
     })
 @login_required 
 def detail_donasi(request):
