@@ -1,65 +1,592 @@
+{% load static %}
+{% load humanize %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <title>Laporan Proyek • JejakDaya</title>
+
+    <meta name="description"
+        content="Pantau perkembangan proyek pertanian yang Anda dukung secara transparan dan realtime bersama JejakDaya.">
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}">
+
+    <!-- FONT -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        :root {
+            --primary: #163B2D;
+            --secondary: #3F7D58;
+            --accent: #85A947;
+            --bg: #F7F8F4;
+            --text: #0F172A;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+        }
+
+        .card-hover {
+            transition: all .4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow:
+                0 30px 60px rgba(15, 23, 42, .08);
+        }
+
+        .hero-gradient {
+            background:
+                radial-gradient(circle at top left, rgba(133, 169, 71, .18), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(63, 125, 88, .12), transparent 35%);
+        }
+
+        .grid-pattern {
+            background-image:
+                linear-gradient(rgba(15, 23, 42, .03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 23, 42, .03) 1px, transparent 1px);
+            background-size: 70px 70px;
+        }
+
+        .fade-up {
+            animation: fadeUp .8s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .image-hover {
+            transition: transform .8s ease;
+        }
+
+        .group:hover .image-hover {
+            transform: scale(1.05);
+        }
+
+        .line-clamp-4 {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        img {
+            content-visibility: auto;
+        }
+    </style>
 </head>
-<body>
-    {% for laporan in laporan %}
-    
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
-    
-        <!-- header -->
-        <div class="flex items-start justify-between gap-4 mb-4">
-    
-            <div>
-                <h2 class="text-xl font-bold text-gray-900">
-                    {{ laporan.judul }}
-                </h2>
-    
-                <p class="text-sm text-gray-500 mt-1">
-                    {{ laporan.tanggal|date:"d M Y • H:i" }}
-                </p>
+
+<body class="min-h-screen antialiased">
+
+    <!-- GRID BG -->
+    <div class="fixed inset-0 grid-pattern opacity-60 pointer-events-none"></div>
+
+    <!-- NAVBAR -->
+    {% include 'donatur/partials/navbar.html' %}
+
+    <!-- HERO -->
+    <section class="relative overflow-hidden pt-8 md:pt-10">
+
+        <!-- BG -->
+        <img src="{% static 'assets/img/bg-final.jpg' %}"
+            class="absolute inset-0 w-full h-full object-cover scale-110"
+            alt="bg">
+
+        <div class="absolute inset-0 bg-[#163B2D]/75"></div>
+
+        <!-- BLUR -->
+        <div class="absolute -top-24 left-0 w-[350px] h-[350px] bg-emerald-300/20 rounded-full blur-3xl"></div>
+
+        <div class="absolute bottom-0 right-0 w-[350px] h-[350px] bg-lime-200/20 rounded-full blur-3xl"></div>
+
+        <!-- GRID -->
+        <div class="absolute inset-0 opacity-[0.04]">
+            <div class="h-full w-full"
+                style="background-image: linear-gradient(to right,#fff 1px,transparent 1px),
+                linear-gradient(to bottom,#fff 1px,transparent 1px);
+                background-size:80px 80px;">
             </div>
-    
-            <div class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-sm font-bold">
-                Rp {{ laporan.jumlah_pengeluaran }}
-            </div>
-    
         </div>
-    
-        <!-- deskripsi -->
-        <div class="mb-4">
-            <p class="text-gray-700 leading-relaxed">
-                {{ laporan.deskripsi }}
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 md:px-8 pt-20 md:pt-24 pb-32">
+
+            <!-- BACK -->
+            <a href="{% url 'home_d' %}"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/50 text-sm font-bold text-slate-700 hover:text-emerald-700 hover:-translate-y-1 transition-all shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+
+                <i class="ph-bold ph-arrow-left"></i>
+
+                Kembali ke Dashboard
+
+            </a>
+
+            <div class="mt-10 grid lg:grid-cols-2 gap-12 items-center">
+
+                <!-- LEFT -->
+                <div class="fade-up">
+
+                    <!-- BADGE -->
+                    <div
+                        class="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 text-[11px] font-black uppercase tracking-[0.25em] text-emerald-100 mb-8">
+
+                        <span class="relative flex w-3 h-3">
+
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-300 opacity-75"></span>
+
+                            <span class="relative inline-flex rounded-full w-3 h-3 bg-lime-300"></span>
+
+                        </span>
+
+                        Smart Transparency System
+
+                    </div>
+
+                    <!-- TITLE -->
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-6xl xl:text-7xl leading-[0.95] tracking-tight font-black text-white font-heading max-w-3xl">
+
+                        Laporan
+
+                        <span class="bg-gradient-to-r from-lime-300 to-emerald-400 bg-clip-text text-transparent">
+
+                            Perkembangan
+
+                        </span>
+
+                        Proyek.
+
+                    </h1>
+
+                    <!-- DESC -->
+                    <p class="mt-7 text-emerald-50/90 text-base md:text-lg leading-relaxed max-w-2xl">
+
+                        Pantau seluruh aktivitas proyek pertanian yang Anda dukung
+                        secara transparan, realtime, dan profesional langsung dari petani terverifikasi.
+
+                    </p>
+
+                    <!-- BUTTON -->
+                    <div class="mt-10 flex flex-wrap gap-4">
+
+                        <a href="{% url 'riwayat_d' %}"
+                            class="group inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#4D7C3E] text-white font-black text-sm shadow-[0_20px_40px_rgba(77,124,62,0.25)] hover:-translate-y-1 transition-all">
+
+                            <i class="ph-bold ph-clock-counter-clockwise text-xl group-hover:rotate-6 transition-transform"></i>
+
+                            Riwayat Dukungan
+
+                        </a>
+
+                        <a href="{% url 'home_d' %}#explore"
+                            class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-white/70 backdrop-blur-xl border border-white/60 text-slate-700 font-black text-sm hover:border-emerald-200 hover:text-emerald-700 hover:-translate-y-1 transition-all shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+
+                            <i class="ph-bold ph-compass text-xl"></i>
+
+                            Explore Project
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+                <div class="relative fade-up">
+
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-300/20 rounded-full blur-3xl">
+                    </div>
+
+                    <div class="absolute -bottom-10 left-0 w-40 h-40 bg-lime-200/20 rounded-full blur-3xl">
+                    </div>
+
+                    <div
+                        class="relative overflow-hidden rounded-[2.5rem] bg-white/60 backdrop-blur-2xl border border-white/60 shadow-[0_30px_80px_rgba(15,23,42,0.10)] p-7 md:p-10">
+
+                        <!-- LIGHT -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-white/10">
+                        </div>
+
+                        <!-- ICON -->
+                        <div class="absolute -right-10 -top-10 opacity-[0.04]">
+                            <i class="ph-fill ph-chart-line-up text-[240px]"></i>
+                        </div>
+
+                        <div class="relative z-10">
+
+                            <div class="flex items-center justify-between gap-5 mb-10">
+
+                                <div>
+
+                                    <p
+                                        class="text-[11px] uppercase tracking-[0.25em] font-black text-slate-400 mb-3">
+
+                                        Total Laporan
+
+                                    </p>
+
+                                    <h2
+                                        class="text-5xl md:text-6xl font-black text-slate-900 font-heading leading-none">
+
+                                        {{ laporan|length }}
+
+                                    </h2>
+
+                                </div>
+
+                                <div
+                                    class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl shadow-lg shadow-emerald-100">
+
+                                    <i class="ph-fill ph-scroll"></i>
+
+                                </div>
+
+                            </div>
+
+                            <!-- INFO -->
+                            <div class="space-y-5">
+
+                                <div
+                                    class="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-5">
+
+                                    <div class="flex items-center justify-between gap-4 mb-4">
+
+                                        <div>
+
+                                            <p class="text-sm font-bold text-slate-900">
+                                                Transparansi Proyek
+                                            </p>
+
+                                            <p class="text-xs text-slate-400">
+                                                Update aktivitas lapangan
+                                            </p>
+
+                                        </div>
+
+                                        <div
+                                            class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl">
+
+                                            <i class="ph-fill ph-plant"></i>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+
+                                        <div
+                                            class="h-full w-[92%] rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 relative">
+
+                                            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div
+                                    class="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-5">
+
+                                    <div class="flex items-center justify-between gap-4 mb-4">
+
+                                        <div>
+
+                                            <p class="text-sm font-bold text-slate-900">
+                                                Monitoring Real-time
+                                            </p>
+
+                                            <p class="text-xs text-slate-400">
+                                                Aktivitas petani terverifikasi
+                                            </p>
+
+                                        </div>
+
+                                        <div
+                                            class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl">
+
+                                            <i class="ph-fill ph-chart-line"></i>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden">
+
+                                        <div
+                                            class="h-full w-[85%] rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 relative">
+
+                                            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTENT -->
+    <section class="max-w-7xl mx-auto px-4 md:px-8 -mt-20 relative z-20 pb-24">
+
+        {% if laporan %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-7">
+
+            {% for laporan in laporan %}
+
+            <article
+                class="group glass-card rounded-[2rem] overflow-hidden card-hover fade-up">
+
+                <!-- IMAGE -->
+                {% if laporan.bukti %}
+                <div class="relative h-72 overflow-hidden">
+
+                    <img src="{{ laporan.bukti.url }}"
+                        alt="{{ laporan.judul }}"
+                        loading="lazy"
+                        class="w-full h-full object-cover image-hover">
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent">
+                    </div>
+
+                    <!-- DATE -->
+                    <div class="absolute top-5 left-5">
+
+                        <div
+                            class="px-4 py-2 rounded-full bg-white/80 backdrop-blur-xl border border-white/50 text-[10px] font-black tracking-[0.2em] uppercase flex items-center gap-2 text-slate-700">
+
+                            <i class="ph-fill ph-calendar"></i>
+
+                            {{ laporan.tanggal|date:"d M Y" }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+                {% endif %}
+
+                <!-- BODY -->
+                <div class="p-6 md:p-7">
+
+                    <!-- TOP -->
+                    <div
+                        class="flex flex-col md:flex-row md:items-start md:justify-between gap-5 mb-6">
+
+                        <div class="flex-1">
+
+                            <div
+                                class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-emerald-50 text-emerald-700 text-[10px] uppercase tracking-[0.2em] font-black mb-4">
+
+                                <i class="ph-fill ph-chart-line-up"></i>
+
+                                Progress Report
+
+                            </div>
+
+                            <h2
+                                class="text-2xl font-black leading-tight text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors">
+
+                                {{ laporan.judul }}
+
+                            </h2>
+
+                        </div>
+
+                        <!-- COST -->
+                        <div
+                            class="shrink-0 rounded-2xl bg-red-50 border border-red-100 px-5 py-4">
+
+                            <p
+                                class="text-[10px] uppercase tracking-[0.2em] text-red-400 font-black mb-1">
+
+                                Pengeluaran
+
+                            </p>
+
+                            <h3
+                                class="text-lg font-black text-red-500 whitespace-nowrap">
+
+                                Rp {{ laporan.jumlah_pengeluaran|intcomma }}
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                    <!-- DESC -->
+                    <div
+                        class="rounded-[1.5rem] bg-slate-50 border border-slate-100 p-5 mb-6">
+
+                        <p
+                            class="text-slate-600 leading-relaxed text-sm md:text-[15px] line-clamp-4">
+
+                            {{ laporan.deskripsi }}
+
+                        </p>
+
+                    </div>
+
+                    <!-- FOOT -->
+                    <div
+                        class="flex items-center justify-between pt-5 border-t border-slate-100">
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+
+                                <i class="ph-fill ph-user-circle"></i>
+
+                            </div>
+
+                            <div>
+
+                                <p
+                                    class="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-black">
+
+                                    Uploaded
+
+                                </p>
+
+                                <p
+                                    class="text-sm font-bold text-slate-800">
+
+                                    Petani Terverifikasi
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="flex items-center gap-2 text-slate-400 text-xs font-semibold">
+
+                            <i class="ph-fill ph-clock"></i>
+
+                            {{ laporan.tanggal|timesince }} lalu
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY -->
+        <div
+            class="glass-card rounded-[3rem] p-10 md:p-20 text-center fade-up">
+
+            <div
+                class="w-28 h-28 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-8 text-5xl text-slate-300">
+
+                <i class="ph-fill ph-scroll"></i>
+
+            </div>
+
+            <h2
+                class="text-3xl md:text-4xl font-black mb-5 text-slate-900 font-heading">
+
+                Belum Ada Laporan
+
+            </h2>
+
+            <p
+                class="max-w-xl mx-auto text-slate-500 leading-relaxed mb-8">
+
+                Petani belum mengunggah perkembangan terbaru proyek.
+                Semua transparansi aktivitas dan laporan proyek akan muncul di halaman ini.
+
             </p>
+
+            <a href="{% url 'home_d' %}#explore"
+                class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-lime-500 text-white font-black text-sm shadow-[0_20px_40px_rgba(77,124,62,0.25)] hover:-translate-y-1 transition-all">
+
+                <i class="ph-fill ph-compass"></i>
+
+                Explore Projects
+
+            </a>
+
         </div>
-    
-        <!-- gambar bukti -->
-        {% if laporan.bukti %}
-        <div class="overflow-hidden rounded-2xl border border-gray-100">
-            <img src="{{ laporan.bukti.url }}" alt="{{ laporan.judul }}"
-                class="w-full h-64 object-cover hover:scale-105 transition duration-300">
-        </div>
+
         {% endif %}
-    
-    </div>
-    
-    {% empty %}
-    
-    <div class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-10 text-center">
-    
-        <h3 class="text-lg font-bold text-gray-700 mb-2">
-            Belum Ada Laporan
-        </h3>
-    
-        <p class="text-gray-500">
-            Petani belum mengunggah perkembangan project.
-        </p>
-    
-    </div>
-    
-    {% endfor %}
+
+    </section>
+
+    <!-- FOOTER -->
+    {% include 'donatur/partials/footer.html' %}
+
 </body>
+
 </html>

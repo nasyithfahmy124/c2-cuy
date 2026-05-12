@@ -45,6 +45,11 @@ def home_page(request):
     else:
         return redirect('public_home')
 
+@login_required
+def profile_user(request):
+    return render(request, 'login/profile_user.html', {
+        'user_login': request.user
+    })
 
 def page_login(request):
     form = LoginForm(request.POST or None)

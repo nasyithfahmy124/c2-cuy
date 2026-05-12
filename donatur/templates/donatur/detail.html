@@ -1,109 +1,1042 @@
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ detail.nama }} - Detail Lahan</title>
-    
+    <title>{{ detail.nama }} • JejakDaya</title>
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/Asset5.png' %}">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="icon" type="image/svg+xml" href="{% static 'assets/logo/logo4.svg' %}">
 
+    <style>
+        :root {
+            --bg: #06110c;
+            --card: #ffffff;
+            --primary: #184d3b;
+            --primary-soft: #1f6b51;
+            --accent: #8BC34A;
+            --accent-soft: #dff4c5;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(24, 77, 59, .10), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(139, 195, 74, .08), transparent 30%),
+                #f6f8f7;
+            color: var(--text);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, .72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, .6);
+        }
+
+        .card-hover {
+            transition: all .45s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, .08);
+        }
+
+        .gradient-btn {
+            background: linear-gradient(135deg, #184d3b, #2d8b68);
+        }
+
+        .gradient-btn:hover {
+            filter: brightness(1.05);
+            transform: translateY(-2px);
+        }
+
+        .accent-btn {
+            background: linear-gradient(135deg, #8BC34A, #6fb22f);
+        }
+
+        .accent-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .progress-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-glow::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, .45), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            100% {
+                transform: translateX(250%);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp .7s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+
+            from {
+                opacity: 0;
+                transform: translateX(40px) scale(.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+
+        }
+
+        .animate-slideIn {
+            animation: slideIn .5s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .notif-item {
+            box-shadow:
+                0 20px 40px rgba(0, 0, 0, .25),
+                inset 0 1px 0 rgba(255, 255, 255, .15);
+        }
+
+
+        .popup {
+            opacity: 0;
+            visibility: hidden;
+            transition: .35s ease;
+        }
+
+        .popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            transform: translateY(30px) scale(.96);
+            transition: .4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .popup.active .popup-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            scrollbar-width: none;
+        }
+    </style>
 </head>
-<body class="bg-jejak-bg font-sans text-jejak-text antialiased min-h-screen">
 
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 px-4 md:px-8 h-16 flex items-center">
-        <a href="{% url 'home_d' %}" class="text-sm font-bold text-gray-500 hover:text-jejak-primary transition-colors flex items-center gap-2">
-            <i class="ph-bold ph-arrow-left"></i> Kembali ke Eksplorasi
-        </a>
-    </nav>
+<body class="min-h-screen">
 
-    <main class="max-w-5xl mx-auto px-4 md:px-8 py-10">
-        
-        <div class="w-full h-[300px] md:h-[400px] rounded-[3rem] overflow-hidden shadow-2xl relative border-4 border-white mb-10 animate-fade-in-up">
-            {% if detail.foto_lahan %}
-                <img src="{{ detail.foto_lahan.url }}" class="w-full h-full object-cover">
-            {% else %}
-                <div class="w-full h-full bg-gray-200 flex items-center justify-center"><i class="ph-fill ph-plant text-7xl text-gray-300"></i></div>
-            {% endif %}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-            <div class="absolute bottom-8 left-8 pr-8">
-                <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight mb-2">{{ detail.nama }}</h1>
-                <p class="text-gray-300 text-sm md:text-base line-clamp-2 max-w-2xl">{{ detail.deskripsi }}</p>
-            </div>
-        </div>
+    {% include 'donatur/partials/navbar.html' %}
+    <!-- =========================
+     TRANSACTION NOTIFICATION
+========================= -->
+    {% if messages %}
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-up delay-100">
-            <div class="md:col-span-2 space-y-8">
-                
-                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 class="text-xl font-black text-jejak-primary mb-6 flex items-center gap-2"><i class="ph-fill ph-map-trifold"></i> Informasi Lahan</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-gray-50 rounded-2xl">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lokasi</p>
-                            <p class="font-bold text-gray-800">{{ detail.lokasi }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-2xl">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Luas Lahan</p>
-                            <p class="font-bold text-gray-800">{{ detail.luas_lahan }} m²</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-2xl">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Durasi</p>
-                            <p class="font-bold text-gray-800">{{ detail.berapa_bulan }} Bulan</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-2xl">
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Estimasi Hasil</p>
-                            <p class="font-bold text-gray-800">{{ detail.estimasi_hasil }}</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="fixed top-5 right-5 z-[9999] space-y-4 w-[90%] max-w-sm">
 
-                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 class="text-xl font-black text-jejak-primary mb-6 flex items-center gap-2"><i class="ph-fill ph-scroll"></i> Transparansi Laporan</h3>
-                    <div class="space-y-4">
-                        {% for l in detail.laporan.all %}
-                        <div class="p-5 border border-gray-100 rounded-2xl bg-gray-50/50 hover:bg-white hover:shadow-sm transition-all">
-                            <h4 class="font-bold text-gray-900 mb-1">{{ l.judul }}</h4>
-                            <p class="text-sm text-gray-500">{{ l.deskripsi }}</p>
-                        </div>
-                        {% empty %}
-                        <p class="text-sm text-gray-400 italic text-center py-4">Petani belum mengirimkan laporan progres.</p>
-                        {% endfor %}
-                    </div>
-                </div>
+        {% for message in messages %}
+
+        <div class="notif-item flex items-start gap-4 p-4 rounded-3xl shadow-2xl border backdrop-blur-xl animate-slideIn
+        {% if message.tags == 'success' %}
+            bg-emerald-500/95 border-emerald-400 text-white
+        {% elif message.tags == 'error' %}
+            bg-red-500/95 border-red-400 text-white
+        {% else %}
+            bg-slate-900 text-white border-slate-700
+        {% endif %}
+    ">
+
+            <!-- ICON -->
+            <div class="shrink-0 text-2xl mt-0.5">
+
+                {% if message.tags == 'success' %}
+                <i class="ph-fill ph-check-circle"></i>
+                {% elif message.tags == 'error' %}
+                <i class="ph-fill ph-warning-circle"></i>
+                {% else %}
+                <i class="ph-fill ph-info"></i>
+                {% endif %}
+
             </div>
 
-            <div>
-                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-lg shadow-jejak-primary/10 sticky top-24">
-                    {% widthratio total_donasi detail.target_dana 100 as persen %}
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Terkumpul</p>
-                    <h2 class="text-3xl font-black text-jejak-primary mb-2">Rp {{ total_donasi|intcomma }}</h2>
-                    <p class="text-sm text-gray-500 mb-6">dari target <span class="font-bold text-gray-800">Rp {{ detail.target_dana|intcomma }}</span></p>
+            <!-- CONTENT -->
+            <div class="flex-1">
 
-                    <div class="w-full bg-gray-100 h-3 rounded-full mb-3 overflow-hidden">
-                        <div class="bg-jejak-secondary h-full" style="width: {{ persen }}%"></div>
-                    </div>
-                    <p class="text-right text-xs font-bold text-jejak-secondary mb-8">{{ persen }}% Tercapai</p>
+                <h4 class="font-black text-sm uppercase tracking-[.2em] mb-1">
 
-                    {% if persen|add:"0" >= 100 %}
-                        <div class="w-full py-4 rounded-xl bg-gray-100 text-gray-500 font-bold text-center border border-gray-200">
-                            Pendanaan Penuh 🎉
-                        </div>
+                    {% if message.tags == 'success' %}
+                    Transaksi Berhasil
+                    {% elif message.tags == 'error' %}
+                    Transaksi Gagal
                     {% else %}
-                        <a href="{% url 'danai_project' detail.id %}" class="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-jejak-primary text-white font-bold uppercase tracking-widest text-sm shadow-lg shadow-jejak-primary/30 hover:-translate-y-1 hover:bg-[#143a29] transition-all active:scale-95">
-                            <i class="ph-bold ph-hand-coins text-xl"></i> Berikan Dukungan
-                        </a>
+                    Informasi
                     {% endif %}
 
-                        <a href="{% url 'donasi_barang' detail.id %}" class="flex items-center justify-center gap-2 w-full mt-3 py-4 rounded-xl bg-jejak-accent text-white font-bold uppercase tracking-widest text-sm shadow-lg shadow-jejak-accent/30 hover:-translate-y-1 hover:brightness-90 transition-all active:scale-95">
-                            <i class="ph-bold ph-package text-xl"></i> Donasi Alat
-                        </a>
-                </div>
+                </h4>
+
+                <p class="text-sm leading-relaxed opacity-90">
+                    {{ message }}
+                </p>
+
             </div>
+
+            <!-- CLOSE -->
+            <button onclick="this.parentElement.remove()" class="text-xl opacity-70 hover:opacity-100 transition-all">
+
+                <i class="ph-bold ph-x"></i>
+
+            </button>
+
         </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 pt-32 pb-24">
+
+        <!-- HERO -->
+        <section class="fade-up">
+
+            <div
+                class="relative overflow-hidden rounded-[2.5rem] md:rounded-[3rem] border border-white/40 shadow-[0_20px_60px_rgba(0,0,0,.08)]">
+
+                {% if detail.foto_lahan %}
+                <img src="{{ detail.foto_lahan.url }}" class="w-full h-[320px] md:h-[520px] object-cover">
+                {% endif %}
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                <div class="absolute top-6 left-6">
+                    <div
+                        class="px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-black tracking-[.2em] uppercase">
+                        Verified Farming Project
+                    </div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+
+                    <div class="max-w-4xl">
+
+                        <div class="flex flex-wrap items-center gap-3 mb-5">
+
+                            <div
+                                class="px-4 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs font-bold flex items-center gap-2">
+                                <i class="ph-fill ph-map-pin"></i>
+                                {{ detail.lokasi }}
+                            </div>
+
+                            <div
+                                class="px-4 py-2 rounded-full bg-lime-400/20 border border-lime-300/20 text-lime-200 text-xs font-bold flex items-center gap-2">
+                                <i class="ph-fill ph-leaf"></i>
+                                Sustainable Agriculture
+                            </div>
+
+                        </div>
+
+                        <h1 class="text-3xl md:text-6xl font-black text-white leading-tight mb-4">
+                            {{ detail.nama }}
+                        </h1>
+
+                        <p class="text-slate-200 text-sm md:text-lg leading-relaxed max-w-3xl">
+                            {{ detail.deskripsi }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- CONTENT -->
+        <section class="grid grid-cols-1 xl:grid-cols-[1fr_390px] gap-8 mt-10">
+
+            <!-- LEFT -->
+            <div class="space-y-8 fade-up">
+
+                <!-- INFO -->
+                <div class="glass rounded-[2rem] p-6 md:p-8 card-hover">
+
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <p class="text-xs uppercase tracking-[.25em] text-slate-400 font-black mb-2">
+                                Detail Lahan
+                            </p>
+
+                            <h2 class="text-2xl md:text-3xl font-black text-[var(--primary)]">
+                                Informasi Proyek
+                            </h2>
+                        </div>
+
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-[var(--accent-soft)] text-[var(--primary)] flex items-center justify-center text-2xl">
+                            <i class="ph-fill ph-plant"></i>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                        <div class="bg-white rounded-2xl border border-slate-100 p-5">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Luas Lahan
+                            </p>
+
+                            <h3 class="text-lg font-black">
+                                {{ detail.luas_lahan }} m²
+                            </h3>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-100 p-5">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Estimasi Durasi
+                            </p>
+
+                            <h3 class="text-lg font-black">
+                                {{ detail.berapa_bulan }} Bulan
+                            </h3>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-100 p-5">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Estimasi Hasil
+                            </p>
+
+                            <h3 class="text-lg font-black">
+                                {{ detail.estimasi_hasil }}
+                            </h3>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-100 p-5">
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Transparansi
+                            </p>
+
+                            <h3 class="text-lg font-black text-emerald-600">
+                                Escrow Active
+                            </h3>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- REPORT -->
+                <div class="glass rounded-[2rem] p-6 md:p-8 card-hover">
+
+                    <div class="flex items-center justify-between mb-8">
+
+                        <div>
+                            <p class="text-xs uppercase tracking-[.25em] text-slate-400 font-black mb-2">
+                                Live Updates
+                            </p>
+
+                            <h2 class="text-2xl md:text-3xl font-black text-[var(--primary)]">
+                                Aktivitas Petani
+                            </h2>
+                        </div>
+
+                        <a href="{% url 'lihat_laporan' detail.id %}"
+                            class="px-5 py-3 rounded-2xl bg-[var(--primary)] text-white text-sm font-bold hover:scale-[1.03] transition-all">
+                            Lihat Semua
+                        </a>
+
+                    </div>
+
+                    <div class="space-y-5">
+
+                        {% for l in detail.laporan.all|slice:":3" %}
+
+                        <div class="bg-white rounded-3xl border border-slate-100 p-5 flex gap-5 card-hover">
+
+                            {% if l.bukti %}
+                            <img src="{{ l.bukti.url }}" class="w-28 h-28 rounded-2xl object-cover">
+                            {% endif %}
+
+                            <div class="flex-1">
+
+                                <div class="flex items-center justify-between gap-4 mb-3">
+
+                                    <h3 class="font-black text-lg text-slate-900">
+                                        {{ l.judul }}
+                                    </h3>
+
+                                    <span class="text-[10px] uppercase tracking-[.2em] font-black text-slate-400">
+                                        {{ l.tanggal|date:"d M Y" }}
+                                    </span>
+
+                                </div>
+
+                                <p class="text-sm text-slate-500 leading-relaxed line-clamp-3">
+                                    {{ l.deskripsi }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {% empty %}
+
+                        <div class="bg-white rounded-3xl border border-dashed border-slate-200 p-12 text-center">
+
+                            <div
+                                class="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-5 text-4xl text-slate-300">
+                                <i class="ph-fill ph-files"></i>
+                            </div>
+
+                            <h3 class="text-xl font-black mb-2">
+                                Belum Ada Laporan
+                            </h3>
+
+                            <p class="text-sm text-slate-500">
+                                Petani belum mengirimkan perkembangan terbaru.
+                            </p>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <aside class="fade-up">
+
+                <div
+                    class="glass rounded-[2rem] p-6 md:p-8 sticky top-28 border border-white/50 shadow-[0_20px_60px_rgba(0,0,0,.08)]">
+
+                    {% widthratio total_donasi detail.target_dana 100 as persen %}
+
+                    <div class="mb-8">
+
+                        <div class="flex items-center justify-between mb-3">
+
+                            <div>
+                                <p class="text-[10px] uppercase tracking-[.25em] text-slate-400 font-black mb-2">
+                                    Dana Terkumpul
+                                </p>
+
+                                <h2 class="text-3xl md:text-4xl font-black text-[var(--primary)]">
+                                    Rp {{ total_donasi|intcomma }}
+                                </h2>
+                            </div>
+
+                            <div
+                                class="w-16 h-16 rounded-3xl bg-[var(--accent-soft)] flex items-center justify-center text-[var(--primary)] text-3xl">
+                                <i class="ph-fill ph-hand-coins"></i>
+                            </div>
+
+                        </div>
+
+                        <p class="text-sm text-slate-500 mb-5">
+                            dari target Rp {{ detail.target_dana|intcomma }}
+                        </p>
+
+                        <div class="h-3 rounded-full bg-slate-100 overflow-hidden mb-3">
+
+                            <div class="h-full rounded-full bg-gradient-to-r from-[#184d3b] to-[#8BC34A] progress-glow"
+                                style="width: {{ persen }}%">
+                            </div>
+
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="text-slate-400">
+                                Progress Pendanaan
+                            </span>
+
+                            <span class="text-[var(--primary)]">
+                                {{ persen }}%
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <!-- ACTION -->
+                    <div class="space-y-4">
+
+                        <button onclick="openSupportPopup()"
+                            class="gradient-btn w-full h-14 rounded-2xl text-white font-black tracking-wide shadow-xl shadow-emerald-900/10 transition-all flex items-center justify-center gap-3">
+
+                            <i class="ph-fill ph-heart-straight text-xl"></i>
+                            Berikan Dukungan
+                        </button>
+
+                        <button onclick="openItemPopup()"
+                            class="accent-btn w-full h-14 rounded-2xl text-white font-black tracking-wide shadow-xl shadow-lime-900/10 transition-all flex items-center justify-center gap-3">
+
+                            <i class="ph-fill ph-package text-xl"></i>
+                            Donasi Alat & Kebutuhan
+                        </button>
+
+                    </div>
+
+                    <!-- CONCEPT -->
+                    <div class="mt-8 bg-white rounded-3xl border border-slate-100 p-5">
+
+                        <div class="flex items-center gap-3 mb-4">
+
+                            <div
+                                class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl">
+                                <i class="ph-fill ph-shield-check"></i>
+                            </div>
+
+                            <div>
+                                <h3 class="font-black text-slate-900">
+                                    Smart Escrow System
+                                </h3>
+
+                                <p class="text-xs text-slate-500">
+                                    Aman & Transparan
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <ul class="space-y-3 text-sm text-slate-600">
+
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-emerald-500 mt-0.5"></i>
+                                Dana tidak langsung masuk ke petani.
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-emerald-500 mt-0.5"></i>
+                                Donatur dapat mendukung tanpa minimal investasi.
+                            </li>
+
+                            <li class="flex items-start gap-3">
+                                <i class="ph-fill ph-check-circle text-emerald-500 mt-0.5"></i>
+                                Sistem katalog kebutuhan meminimalisir penyalahgunaan.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </section>
+
     </main>
+
+    <!-- SUPPORT POPUP -->
+    <div id="supportPopup"
+        class="popup fixed inset-0 z-[100] bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
+
+        <div class="popup-content bg-white rounded-[2rem] w-full max-w-lg overflow-hidden shadow-2xl">
+
+            <!-- HEADER -->
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs uppercase tracking-[.25em] text-slate-400 font-black mb-2">
+                        Flexible Support
+                    </p>
+
+                    <h3 class="text-2xl font-black text-[var(--primary)]">
+                        Dukung Proyek
+                    </h3>
+                </div>
+
+                <button type="button" onclick="closeSupportPopup()"
+                    class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center text-xl">
+
+                    <i class="ph-bold ph-x"></i>
+
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="p-6">
+
+                <!-- PROJECT INFO -->
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100 mb-6">
+
+                    <div class="flex items-center justify-between gap-5">
+
+                        <div class="min-w-0">
+
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Proyek
+                            </p>
+
+                            <h4 class="font-black text-lg text-slate-900 leading-tight">
+                                {{ detail.nama }}
+                            </h4>
+
+                        </div>
+
+                        <div class="text-right shrink-0">
+
+                            <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                Progress
+                            </p>
+
+                            <h4 class="font-black text-emerald-600 text-lg">
+                                {{ persen }}%
+                            </h4>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- FORM -->
+                <form method="POST" action="{% url 'danai_project' detail.id %}" class="space-y-5">
+
+                    {% csrf_token %}
+
+                    <!-- NOMINAL -->
+                    <div>
+
+                        <label class="text-sm font-bold text-slate-700 mb-3 block">
+                            Nominal Dukungan
+                        </label>
+
+                        <div class="relative">
+
+                            <span class="absolute left-5 top-1/2 -translate-y-1/2 font-black text-slate-400 text-lg">
+                                Rp
+                            </span>
+
+                            <input type="number" id="jumlahInput" name="jumlah" min="1000" required placeholder="50000"
+                                class="w-full h-16 rounded-2xl border border-slate-200 bg-slate-50 px-14 text-xl font-black text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all">
+
+                        </div>
+
+                        <!-- ERROR -->
+                        {% if form.jumlah.errors %}
+                        <div class="mt-3 space-y-2">
+
+                            {% for error in form.jumlah.errors %}
+                            <div
+                                class="px-4 py-3 rounded-2xl bg-red-50 border border-red-100 text-sm font-semibold text-red-600">
+
+                                {{ error }}
+
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- QUICK AMOUNT -->
+                    <div class="grid grid-cols-3 gap-3">
+
+                        <button type="button" onclick="setNominal(10000)"
+                            class="h-12 rounded-2xl bg-slate-100 hover:bg-emerald-500 hover:text-white text-sm font-black transition-all duration-300">
+                            10K
+                        </button>
+
+                        <button type="button" onclick="setNominal(50000)"
+                            class="h-12 rounded-2xl bg-slate-100 hover:bg-emerald-500 hover:text-white text-sm font-black transition-all duration-300">
+                            50K
+                        </button>
+
+                        <button type="button" onclick="setNominal(100000)"
+                            class="h-12 rounded-2xl bg-slate-100 hover:bg-emerald-500 hover:text-white text-sm font-black transition-all duration-300">
+                            100K
+                        </button>
+
+                    </div>
+
+                    <!-- INFO -->
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-start gap-3">
+
+                        <div
+                            class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+
+                            <i class="ph-fill ph-lock-key text-xl"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h5 class="font-black text-emerald-800 mb-1">
+                                Smart Escrow Protection
+                            </h5>
+
+                            <p class="text-sm text-emerald-700 leading-relaxed">
+                                Dana akan ditahan di sistem escrow dan dicairkan bertahap sesuai laporan aktivitas
+                                petani.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ACTION -->
+                    <button type="submit"
+                        class="gradient-btn w-full h-14 rounded-2xl text-white font-black tracking-wide shadow-xl shadow-emerald-900/10 transition-all hover:scale-[1.01] active:scale-[0.98] flex items-center justify-center gap-3">
+
+                        <i class="ph-fill ph-heart-straight text-xl"></i>
+
+                        Kirim Dukungan
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ITEM POPUP -->
+    <div id="itemPopup"
+        class="popup fixed inset-0 z-[100] bg-black/50 backdrop-blur-md flex items-center justify-center p-4">
+
+        <div class="popup-content bg-white rounded-[2rem] w-full max-w-5xl overflow-hidden shadow-2xl">
+
+            <!-- HEADER -->
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+
+                <div>
+                    <p class="text-xs uppercase tracking-[.25em] text-slate-400 font-black mb-2">
+                        Smart Catalog
+                    </p>
+
+                    <h3 class="text-2xl md:text-3xl font-black text-[var(--primary)]">
+                        Donasi Kebutuhan
+                    </h3>
+                </div>
+
+                <button type="button" onclick="closeItemPopup()"
+                    class="w-11 h-11 rounded-2xl bg-slate-100 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center text-xl">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+
+            </div>
+
+            <!-- CONTENT -->
+            <div class="p-6 max-h-[80vh] overflow-y-auto hide-scrollbar">
+
+                <!-- SEARCH -->
+                <div class="mb-8 relative">
+
+                    <i class="ph-bold ph-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+
+                    <input type="text" id="searchKebutuhan" placeholder="Cari kebutuhan petani..."
+                        class="w-full h-14 rounded-2xl border border-slate-200 bg-slate-50 pl-14 pr-5 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500">
+
+                </div>
+
+                <!-- CATALOG -->
+                <div id="catalogContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                    {% for k in kebutuhan %}
+
+                    <div
+                        class="catalog-item border border-slate-200 rounded-3xl p-5 hover:border-emerald-400 hover:shadow-xl transition-all duration-300 bg-white">
+
+                        <!-- TOP -->
+                        <div class="flex items-start justify-between gap-4 mb-5">
+
+                            <div class="flex items-start gap-4">
+
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shrink-0">
+                                    <i class="ph-fill ph-package"></i>
+                                </div>
+
+                                <div>
+
+                                    <h4 class="font-black text-lg mb-1 item-name">
+                                        {{ k.nama_barang }}
+                                    </h4>
+
+                                    <p class="text-sm text-slate-500 leading-relaxed">
+                                        Dibutuhkan untuk operasional dan pengembangan lahan pertanian.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            {% if k.sisa_kebutuhan > 0 %}
+                            <div class="w-4 h-4 rounded-full bg-emerald-500 animate-pulse mt-1"></div>
+                            {% else %}
+                            <div class="w-4 h-4 rounded-full bg-slate-300 mt-1"></div>
+                            {% endif %}
+
+                        </div>
+
+                        <!-- INFO -->
+                        <div class="grid grid-cols-2 gap-3 mb-5">
+
+                            <!-- TARGET -->
+                            <div class="bg-slate-50 rounded-2xl p-4">
+
+                                <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                    Dibutuhkan
+                                </p>
+
+                                <h5 class="font-black text-slate-800">
+                                    {{ k.jumlah_dibutuhkan }} {{ k.satuan }}
+                                </h5>
+
+                            </div>
+
+                            <!-- SISA -->
+                            <div class="bg-slate-50 rounded-2xl p-4">
+
+                                <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                    Sisa
+                                </p>
+
+                                <h5 class="font-black text-emerald-600">
+                                    {{ k.sisa_kebutuhan }} {{ k.satuan }}
+                                </h5>
+
+                            </div>
+
+                            <!-- HARGA -->
+                            <div class="bg-slate-50 rounded-2xl p-4">
+
+                                <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                    Harga / Item
+                                </p>
+
+                                <h5 class="font-black text-slate-800">
+                                    Rp {{ k.harga_satuan|intcomma }}
+                                </h5>
+
+                            </div>
+
+                            <!-- PROGRESS -->
+                            <div class="bg-slate-50 rounded-2xl p-4">
+
+                                <p class="text-[10px] uppercase tracking-[.2em] text-slate-400 font-black mb-2">
+                                    Progress
+                                </p>
+
+                                <h5 class="font-black text-emerald-600">
+                                    {{ k.progress_persen }}%
+                                </h5>
+
+                            </div>
+
+                        </div>
+
+                        <!-- PROGRESS BAR -->
+                        <div class="mb-5">
+
+                            <div class="flex items-center justify-between text-xs font-bold mb-2">
+
+                                <span class="text-slate-400">
+                                    Pemenuhan Kebutuhan
+                                </span>
+
+                                <span class="text-emerald-600">
+                                    {{ k.total_terpenuhi }}/{{ k.jumlah_dibutuhkan }}
+                                </span>
+
+                            </div>
+
+                            <div class="h-3 bg-slate-100 rounded-full overflow-hidden">
+
+                                <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 transition-all duration-500"
+                                    style="width: {{ k.progress_persen }}%">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ACTION -->
+                        {% if k.sisa_kebutuhan > 0 %}
+
+                        <form method="POST" action="{% url 'donasi_barang' detail.id %}"
+                            class="flex items-center gap-3">
+
+                            {% csrf_token %}
+
+                            <!-- MANAGEMENT FORM -->
+                            <input type="hidden" name="items-TOTAL_FORMS" value="1">
+                            <input type="hidden" name="items-INITIAL_FORMS" value="0">
+                            <input type="hidden" name="items-MIN_NUM_FORMS" value="0">
+                            <input type="hidden" name="items-MAX_NUM_FORMS" value="1000">
+
+                            <!-- FORMSET -->
+                            <input type="hidden" name="items-0-kebutuhan" value="{{ k.id }}">
+
+                            <!-- JUMLAH -->
+                            <input type="number" name="items-0-jumlah" min="1" max="{{ k.sisa_kebutuhan }}"
+                                placeholder="Jumlah" required
+                                class="flex-1 h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 font-bold focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500">
+
+                            <!-- BTN -->
+                            <button type="submit"
+                                class="accent-btn px-5 h-12 rounded-2xl text-white font-black transition-all hover:scale-[1.03] flex items-center gap-2">
+
+                                <i class="ph-fill ph-hand-heart"></i>
+                                Donasi
+
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <div
+                            class="h-12 rounded-2xl bg-emerald-50 text-emerald-700 font-black flex items-center justify-center gap-2">
+
+                            <i class="ph-fill ph-check-circle"></i>
+                            Kebutuhan Sudah Terpenuhi
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% empty %}
+
+                    <!-- EMPTY -->
+                    <div class="col-span-full text-center py-20">
+
+                        <div
+                            class="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6 text-5xl text-slate-300">
+                            <i class="ph-fill ph-package"></i>
+                        </div>
+
+                        <h3 class="text-2xl font-black mb-2">
+                            Belum Ada Kebutuhan
+                        </h3>
+
+                        <p class="text-slate-500 max-w-md mx-auto">
+                            Petani belum menambahkan katalog kebutuhan untuk proyek ini.
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% include 'donatur/partials/footer.html' %}
+    <script>
+        const supportPopup = document.getElementById('supportPopup')
+        const itemPopup = document.getElementById('itemPopup')
+        const searchInput = document.getElementById('searchKebutuhan')
+
+        if (searchInput) {
+
+            searchInput.addEventListener('keyup', function () {
+
+                const value = this.value.toLowerCase()
+
+                document.querySelectorAll('.catalog-item').forEach(item => {
+
+                    const name = item.querySelector('.item-name').innerText.toLowerCase()
+
+                    if (name.includes(value)) {
+                        item.style.display = 'block'
+                    } else {
+                        item.style.display = 'none'
+                    }
+
+                })
+
+            })
+
+        }
+
+
+        function openSupportPopup() {
+            supportPopup.classList.add('active')
+            document.body.style.overflow = 'hidden'
+        }
+
+        function setNominal(value) {
+            document.getElementById('jumlahInput').value = value
+        }
+
+        function closeSupportPopup() {
+            supportPopup.classList.remove('active')
+            document.body.style.overflow = 'auto'
+        }
+
+        function openItemPopup() {
+            itemPopup.classList.add('active')
+            document.body.style.overflow = 'hidden'
+        }
+
+        function closeItemPopup() {
+            itemPopup.classList.remove('active')
+            document.body.style.overflow = 'auto'
+        }
+
+        window.addEventListener('click', function (e) {
+            if (e.target === supportPopup) {
+                closeSupportPopup()
+            }
+
+            if (e.target === itemPopup) {
+                closeItemPopup()
+            }
+        })
+    </script>
+
 </body>
+
 </html>

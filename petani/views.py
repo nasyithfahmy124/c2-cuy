@@ -1,18 +1,32 @@
 from collections import defaultdict
-from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from .forms import FormDonasi, FormLaporan,formhasilpanen
-from django.contrib import messages
-from .models import KebutuhanBarang, Project,Laporan ,HasilPanen
-from django.db.models import Sum, Q,F
-from donatur.models import Donasi,DonasiBarang
-import json
-from donatur.models import DonasiBarangItem
-from petani.models import KebutuhanBarang
-from django.db import transaction
-from collections import defaultdict
 from decimal import Decimal
+from datetime import datetime
+import json
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.db.models import Sum, Q, F
+from django.shortcuts import render, redirect, get_object_or_404
+
+from .forms import (
+    FormDonasi,
+    FormLaporan,
+    formhasilpanen,
+)
+
+from .models import (
+    Project,
+    Laporan,
+    HasilPanen,
+    KebutuhanBarang,
+)
+
+from donatur.models import (
+    Donasi,
+    DonasiBarang,
+    DonasiBarangItem,
+)
 # Create your views here.
 @login_required
 def home_page(request):
@@ -174,20 +188,31 @@ def view_projek(request):
         'current_status': current_status
     })
 
-@login_required
 def detail_projek(request, id):
-    get = get_object_or_404(
-        Project,
+
+    project = get_object_or_404(
+        Project.objects.select_related('petani'),
         id=id,
-        petani=request.user 
+        petani=request.user
     )
-    barang_masuk = DonasiBarang.objects.filter(project=get).order_by('-id')
-    total = get.donasi_set.aggregate(Sum('jumlah'))['jumlah__sum'] or 0
+
+    barang_masuk = (
+        DonasiBarang.objects
+        .filter(project=project)
+        .prefetch_related('items')
+        .order_by('-id')
+    )
+
+    total_donasi = (
+        project.donasi_set.aggregate(
+            total=Coalesce(Sum('jumlah'), 0)
+        )['total']
+    )
 
     return render(request, 'petani/detail_projek.html', {
-        'semua_projek': get,
-        'total_donasi': total,
-        'barang_masuk': barang_masuk
+        'semua_projek': project,
+        'total_donasi': total_donasi,
+        'barang_masuk': barang_masuk,
     })
 
 @login_required
